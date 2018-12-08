@@ -1,0 +1,1153 @@
+number of cats: 17
+
+divProduct_7296073322450
+price: 14.90 ₪
+desc: לזניה 4 גבינות ברוטב
+boxSupplier: שופרסל, 300 גרם
+pricePerUnit: 4.97 ₪ ל100 גרם
+
+divProduct_7296073322467
+price: 14.90 ₪
+desc: קנלוני גבינות ברוטב
+boxSupplier: שופרסל, 300 גרם
+pricePerUnit: 4.97 ₪ ל100 גרם
+
+divProduct_2824640
+price: 4.60 ₪
+desc: 5% גבינה לבנה סקי
+boxSupplier: סקי, 250 גרם
+pricePerUnit: 1.84 ₪ ל100 גרם
+
+divProduct_7290011194246
+price: 5.80 ₪
+desc: קוטג' 5% שומן
+boxSupplier: שטראוס, 250 גרם
+pricePerUnit: 2.32 ₪ ל100 גרם
+
+divProduct_408354
+price: 4.60 ₪
+desc: דנונה בר פצפוצים
+boxSupplier: דנונה, 173 גרם
+pricePerUnit: 2.66 ₪ ל100 גרם
+
+divProduct_5838002
+price: 4.10 ₪
+desc: דניאלה מעדן קרם גבינה
+boxSupplier: דניאלה, 150 מ"ל
+pricePerUnit: 2.73 ₪ ל100 מ"ל
+
+divProduct_4129101
+price: 10.90 ₪
+desc: גבינת נפוליאון בטעם טבעי
+boxSupplier: תנובה, 225 גרם
+pricePerUnit: 4.84 ₪ ל100 גרם
+
+divProduct_3321155
+price: 4.60 ₪
+desc: דנונה בר פקאן
+boxSupplier: דנונה, 183 גרם
+pricePerUnit: 2.51 ₪ ל100 גרם
+
+divProduct_4584351
+price: 11.00 ₪
+desc: 5% גבינת סימפוניה ט.טבעי
+boxSupplier: סימפוניה, 200 גרם
+pricePerUnit: 5.50 ₪ ל100 גרם
+
+divProduct_7290107932080
+price: 7.70 ₪
+desc: חלב יטבתה מועשר3% בקבוק
+boxSupplier: יטבתה, 1 ליטר
+pricePerUnit: 0.77 ₪ ל100 מ"ל
+
+divProduct_5839108
+price: 11.00 ₪
+desc: גבינת סימפוניה 5%זיתים
+boxSupplier: סימפוניה, 200 גרם
+pricePerUnit: 5.50 ₪ ל100 גרם
+
+divProduct_8693134
+price: 4.10 ₪
+desc: דניאלה תות מוקצף5% שומן
+boxSupplier: דניאלה, 150 מ"ל
+pricePerUnit: 2.73 ₪ ל100 מ"ל
+
+divProduct_91
+price: 6.90 ₪
+desc: פלפל אדום
+boxSupplier: קטיף, מחיר לפי משקל
+pricePerUnit: 6.90 ₪ לק"ג
+
+divProduct_114
+price: 5.90 ₪
+desc: חציל
+boxSupplier: קטיף, מחיר לפי משקל
+pricePerUnit: 5.90 ₪ לק"ג
+
+divProduct_7290013090515
+price: 4.90 ₪
+desc: פטרוזיליה אורגני
+boxSupplier: קטיף, יח
+pricePerUnit: 
+
+divProduct_7290015055000
+price: 9.90 ₪
+desc: עגבניה שרי יובל ליקופן
+boxSupplier: קטיף, יחידה
+pricePerUnit: 
+
+divProduct_7290013090492
+price: 4.90 ₪
+desc: כוסברה אורגני
+boxSupplier: קטיף, יח
+pricePerUnit: 
+
+divProduct_7290013090508
+price: 4.90 ₪
+desc: נענע אורגני
+boxSupplier: קטיף, יחידה
+pricePerUnit: 
+
+divProduct_7290010582037
+price: 7.90 ₪
+desc: פלפלון סוויט בייט
+boxSupplier: קטיף, יחידה
+pricePerUnit: 
+
+divProduct_7290013090522
+price: 4.90 ₪
+desc: שמיר אורגני
+boxSupplier: קטיף, יח
+pricePerUnit: 
+
+divProduct_6765000
+price: 12.80 ₪
+desc: 'טורטיות חיטה מלאה 8יח
+boxSupplier: 360 גרם
+pricePerUnit: 3.56 ₪ ל100 גרם
+
+divProduct_7290013861740
+price: 7.00 ₪
+desc: ניוקי
+boxSupplier: קרלו סילוורל, 500 גרם
+pricePerUnit: 1.40 ₪ ל100 גרם
+
+divProduct_7296073103844
+price: 6.90 ₪
+desc: תפוח אדמה למיקרו
+boxSupplier: קטיף, יחידה
+pricePerUnit: 
+
+divProduct_7290019297161
+price: 12.80 ₪
+desc: טורטיות ראפ מקמח תירס
+boxSupplier: 10 יחידות
+pricePerUnit: 1.28 ₪ ליחידה
+
+divProduct_9012880
+price: 39.90 ₪
+desc: כרעיים בתיבול גריל
+boxSupplier: שופרסל, ק"ג
+pricePerUnit: 
+
+divProduct_9012897
+price: 29.90 ₪
+desc: עוף שלם בעשבי תיבול
+boxSupplier: שופרסל, ק"ג
+pricePerUnit: 
+
+divProduct_9012903
+price: 29.90 ₪
+desc: עוף שלם בתיבול גריל
+boxSupplier: שופרסל, ק"ג
+pricePerUnit: 
+
+divProduct_9012910
+price: 49.90 ₪
+desc: רוסט הודו בחרדל ודבש
+boxSupplier: שופרסל, ק"ג
+pricePerUnit: 
+
+divProduct_9012927
+price: 49.90 ₪
+desc: רוסט עוף בעשבי תיבול
+boxSupplier: שופרסל, ק"ג
+pricePerUnit: 
+
+divProduct_9012934
+price: 42.90 ₪
+desc: שוקיים בתיבול גריל
+boxSupplier: שופרסל, ק"ג
+pricePerUnit: 
+
+divProduct_9017090
+price: 59.90 ₪
+desc: שיפודי פרגיות ארוז טרי
+boxSupplier: שופרסל, לקג
+pricePerUnit: 
+
+divProduct_9127485
+price: 120.00 ₪
+desc: אנטריקוט טרי חלק אנגוס
+boxSupplier: שופרסל, לקג
+pricePerUnit: 
+
+divProduct_9012392
+price: 120.00 ₪
+desc: אנטריקוט טרי חלק אנגוס
+boxSupplier: שופרסל, קג
+pricePerUnit: 
+
+divProduct_9011791
+price: 120.00 ₪
+desc: אנטריקוט טרי מוכשר אנגוס
+boxSupplier: שופרסל, לקג
+pricePerUnit: 
+
+divProduct_9012705
+price: 120.00 ₪
+desc: אנטריקוט טרי מוכשר אנגוס
+boxSupplier: שופרסל, קג
+pricePerUnit: 
+
+divProduct_9127492
+price: 120.00 ₪
+desc: אנטריקוט טרי מוכשר אנגוס
+boxSupplier: שופרסל, קג
+pricePerUnit: 
+
+divProduct_2065555
+price: 9.90 ₪
+desc: לחמניות בשקית
+boxSupplier: אנג'ל מאפיה, 6 * 75גרם
+pricePerUnit: 2.20 ₪ ל100 גרם
+
+divProduct_497044
+price: 11.90 ₪
+desc: לחם ברמן אקטיב
+boxSupplier: ברמן לחם, 750 גרם
+pricePerUnit: 1.59 ₪ ל100 גרם
+
+divProduct_77253
+price: 9.90 ₪
+desc: לחמית כפרית
+boxSupplier: אסם, 190 גרם
+pricePerUnit: 5.21 ₪ ל100 גרם
+
+divProduct_75204
+price: 9.50 ₪
+desc: לחמית חיטה מלאה
+boxSupplier: אסם, 250 גרם
+pricePerUnit: 3.80 ₪ ל100 גרם
+
+divProduct_7290111564277
+price: 10.90 ₪
+desc: פריכיות דקות 3דגנ.פיטנס
+boxSupplier: פיטנס, 120 גרם
+pricePerUnit: 9.08 ₪ ל100 גרם
+
+divProduct_7290111564291
+price: 10.90 ₪
+desc: פריכיות דק.+קינואה פיטנס
+boxSupplier: פיטנס, 120 גרם
+pricePerUnit: 9.08 ₪ ל100 גרם
+
+divProduct_7290106527386
+price: 7.90 ₪
+desc: פריכיות אנרגי שוקולד חלב
+boxSupplier: אנרג'י, 70 גרם
+pricePerUnit: 11.29 ₪ ל100 גרם
+
+divProduct_7290105968777
+price: 7.90 ₪
+desc: פריכיות עם שוקולד מריר
+boxSupplier: אנרג'י, 70 גרם
+pricePerUnit: 11.29 ₪ ל100 גרם
+
+divProduct_74481
+price: 9.90 ₪
+desc: לחמית אגוזים
+boxSupplier: אסם, 160 גרם
+pricePerUnit: 6.19 ₪ ל100 גרם
+
+divProduct_379203
+price: 10.90 ₪
+desc: לחם עינן קל
+boxSupplier: אנג'ל מאפיה, 500 גרם
+pricePerUnit: 2.18 ₪ ל100 גרם
+
+divProduct_7290106526822
+price: 7.90 ₪
+desc: פריכיות תחתית חלב כשל"פ
+boxSupplier: אנרג'י, 80 גרם
+pricePerUnit: 9.88 ₪ ל100 גרם
+
+divProduct_7290107871297
+price: 4.20 ₪
+desc: פריכונים מיני עשבי תיבול
+boxSupplier: אסם, 25 גרם
+pricePerUnit: 16.80 ₪ ל100 גרם
+
+divProduct_2331360
+price: 12.90 ₪
+desc: נביעות עם פקק טו גו
+boxSupplier: נביעות, 6 * 500 מ"ל
+pricePerUnit: 0.43 ₪ ל100 מ"ל
+
+divProduct_5410228144755
+price: 29.90 ₪
+desc: בירה סטלה ארטואה בקבוקים
+boxSupplier: סטלה ארטואה, 6 * 330מ"ל
+pricePerUnit: 1.51 ₪ ל100 מ"ל
+
+divProduct_8464741
+price: 35.90 ₪
+desc: בירה גולדסטאר בקבוקים
+boxSupplier: גולדסטאר, 6 * 330 מ"ל
+pricePerUnit: 1.81 ₪ ל100 מ"ל
+
+divProduct_7290013585554
+price: 13.90 ₪
+desc: קינלי סודה
+boxSupplier: קינלי, 6 * 1.5 ליטר
+pricePerUnit: 0.15 ₪ ל100 מ"ל
+
+divProduct_8464987
+price: 15.90 ₪
+desc: מי סודה טמפו מארז
+boxSupplier: טמפו, 6 * 1.5 ליטר
+pricePerUnit: 0.18 ₪ ל100 מ"ל
+
+divProduct_8714599513866
+price: 26.90 ₪
+desc: קפה נמס ג'קובס קרוננג
+boxSupplier: ג'קובס, 200 גרם
+pricePerUnit: 13.45 ₪ ל100 גרם
+
+divProduct_8005200496525
+price: 6.20 ₪
+desc: נסטי בטעם אפרסק
+boxSupplier: נסטי, 1.5 ליטר
+pricePerUnit: 0.41 ₪ ל100 מ"ל
+
+divProduct_2663522
+price: 6.20 ₪
+desc: תפוזינה משקה קל תפוזים
+boxSupplier: תפוזינה, 1.5 ליטר
+pricePerUnit: 0.41 ₪ ל100 מ"ל
+
+divProduct_7290011018313
+price: 23.90 ₪
+desc: פיוז טי תה קר אפרסק
+boxSupplier: פיוז תה, 4 * 1.5 ליטר
+pricePerUnit: 0.40 ₪ ל100 מ"ל
+
+divProduct_1247952
+price: 6.20 ₪
+desc: תפוזינה משקה קל ענבים
+boxSupplier: תפוזינה, 1.5 ליטר
+pricePerUnit: 0.41 ₪ ל100 מ"ל
+
+divProduct_5896828
+price: 15.90 ₪
+desc: מים מינרליים סאן בנדטו
+boxSupplier: סאן בנדטו, 6 * 1.5 ליטר
+pricePerUnit: 0.18 ₪ ל100 מ"ל
+
+divProduct_5896835
+price: 15.90 ₪
+desc: מים סאן בנדטו מוגז
+boxSupplier: סאן בנדטו, 6 * 1.5 ליטר
+pricePerUnit: 0.18 ₪ ל100 מ"ל
+
+divProduct_363462
+price: 66.60 ₪
+desc: מעושן איטלקי
+boxSupplier: טירת צבי, מחיר לפי משקל
+pricePerUnit: 6.66 ₪ ל100 גרם
+
+divProduct_363011
+price: 66.60 ₪
+desc: נקניק קוניאק מובחר
+boxSupplier: טירת צבי, מחיר לפי משקל
+pricePerUnit: 6.66 ₪ ל100 גרם
+
+divProduct_365749
+price: 66.60 ₪
+desc: פס.הודו מעושנת ד.שומן
+boxSupplier: טירת צבי, מחיר לפי משקל
+pricePerUnit: 6.66 ₪ ל100 גרם
+
+divProduct_2900313
+price: 66.60 ₪
+desc: פסטרמה ספרדית
+boxSupplier: טירת צבי, מחיר לפי משקל
+pricePerUnit: 6.66 ₪ ל100 גרם
+
+divProduct_363202
+price: 26.90 ₪
+desc: נקניק סלמי גליל מעושן
+boxSupplier: טירת צבי, 600 גרם
+pricePerUnit: 4.48 ₪ ל100 גרם
+
+divProduct_2371854
+price: 24.90 ₪
+desc: נקניקיות עוף חריפות
+boxSupplier: טירת צבי, 1 ק"ג
+pricePerUnit: 2.49 ₪ ל100 גרם
+
+divProduct_7290012228216
+price: 11.90 ₪
+desc: בורקס תפוח אדמה
+boxSupplier: זוגלובק, 500 גרם
+pricePerUnit: 2.38 ₪ ל100 גרם
+
+divProduct_7290012226762
+price: 26.90 ₪
+desc: בורגרפטריות עדשים קינואה
+boxSupplier: זוגלובק, 450 גרם
+pricePerUnit: 5.98 ₪ ל100 גרם
+
+divProduct_7290012226779
+price: 26.90 ₪
+desc: שניצל ירוק ללא גלוטן
+boxSupplier: זוגלובק, 540 גרם
+pricePerUnit: 4.98 ₪ ל100 גרם
+
+divProduct_7290012226816
+price: 26.90 ₪
+desc: שניצל תירס דקדק מן הצומח
+boxSupplier: זוגלובק, 540 גרם
+pricePerUnit: 4.98 ₪ ל100 גרם
+
+divProduct_7290012227264
+price: 26.90 ₪
+desc: שניצל תירס ללא גלוטן
+boxSupplier: זוגלובק, 560 גרם
+pricePerUnit: 4.80 ₪ ל100 גרם
+
+divProduct_534800
+price: 80.00 ₪
+desc: פסטרמה הודו רומני
+boxSupplier: זוגלובק, מחיר לפי משקל
+pricePerUnit: 8.00 ₪ ל100 גרם
+
+divProduct_7290100249512
+price: 11.90 ₪
+desc: פירה בטעם ביתי
+boxSupplier: קנור, 2 * 130 גרם
+pricePerUnit: 4.58 ₪ ל100 גרם
+
+divProduct_70308
+price: 18.70 ₪
+desc: מרק עוף אמיתי בשרי
+boxSupplier: אסם, 400 גרם
+pricePerUnit: 4.68 ₪ ל100 גרם
+
+divProduct_7290100249352
+price: 12.90 ₪
+desc: מרק טעם עוף
+boxSupplier: קנור, 400 גרם
+pricePerUnit: 3.23 ₪ ל100 גרם
+
+divProduct_112619
+price: 14.90 ₪
+desc: מרק עוף אמיתי בשרי קנור
+boxSupplier: קנור, 400 גרם
+pricePerUnit: 3.73 ₪ ל100 גרם
+
+divProduct_8005110170300
+price: 16.90 ₪
+desc: עגבניות חתוכות דק
+boxSupplier: מוטי, 3 * 400 גרם
+pricePerUnit: 1.41 ₪ ל100 גרם
+
+divProduct_8076809513388
+price: 10.00 ₪
+desc: רוטב ארביאטה לפסטה
+boxSupplier: ברילה, 400 גרם
+pricePerUnit: 2.50 ₪ ל100 גרם
+
+divProduct_7290107975094
+price: 6.90 ₪
+desc: שימורי גרגירי חומוס
+boxSupplier: מאסטר שף, 400 גרם
+pricePerUnit: 1.73 ₪ ל100 גרם
+
+divProduct_7290107975100
+price: 6.90 ₪
+desc: שימורי שעועית לבנה
+boxSupplier: מאסטר שף, 400 גרם
+pricePerUnit: 1.73 ₪ ל100 גרם
+
+divProduct_66318
+price: 4.30 ₪
+desc: במבה
+boxSupplier: במבה, 80 גרם
+pricePerUnit: 5.38 ₪ ל100 גרם
+
+divProduct_8715700419732
+price: 10.00 ₪
+desc: מתבל עגבניות היינץ
+boxSupplier: היינץ, 700 גרם
+pricePerUnit: 1.43 ₪ ל100 גרם
+
+divProduct_72623
+price: 10.00 ₪
+desc: קטשופ בקבוק לחיץ אסם
+boxSupplier: אסם, 750 גרם
+pricePerUnit: 1.33 ₪ ל100 גרם
+
+divProduct_63140
+price: 10.00 ₪
+desc: שקדי מרק רכיבים טבעיים
+boxSupplier: אסם, 400 גרם
+pricePerUnit: 2.50 ₪ ל100 גרם
+
+divProduct_7296073277453
+price: 8.90 ₪
+desc: גינגר כבוש אורגני גרין
+boxSupplier: שופרסל גרין, 340 גרם
+pricePerUnit: 2.62 ₪ ל100 גרם
+
+divProduct_7296073270003
+price: 13.90 ₪
+desc: חומץ בלסמי 6%אורגניגרין
+boxSupplier: שופרסל גרין, 500 מ"ל
+pricePerUnit: 2.78 ₪ ל100 מ"ל
+
+divProduct_7296073270027
+price: 7.90 ₪
+desc: חומץ יין לבן אורגני גרין
+boxSupplier: שופרסל גרין, 500 מ"ל
+pricePerUnit: 1.58 ₪ ל100 מ"ל
+
+divProduct_7296073341451
+price: 23.90 ₪
+desc: חומץ רימונים מלא אורגני
+boxSupplier: שופרסל גרין, 500 מ"ל
+pricePerUnit: 4.78 ₪ ל100 מ"ל
+
+divProduct_7296073341444
+price: 13.90 ₪
+desc: חומץ תפוחים מלא אורגני
+boxSupplier: שופרסל גרין, 750 מ"ל
+pricePerUnit: 1.85 ₪ ל100 מ"ל
+
+divProduct_7296073263814
+price: 13.90 ₪
+desc: ממרח אגוזי לוז אורגני
+boxSupplier: שופרסל גרין, 350 גרם
+pricePerUnit: 3.97 ₪ ל100 גרם
+
+divProduct_7296073273615
+price: 6.90 ₪
+desc: נוזל קוקוס אורגני גרין
+boxSupplier: שופרסל גרין, 400 מ"ל
+pricePerUnit: 1.73 ₪ ל100 מ"ל
+
+divProduct_7296073319801
+price: 9.90 ₪
+desc: עגבניות מרוסקות אורגני
+boxSupplier: שופרסל גרין, 690 גרם
+pricePerUnit: 1.43 ₪ ל100 גרם
+
+divProduct_7296073266723
+price: 11.90 ₪
+desc: רוטב סויה אורגני גרין
+boxSupplier: שופרסל גרין, 300 מ"ל
+pricePerUnit: 3.97 ₪ ל100 גרם
+
+divProduct_7296073319795
+price: 9.90 ₪
+desc: רוטב עגבניות אורגני גרין
+boxSupplier: שופרסל גרין, 700 גרם
+pricePerUnit: 1.41 ₪ ל100 גרם
+
+divProduct_7296073322535
+price: 7.90 ₪
+desc: פלפל רומירו אורגני גרין
+boxSupplier: שופרסל גרין, 270 גרם
+pricePerUnit: 2.93 ₪ ל100 גרם
+
+divProduct_7296073346319
+price: 12.90 ₪
+desc: חלה אורגנית גרין
+boxSupplier: שופרסל גרין, 500 גרם
+pricePerUnit: 1.72 ₪ ל100 גרם
+
+divProduct_4015600763251
+price: 17.90 ₪
+desc: שמפו הד&שולדרס קלאסי
+boxSupplier: הד&שולדרס, 600 מ"ל
+pricePerUnit: 2.98 ₪ ל100 מ"ל
+
+divProduct_4210201043546
+price: 79.90 ₪
+desc: D12מברשת נטענת ויטליטי
+boxSupplier: אורל בי, יחידה
+pricePerUnit: 
+
+divProduct_3805648
+price: 13.90 ₪
+desc: אקס ספריי לגוף בלאק
+boxSupplier: אקס, 150 מ"ל
+pricePerUnit: 9.27 ₪ ל100 מ"ל
+
+divProduct_5029053510811
+price: 16.90 ₪
+desc: תחבושות קוטקס כנפיים
+boxSupplier: קוטקס, 30יחידות
+pricePerUnit: 0.56 ₪ ליחידה במוצר
+
+divProduct_4210201181088
+price: 79.90 ₪
+desc: D12 מברשת חשמלית מכונית
+boxSupplier: אורל בי, *
+pricePerUnit: 
+
+divProduct_4210201154686
+price: 79.90 ₪
+desc: D12 מברשת חשמלית פרוזן
+boxSupplier: אורל בי, *
+pricePerUnit: 
+
+divProduct_7702018997022
+price: 119.90 ₪
+desc: סכיני גילוח פיוז'ן ידני
+boxSupplier: ג'ילט, 12 יחידות
+pricePerUnit: 9.99 ₪ ליחידה
+
+divProduct_7290106507753
+price: 488.00 ₪
+desc: כרטיסיית 8 אקטיב בייבי
+boxSupplier: פמפרס
+pricePerUnit: 
+
+divProduct_7290106507746
+price: 268.00 ₪
+desc: כרטיסיית 4 אקטיב בייבי
+boxSupplier: פמפרס
+pricePerUnit: 
+
+divProduct_7290106507777
+price: 280.00 ₪
+desc: כרטיסיית 8 מכנסוניפמפרס
+boxSupplier: פמפרס
+pricePerUnit: 
+
+divProduct_7290106507760
+price: 145.00 ₪
+desc: כרטיסיית 4 מכנסוניפמפרס
+boxSupplier: פמפרס
+pricePerUnit: 
+
+divProduct_3014260214692
+price: 12.90 ₪
+desc: CW ג'ל גילוח סירייס
+boxSupplier: ג'ילט, 200 מ"ל
+pricePerUnit: 6.45 ₪ ל100 מ"ל
+
+divProduct_78652507017
+price: 229.00 ₪
+desc: מלונה גדולה לכלב
+boxSupplier: STARPLAST, 82*84*86 ס"מ
+pricePerUnit: 
+
+divProduct_295558
+price: 9.90 ₪
+desc: זוג רדידי אלומיניום
+boxSupplier: סנו סושי, 7.5*0.30 מטרכ"א
+pricePerUnit: 0.66 ₪ למטר
+
+divProduct_7290012823602
+price: 29.90 ₪
+desc: נייר טואלט סנו סופט לבן
+boxSupplier: סנו סופט, 32 גלילים
+pricePerUnit: 5.09 ₪ ל100 מטר
+
+divProduct_8001090184412
+price: 12.50 ₪
+desc: פיירי לכלים לימון
+boxSupplier: פיירי, 900 מ"ל
+pricePerUnit: 1.39 ₪ ל100 מ"ל
+
+divProduct_286228
+price: 10.00 ₪
+desc: סנו סושי כרית יפנית
+boxSupplier: סנו סושי, 6 יחידות
+pricePerUnit: 1.67 ₪ ליחידה
+
+divProduct_187938
+price: 34.90 ₪
+desc: נ.טואלט לילי פסטל
+boxSupplier: לילי, 32 גלילים
+pricePerUnit: 5.94 ₪ ל100 מטר
+
+divProduct_1713853
+price: 7.90 ₪
+desc: אקונומיקה מבושמת ס.מוריץ
+boxSupplier: סנט מוריץ, 4 ליטר
+pricePerUnit: 0.20 ₪ ל100 מ"ל
+
+divProduct_5900627063233
+price: 34.90 ₪
+desc: 1הכל ב AIO פיניש
+boxSupplier: פיניש, 50 טבליות
+pricePerUnit: 0.70 ₪ ליחידה במוצר
+
+divProduct_191539
+price: 12.90 ₪
+desc: מגבוני לילי צבעוני מארז
+boxSupplier: לילי, 5 * 100 יחידות
+pricePerUnit: 2.58 ₪ ליחידה
+
+divProduct_286761
+price: 9.90 ₪
+desc: ניילון נצמד סנו סושי
+boxSupplier: סנו סושי, 2 * 30 מטר
+pricePerUnit: 0.17 ₪ למטר
+
+divProduct_7290013269850
+price: 12.90 ₪
+desc: נייר אפיה אקולוגי
+boxSupplier: סנו סושי, '50 יח
+pricePerUnit: 0.26 ₪ ליחידה במוצר
+
+divProduct_8001090184375
+price: 12.50 ₪
+desc: פיירי לכלים אוריגינל
+boxSupplier: פיירי, 900 מ"ל
+pricePerUnit: 1.39 ₪ ל100 מ"ל
+
+divProduct_7290110784966
+price: 799.00 ₪
+desc: מייבש כביסה 7קג
+boxSupplier: PILOT, P7Q5G
+pricePerUnit: 
+
+divProduct_885609013886
+price: 1,999.00 ₪
+desc: V10 שואב אבק
+boxSupplier: DYSON, Motorhead
+pricePerUnit: 
+
+divProduct_6221127012507
+price: 1,999.00 ₪
+desc: LED 55 SMART
+boxSupplier: TOSHIBA, U7751
+pricePerUnit: 
+
+divProduct_6925876326242
+price: 1,599.00 ₪
+desc: LED 50 SMART 4K
+boxSupplier: HAIER, LE50U6660TUA
+pricePerUnit: 
+
+divProduct_7290015970914
+price: 3,999.00 ₪
+desc: מקרר 4 דלתות נירוסטה
+boxSupplier: SHARP, SJ-F82-SL
+pricePerUnit: 
+
+divProduct_190198625762
+price: 699.00 ₪
+desc: 32GB 4K TV סטרימר
+boxSupplier: APPLE, MQD22LLA
+pricePerUnit: 
+
+divProduct_885609008370
+price: 1,699.00 ₪
+desc: ANIMAL שואב אבק
+boxSupplier: DYSON, V8
+pricePerUnit: 
+
+divProduct_190198253316
+price: 799.00 ₪
+desc: אוזניה אלחוטית שחור
+boxSupplier: BEATS, 3 סולו
+pricePerUnit: 
+
+divProduct_8806088546575
+price: 999.00 ₪
+desc: GEAR FRONTIER שעון חכם
+boxSupplier: SAMSUNG, S3
+pricePerUnit: 
+
+divProduct_753759172114
+price: 1,999.00 ₪
+desc: שעון חכם
+boxSupplier: FENIX 5S
+pricePerUnit: 
+
+divProduct_8718863014097
+price: 1,799.00 ₪
+desc: LED 55 SMART 4K
+boxSupplier: PHILIPS, PUT6002/98
+pricePerUnit: 
+
+divProduct_4242002912042
+price: 1,199.00 ₪
+desc: מיקסר משולב
+boxSupplier: BOSCH, MUM58235
+pricePerUnit: 
+
+divProduct_7296073292951
+price: 999.00 ₪
+desc: 140 מיטה זוגית עמית
+boxSupplier: HOME DECOR, 140*190 ס"מ
+pricePerUnit: 
+
+divProduct_7296073292555
+price: 444.00 ₪
+desc: כסא סופר גיימר אדום
+boxSupplier: HOMAX, 50/107 ס"מ
+pricePerUnit: 
+
+divProduct_7296073274339
+price: 239.00 ₪
+desc: כוורת 9 תאים חום בהיר
+boxSupplier: HOMAX, דגם ג'ני
+pricePerUnit: 
+
+divProduct_811434011056
+price: 159.00 ₪
+desc: מתקן תלית כביסה 3קומות
+boxSupplier: HONEY CAN DO, 01105-DRY
+pricePerUnit: 
+
+divProduct_811434016105
+price: 159.00 ₪
+desc: מתקן תלית כביסה מתכוונן
+boxSupplier: HONEY CAN DO, 01610-DRY
+pricePerUnit: 
+
+divProduct_7296073292258
+price: 1,390.00 ₪
+desc: כורסת טלווזיה רחבה
+boxSupplier: עין חרוד, 98*94*100
+pricePerUnit: 
+
+divProduct_78652507017
+price: 229.00 ₪
+desc: מלונה גדולה לכלב
+boxSupplier: STARPLAST, 82*84*86 ס"מ
+pricePerUnit: 
+
+divProduct_7290103123482
+price: 1,599.00 ₪
+desc: 6X5 מחסן גינה סקיילייט
+boxSupplier: פלרם, 217*153.6*185.40
+pricePerUnit: 
+
+divProduct_7296073322894
+price: 1,190.00 ₪
+desc: 140 מיטה זוגית דרבי
+boxSupplier: HOME DECOR, 211/146/96
+pricePerUnit: 
+
+divProduct_7296073292548
+price: 444.00 ₪
+desc: כסא סופר גיימר ירוק
+boxSupplier: HOMAX, 50/107 ס"מ
+pricePerUnit: 
+
+divProduct_7296073292579
+price: 444.00 ₪
+desc: כסא סופר גיימר כחול
+boxSupplier: HOMAX, 50/107 ס"מ
+pricePerUnit: 
+
+divProduct_7296073292562
+price: 444.00 ₪
+desc: כסא סופר גיימר לבן
+boxSupplier: HOMAX, 50/107 ס"מ
+pricePerUnit: 
+
+divProduct_7291074003292
+price: 148.80 ₪
+desc: סט מחבת כפולה+אביזרים
+boxSupplier: סולתם, 32*24ס"מ
+pricePerUnit: 
+
+divProduct_7296051100315
+price: 99.00 ₪
+desc: סט 7 קופסאות פלסטיק
+boxSupplier: LOCK & LOCK, LOCK&LOCK
+pricePerUnit: 
+
+divProduct_7290101665595
+price: 398.40 ₪
+desc: סט 4 סירים טופז
+boxSupplier: סולתם, 20/24/26/24ס"מ
+pricePerUnit: 
+
+divProduct_7291074001618
+price: 148.80 ₪
+desc: סט 2 סכינים עם בוצ'ר
+boxSupplier: סולתם, יח
+pricePerUnit: 
+
+divProduct_7291074003179
+price: 95.20 ₪
+desc: סט 2 מחבתות ידיתמוברשת
+boxSupplier: סולתם, 20*26ס"מ
+pricePerUnit: 
+
+divProduct_7291074003278
+price: 148.80 ₪
+desc: סט פלנצ'ה+אביזרים
+boxSupplier: סולתם, 34ס"מ
+pricePerUnit: 
+
+divProduct_7291074003285
+price: 198.40 ₪
+desc: סט סוטאז/מחבת ואביזרים
+boxSupplier: סולתם, 28ס"מ
+pricePerUnit: 
+
+divProduct_8421002857409
+price: 199.00 ₪
+desc: ARCOS סט סכינים מהודר
+boxSupplier: ARCOS, 20/21/10 ס"מ
+pricePerUnit: 
+
+divProduct_7290110465247
+price: 249.00 ₪
+desc: פלנציה + זוג מחבתות
+boxSupplier: FOOD APPEAL, 28 + 20 ס"מ
+pricePerUnit: 
+
+divProduct_7291074003636
+price: 198.40 ₪
+desc: סט סוטאז+כף הגשה
+boxSupplier: סולתם, 28ס"מ
+pricePerUnit: 
+
+divProduct_7290110462086
+price: 179.00 ₪
+desc: מחבת גריל כפולה ומתפרקת
+boxSupplier: FOOD APPEAL, 32 ס"מ
+pricePerUnit: 
+
+divProduct_7290109134222
+price: 268.80 ₪
+desc: סט סירים נירוסטה
+boxSupplier: סולתם, 6 חלקים
+pricePerUnit: 
+
+divProduct_7296073330059
+price: 99.00 ₪
+desc: PINK סט מצעים כותנה פלנל
+boxSupplier: GALA HOME, יחיד
+pricePerUnit: 
+
+divProduct_7296073330196
+price: 149.00 ₪
+desc: Blue Strמצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330189
+price: 149.00 ₪
+desc: DREAMסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330165
+price: 149.00 ₪
+desc: HOMEסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330202
+price: 149.00 ₪
+desc: LONDONמצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330226
+price: 149.00 ₪
+desc: Pastel Sמצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330080
+price: 179.00 ₪
+desc: PINKסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, 180זוגי
+pricePerUnit: 
+
+divProduct_7296073330219
+price: 149.00 ₪
+desc: SKYסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330172
+price: 149.00 ₪
+desc: STARSסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, זוגי
+pricePerUnit: 
+
+divProduct_7296073330127
+price: 99.00 ₪
+desc: Blue Strמצעים כותנה פלנל
+boxSupplier: GALA HOME, יחיד
+pricePerUnit: 
+
+divProduct_7296073330158
+price: 129.00 ₪
+desc: DREAMסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, נוער
+pricePerUnit: 
+
+divProduct_7296073330110
+price: 99.00 ₪
+desc: DREAMסט מצעים כותנה פלנל
+boxSupplier: GALA HOME, יחיד
+pricePerUnit: 
+
+divProduct_78652507017
+price: 229.00 ₪
+desc: מלונה גדולה לכלב
+boxSupplier: STARPLAST, 82*84*86 ס"מ
+pricePerUnit: 
+
+divProduct_7296073280781
+price: 1,990.00 ₪
+desc: מסלול ריצה
+boxSupplier: VO2, 430 ראן
+pricePerUnit: 
+
+divProduct_4006825604733
+price: 169.00 ₪
+desc: מברגון ליתיום נטען
+boxSupplier: EINHELL, TCSD 3,6 Li
+pricePerUnit: 
+
+divProduct_4010951781800
+price: 649.00 ₪
+desc: מסור גובה חשמלי טלסקופי
+boxSupplier: IKRA, עד 4 מטר
+pricePerUnit: 
+
+divProduct_4010951748131
+price: 333.00 ₪
+desc: שואב/מפוח עלים קל משקל
+boxSupplier: IKRA, 3.3 ק"ג
+pricePerUnit: 
+
+divProduct_7290016528091
+price: 199.00 ₪
+desc: זוג מזוודות בד נייבי
+boxSupplier: SWISS CLUB, 24/28
+pricePerUnit: 
+
+divProduct_7290016528343
+price: 299.00 ₪
+desc: 1377 ABS זוג מזוודות
+boxSupplier: GALA HOME, שחור
+pricePerUnit: 
+
+divProduct_7290016528350
+price: 299.00 ₪
+desc: 1377 ABS זוג מזוודות
+boxSupplier: GALA HOME, סגול
+pricePerUnit: 
+
+divProduct_7290016528367
+price: 299.00 ₪
+desc: 1377 ABS זוג מזוודות
+boxSupplier: GALA HOME, כסוף
+pricePerUnit: 
+
+divProduct_7290016528374
+price: 299.00 ₪
+desc: 1377 ABS זוג מזוודות
+boxSupplier: GALA HOME, כחול רויאל
+pricePerUnit: 
+
+divProduct_7290016528916
+price: 349.00 ₪
+desc: 20+24+28סט3 מזוודות בד
+boxSupplier: GALA HOME, 1630 שחור
+pricePerUnit: 
+
+divProduct_7290016528923
+price: 349.00 ₪
+desc: 20+24+28סט3 מזוודות בד
+boxSupplier: GALA HOME, 1630 סגול
+pricePerUnit: 
+
+divProduct_7702018997022
+price: 119.90 ₪
+desc: סכיני גילוח פיוז'ן ידני
+boxSupplier: ג'ילט, 12 יחידות
+pricePerUnit: 9.99 ₪ ליחידה
+
+divProduct_3014260214692
+price: 12.90 ₪
+desc: CW ג'ל גילוח סירייס
+boxSupplier: ג'ילט, 200 מ"ל
+pricePerUnit: 6.45 ₪ ל100 מ"ל
+
+divProduct_88300178278
+price: 249.00 ₪
+desc: אופוריה סי קיי א.ד.ט גבר
+boxSupplier: אופוריה, 100 מ"ל
+pricePerUnit: 
+
+divProduct_3386460078597
+price: 149.00 ₪
+desc: טוקד לאשה אדט
+boxSupplier: טוקד, 100 מ"ל
+pricePerUnit: 149.00 ₪ ל100 מ"ל
+
+divProduct_560540
+price: 15.00 ₪
+desc: אדג' ג'ל לגילוח עור רגיש
+boxSupplier: 'אדג, 200 מ"ל
+pricePerUnit: 7.50 ₪ ל100 מ"ל
+
+divProduct_5427978
+price: 14.70 ₪
+desc: תחליב רחצה עדין לפנים
+boxSupplier: קרמה, 180 מ"ל
+pricePerUnit: 8.17 ₪ ל100 מ"ל
+
+divProduct_5427985
+price: 14.70 ₪
+desc: קרמה ת.רחצה לפנים+ג.פילי
+boxSupplier: קרמה, 180 מ"ל
+pricePerUnit: 8.17 ₪ ל100 מ"ל
+
+divProduct_4891228430061
+price: 20.00 ₪
+desc: סכיני גילוח עם אלוורה
+boxSupplier: שיק גילוח, 10 יחידות
+pricePerUnit: 2.00 ₪ ליחידה
+
+divProduct_7640111495109
+price: 99.00 ₪
+desc: קברט לאישה א.ד.פ
+boxSupplier: 100 מ"ל
+pricePerUnit: 99.00 ₪ ל100 מ"ל
+
+divProduct_6291100139668
+price: 199.00 ₪
+desc: אדפ לגבר L'aventure
+boxSupplier: 100 מ"ל
+pricePerUnit: 
+
+divProduct_88300105519
+price: 149.00 ₪
+desc: אטרניטי אדט לגבר
+boxSupplier: 100 מ"ל
+pricePerUnit: 
+
+divProduct_737052347974
+price: 159.00 ₪
+desc: בוס אורנג' א.ד.ט לגבר
+boxSupplier: 100 מ"ל
+pricePerUnit: 
