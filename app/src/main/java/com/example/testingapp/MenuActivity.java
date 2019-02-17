@@ -33,7 +33,7 @@ public class MenuActivity extends AppCompatActivity {
         Shop appShop = new Shop(bufferReader);
         TextView loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         loadingTextView.setText("קטגוריות");
-        loadingTextView.setBackgroundColor(Color.BLUE);
+        loadingTextView.setBackgroundColor(Color.GREEN);
 
         myAppShop = appShop;
         myListView = (ListView) findViewById(R.id.categoriesListView);

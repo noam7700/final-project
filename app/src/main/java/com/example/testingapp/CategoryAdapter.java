@@ -45,7 +45,6 @@ public class CategoryAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Intent startIntent = new Intent();
                 startIntent.setClass(v.getContext(), CategoryActivity.class);
-                //TODO: send currCat object (with Parcelable)
                 startIntent.putExtra("com.example.testingapp.CATEGORY", currCat); //specific data
                 v.getContext().startActivity(startIntent);
             }
