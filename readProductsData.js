@@ -1,3 +1,21 @@
+/*
+file created format:
+line1) #categories
+loop #catagories:
+	line2.1) cat's name
+	line2.2) #pds in cat
+	loop #pds in cat:
+		line3.1) product's id //(divProduct_...)
+		line3.2) product's price
+		line3.3) product's description
+		line3.4) product's supplier's description
+		line3.5) product's price per unit
+	end
+end
+*/
+
+
+
 const puppeteer = require('puppeteer'); //clasic :)
 const fs = require('fs');
 const util = require('util');
@@ -21,16 +39,16 @@ const writeFile = util.promisify(fs.writeFile);
 		
 		
 		await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx');
-		await page.waitForSelector('.ciw ');
+		await page.waitForSelector('.ciw '); //catagories
 		
 		
 		
 		const button_cats = await page.$$('.ciw ');
 		const cats_num = button_cats.length;
-		outStream.write('number of cats: '+cats_num+'\n');
-		//i starts as 1, because [0] is 'recommended'
+		outStream.write(cats_num+'\n'); //line1
+		//i starts as 1, because [0] is 'recommended' and doesn't work as others
 		for (let i=1; i<cats_num; i++) {
-			console.log('current cat: '+i);
+			console.log('current cat: '+ i);
 			//reload main shopping page everytime
 			await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx');
 			await page.waitForSelector('.ciw ');
@@ -38,36 +56,40 @@ const writeFile = util.promisify(fs.writeFile);
 			
 			//goto cats[i]
 			const button_cat = button_cats[i];
-			const clickable = await button_cat.$('img');
-			clickable.click();
+			const clickableImg = await button_cat.$('img'); //the img of the catagory is clickable
+			const clickableImg_title = await page.evaluate(pd => pd.title, clickableImg);
+			outStream.write(clickableImg_title+'\n'); //line2.1
+			clickableImg.click(); //goto current catagory
 			await page.waitForSelector('div[id^="divProduct_"]');
 			
 			const productsDetails = await page.$$('div[id^="divProduct_"]');
 			const pd_num = productsDetails.length;
+			outStream.write(pd_num+'\n'); //line2.2
 			//loop over all the products
 			for(let i=0; i<pd_num; i++) {
 				//probably not necessary
 				const prodTextDetails = await productsDetails[i].$('div#divProductDetailsTexts');
 				
+				//print all pd's text attributes
 				let prodIdAttr = await page.evaluate(pd => pd.id, productsDetails[i]);
-				prodIdAttr.replace(/ /g, '');
-				outStream.write('\n'+prodIdAttr+'\n');
+				prodIdAttr.replace(/ /g, ''); // delete all spaces(' ') <-- I dont know, dont have the courage to check if it's needed
+				outStream.write(prodIdAttr+'\n'); //line3.1
 				
-				const prodPriceCss = 'span[id="spnEffectivePrice"]';
+				const prodPriceCss = 'span[id="spnEffectivePrice"]'; // w/o discounts
 				const prodPriceStr = await prodTextDetails.$eval(prodPriceCss, el => el.innerText);
-				outStream.write('price: '+prodPriceStr+'\n');
+				outStream.write(prodPriceStr+'\n'); //line3.2
 				
-				const prodDescCss = 'a';
+				const prodDescCss = 'a'; //the element is of the type 'a'
 				const prodDescStr = await prodTextDetails.$eval(prodDescCss, el => el.innerText);
-				outStream.write('desc: '+prodDescStr+'\n');
+				outStream.write(prodDescStr+'\n'); //line3.3
 				
 				const prodBoxSupplierCss = 'div[class="ProdBoxSupplierText"]';
 				const prodBoxSupplierStr = await prodTextDetails.$eval(prodBoxSupplierCss, el => el.innerText);
-				outStream.write('boxSupplier: '+prodBoxSupplierStr+'\n');
+				outStream.write(prodBoxSupplierStr+'\n'); //line3.4
 				
 				const prodPricePerUnitCss = 'div[id^=divProductPricePerUnit_]';
 				const prodPricePerUnitStr = await prodTextDetails.$eval(prodPricePerUnitCss, el => el.innerText);
-				outStream.write('pricePerUnit: '+prodPricePerUnitStr+'\n');
+				outStream.write(prodPricePerUnitStr+'\n'); //line3.5
 			}
 		}
 		
@@ -79,3 +101,26 @@ const writeFile = util.promisify(fs.writeFile);
 		writeFile('errors_readProductsData.txt'+e+'\n\n');
 	}
 })();
+
+/*
+file created format:
+line1) #categories
+loop #catagories:
+	line2.1) cat's name
+	line2.2) #pds in cat
+	loop #pds in cat:
+		line3.1) product's id //(divProduct_...)
+		line3.2) product's price
+		line3.3) product's description
+		line3.4) product's supplier's description
+		line3.5) product's price per unit
+	end
+end
+*/
+
+
+
+
+
+
+
