@@ -3,6 +3,8 @@ package com.example.testingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,6 +18,8 @@ public class ProductActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //backbutton
 
         myPd = getIntent().getParcelableExtra("com.example.testingapp.PRODUCT");
         myCategory = getIntent().getParcelableExtra("com.example.testingapp.CATEGORY");
@@ -31,14 +35,30 @@ public class ProductActivity extends AppCompatActivity {
         pdPriceTextView.setText(myPd.getPrice_str());
         pdPrice_perunitTextView.setText(myPd.getPrice_perunit_str());
 
-        Button backBtn = (Button) findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        Button addBtn = (Button) findViewById(R.id.addBtn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), CategoryActivity.class);
-                startIntent.putExtra("com.example.testingapp.CATEGORY", myCategory);
+                Intent startIntent = new Intent(getApplicationContext(), BasketActivity.class);
+                //TODO: add this pd to the basket (using putExtra)
                 startActivity(startIntent);
             }
         });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case android.R.id.home: //backbutton
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
     }
 }

@@ -3,6 +3,8 @@ package com.example.testingapp;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +25,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //backbutton
+
         BufferedReader bufferReader = null;
         try{
             InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
@@ -42,4 +46,18 @@ public class MenuActivity extends AppCompatActivity {
         myListView.setAdapter(categoryAdapter);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case android.R.id.home: //backbutton
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
 }
