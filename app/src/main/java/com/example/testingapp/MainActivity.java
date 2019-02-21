@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        if(BasketActivity.basketProducts != null){
+        if(BasketActivity.basketProducts == null){
             BasketActivity.basketProducts = new ArrayList<BasketProduct>();
         }
 
