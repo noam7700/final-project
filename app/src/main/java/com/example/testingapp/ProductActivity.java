@@ -28,10 +28,10 @@ public class ProductActivity extends AppCompatActivity {
         myCategory = getIntent().getParcelableExtra("com.example.testingapp.CATEGORY");
 
         //update the textView(s) to the current product
-        TextView pdDescTextView = (TextView) findViewById(R.id.pdDescTextView);
-        TextView pdSuppDescTextView = (TextView) findViewById(R.id.pdSuppDescTextView);
-        TextView pdPriceTextView = (TextView) findViewById(R.id.pdPriceTextView);
-        TextView pdPrice_perunitTextView = (TextView) findViewById(R.id.pdPrice_perunitTextView);
+        TextView pdDescTextView = (TextView) findViewById(R.id.activity_product_pdDescTextView);
+        TextView pdSuppDescTextView = (TextView) findViewById(R.id.activity_product_pdSuppDescTextView);
+        TextView pdPriceTextView = (TextView) findViewById(R.id.activity_product_pdPriceTextView);
+        TextView pdPrice_perunitTextView = (TextView) findViewById(R.id.activity_product_pdPrice_perunitTextView);
 
         pdDescTextView.setText(myPd.getDesc());
         pdSuppDescTextView.setText(myPd.getSupplier_desc());

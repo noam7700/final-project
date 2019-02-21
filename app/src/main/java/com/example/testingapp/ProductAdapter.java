@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 public class ProductAdapter extends BaseAdapter {
 
-    LayoutInflater mInflater;
-    Category myCategory;
+    private LayoutInflater mInflater;
+    private Category myCategory;
 
     public ProductAdapter(Context c, Category myCategory) {
         this.myCategory = myCategory;
@@ -36,10 +36,11 @@ public class ProductAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = mInflater.inflate(R.layout.productitem_layout, null);
         Product currProduct = myCategory.getProducts().get(position);
-        TextView pdDescTextView = (TextView) view.findViewById(R.id.pdDescTextView);
-        TextView pdSuppDescTextView = (TextView) view.findViewById(R.id.pdSuppDescTextView);
-        TextView pdPriceTextView = (TextView) view.findViewById(R.id.pdPriceTextView);
-        TextView pdPrice_perunitTextView = (TextView) view.findViewById(R.id.pdPrice_perunitTextView);
+
+        TextView pdDescTextView = (TextView) view.findViewById(R.id.productitem_pdDescTextView);
+        TextView pdSuppDescTextView = (TextView) view.findViewById(R.id.productitem_pdSuppDescTextView);
+        TextView pdPriceTextView = (TextView) view.findViewById(R.id.productitem_pdPriceTextView);
+        TextView pdPrice_perunitTextView = (TextView) view.findViewById(R.id.productitem_pdPrice_perunitTextView);
 
         //set the textViews
         pdDescTextView.setText(currProduct.getDesc());
