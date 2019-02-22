@@ -44,10 +44,9 @@ const writeFile = util.promisify(fs.writeFile);
 		outStream = await fs.createWriteStream('ProductsTextData.txt', {'flags': 'a'});
 		
 		//emptying the folder 'images'
-		empty('./images', false, (o)=>{
+	    /*empty('./images', false, (o)=>{
 		if(o.error) console.error(o.error);
-		});
-		
+		});*/	
 		await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx');
 		await page.waitForSelector('.ciw '); //catagories
 		
@@ -72,11 +71,12 @@ const writeFile = util.promisify(fs.writeFile);
 			await clickableImg.click(); //goto current catagory
 			
 			// scroll-down try
-			//for(let i = 0; i < 1; i++){
+			/*for(let i = 0; i < 1; i++){
 				await page.waitForSelector('#ctl00_PlaceHolderMain_ucMain_ctlProductsView_grdChart_GridData');
 				const category = await page.$('#ctl00_PlaceHolderMain_ucMain_ctlProductsView_grdChart_GridData');
-			//	await category.scrollTo(0,100);	
-			//}
+				await category.scrollTo(0,100);	
+			}
+			
 			const autoScroll = async (category) => {
 				await category.evaluate(async () => {
 					await new Promise((resolve, reject) => {
@@ -93,14 +93,25 @@ const writeFile = util.promisify(fs.writeFile);
 					}, 100)
 					})
 				})
-				}
-}/*			
+				}*/
+
 			await page.waitForSelector('div[id^="divProduct_"]');
 			
 			const productsDetails = await page.$$('div[id^="divProduct_"]');
+			 
+			
 			pd_num = productsDetails.length;
 			outStream.write(pd_num+'\n'); //line2.2
 			//loop over all the products
+			
+			//for(let i = 0; i < 100000; i++);
+
+			const last_product_id = await page.evaluate(pd => pd.id, productsDetails[pd_num - 1]);
+			console.log(last_product_id);
+			const selector = "#"+last_product_id;
+			await page.hover(selector);
+			
+			
 			for(let i=0; i<pd_num; i++) {
 				//probably not necessary
 				const prodTextDetails = await productsDetails[i].$('div#divProductDetailsTexts');
@@ -110,13 +121,6 @@ const writeFile = util.promisify(fs.writeFile);
 				let prodIdAttr = await page.evaluate(pd => pd.id, productsDetails[i]);
 				prodIdAttr.replace(/ /g, ''); // delete all spaces(' ') <-- I dont know, dont have the courage to check if it's needed
 				outStream.write(prodIdAttr+'\n'); //line3.1
-				
-				const prodImgCss = 'img';
-				const imgSrc = await prodImage.$eval(prodImgCss, el => el.src);
-				img_buf.push(`${prodIdAttr}.png`);
-				download(imgSrc, `${prodIdAttr}.png`, function(){ // downloading image
-					console.log("Image" + i + " downloaded");
-				});	
 				
 				const prodPriceCss = 'span[id="spnEffectivePrice"]'; // w/o discounts
 				const prodPriceStr = await prodTextDetails.$eval(prodPriceCss, el => el.innerText);
@@ -133,10 +137,18 @@ const writeFile = util.promisify(fs.writeFile);
 				const prodPricePerUnitCss = 'div[id^=divProductPricePerUnit_]';
 				const prodPricePerUnitStr = await prodTextDetails.$eval(prodPricePerUnitCss, el => el.innerText);
 				outStream.write(prodPricePerUnitStr+'\n'); //line3.5
+				
+				const prodImgCss = 'img';
+				const imgSrc = await prodImage.$eval(prodImgCss, el => el.src);
+				outStream.write(imgSrc+'\n'); //line3.6
+				/*img_buf.push(`${prodIdAttr}.png`);
+				download(imgSrc, `${prodIdAttr}.png`, function(){ // downloading image
+					console.log("Image" + i + " downloaded");
+				}); */  
 			}
 		}
 		//moving all images to folder named 'images'
-		await setTimeout(function(){
+		/*await setTimeout(function(){
 			for (let i=0; i<img_buf.length; i++) {
 				const src = path.join(img_buf[i]);
 				const destDir = path.join(`images`);
@@ -151,8 +163,8 @@ const writeFile = util.promisify(fs.writeFile);
 					});
 				});
 			}
-		}, 5000);	
-	*/	
+		}, 5000); */
+		
 		console.log('done!');
 		
 		
