@@ -56,7 +56,7 @@ const writeFile = util.promisify(fs.writeFile);
 		let pd_num;
 		outStream.write(cats_num+'\n'); //line1
 		//i starts as 1, because [0] is 'recommended' and doesn't work as others
-		for (let i=1; i<cats_num&&i<2; i++) {
+		for (let i=1; i<cats_num; i++) {
 			console.log('current cat: '+ i);
 			//reload main shopping page everytime
 			await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx');
@@ -69,49 +69,23 @@ const writeFile = util.promisify(fs.writeFile);
 			const clickableImg_title = await page.evaluate(pd => pd.title, clickableImg);
 			outStream.write(clickableImg_title+'\n'); //line2.1
 			await clickableImg.click(); //goto current catagory
-			
-			// scroll-down try
-			/*for(let i = 0; i < 1; i++){
-				await page.waitForSelector('#ctl00_PlaceHolderMain_ucMain_ctlProductsView_grdChart_GridData');
-				const category = await page.$('#ctl00_PlaceHolderMain_ucMain_ctlProductsView_grdChart_GridData');
-				await category.scrollTo(0,100);	
-			}
-			
-			const autoScroll = async (category) => {
-				await category.evaluate(async () => {
-					await new Promise((resolve, reject) => {
-					let totalHeight = 0
-					let distance = 100
-					let timer = setInterval(() => {
-						let scrollHeight = document.body.scrollHeight
-						window.scrollBy(0, distance)
-						totalHeight += distance
-						if(totalHeight >= scrollHeight){
-						clearInterval(timer)
-						resolve()
-						}
-					}, 100)
-					})
-				})
-				}*/
+			let productsDetails;
+			for(let i = 0; i<12; i++){
+				for(let i = 0; i<1000000000; i++); // delay for scrolling data to be loaded (about half a second)
+				await page.waitForSelector('div[id^="divProduct_"]');	
+				productsDetails = await page.$$('div[id^="divProduct_"]');
+				pd_num = productsDetails.length;
+				const last_pd_id = await page.evaluate(el=>el.id, productsDetails[pd_num - 1]);
+				console.log(last_pd_id);
+				const last_selector = "#"+last_pd_id+' > #divProductBg > #divProductDetails > #divProductDetailsTexts > div.prodpricetbl > a';
+				await page.hover(last_selector);
+				for(let i = 0; i<1000000000; i++); // delay for scrolling data to be loaded (about half a second)
 
-			await page.waitForSelector('div[id^="divProduct_"]');
-			
-			const productsDetails = await page.$$('div[id^="divProduct_"]');
-			 
-			
-			pd_num = productsDetails.length;
+			}				
+			console.log(pd_num);
 			outStream.write(pd_num+'\n'); //line2.2
-			//loop over all the products
 			
-			//for(let i = 0; i < 100000; i++);
-
-			const last_product_id = await page.evaluate(pd => pd.id, productsDetails[pd_num - 1]);
-			console.log(last_product_id);
-			const selector = "#"+last_product_id;
-			await page.hover(selector);
-			
-			
+			//loop over all the products			
 			for(let i=0; i<pd_num; i++) {
 				//probably not necessary
 				const prodTextDetails = await productsDetails[i].$('div#divProductDetailsTexts');
