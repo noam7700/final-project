@@ -70,16 +70,17 @@ const writeFile = util.promisify(fs.writeFile);
 			outStream.write(clickableImg_title+'\n'); //line2.1
 			await clickableImg.click(); //goto current catagory
 			let productsDetails;
-			for(let i = 0; i<12; i++){
-				for(let i = 0; i<1000000000; i++); // delay for scrolling data to be loaded (about half a second)
+			for(let i = 0; i<8; i++){
+				//await sleep(500); // delay for scrolling data to be loaded (a second)
 				await page.waitForSelector('div[id^="divProduct_"]');	
 				productsDetails = await page.$$('div[id^="divProduct_"]');
 				pd_num = productsDetails.length;
 				const last_pd_id = await page.evaluate(el=>el.id, productsDetails[pd_num - 1]);
 				console.log(last_pd_id);
-				const last_selector = "#"+last_pd_id+' > #divProductBg > #divProductDetails > #divProductDetailsTexts > div.prodpricetbl > a';
+				const last_selector = "#"+last_pd_id+' > #divProductBg > #divProductDetails > #divProductDetailsTexts > div.prodpricetbl > a'; // selector of the description of last pd
+				await page.waitForSelector(last_selector);
 				await page.hover(last_selector);
-				for(let i = 0; i<1000000000; i++); // delay for scrolling data to be loaded (about half a second)
+				await sleep(1500); // delay for scrolling data to be loaded (1.5 seconds)
 
 			}				
 			console.log(pd_num);
@@ -153,6 +154,9 @@ async function download(uri, filename, callback) {
     .pipe(fs.createWriteStream(filename))
     .on("close", callback);
  });
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /*
