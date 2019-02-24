@@ -32,7 +32,7 @@ const writeFile = util.promisify(fs.writeFile);
 
 (async function main() {
 	try {
-		const browser = await puppeteer.launch({headless: false});
+		const browser = await puppeteer.launch({headless: true});
 		const page = await browser.newPage();
 		
 		//probably stupid way to delete previous data
@@ -55,6 +55,8 @@ const writeFile = util.promisify(fs.writeFile);
 		const cats_num = button_cats.length;
 		let pd_num;
 		outStream.write(cats_num+'\n'); //line1
+		
+		let idbuf = [];
 		//i starts as 1, because [0] is 'recommended' and doesn't work as others
 		for (let i=1; i<cats_num; i++) {
 			console.log('current cat: '+ i);
@@ -96,6 +98,9 @@ const writeFile = util.promisify(fs.writeFile);
 				let prodIdAttr = await page.evaluate(pd => pd.id, productsDetails[i]);
 				prodIdAttr.replace(/ /g, ''); // delete all spaces(' ') <-- I dont know, dont have the courage to check if it's needed
 				outStream.write(prodIdAttr+'\n'); //line3.1
+				
+				if(idbuf.includes(prodIdAttr)) console.log("error!! pd: " + prodIdAttr +" returns itself");
+				idbuf.push(prodIdAttr);
 				
 				const prodPriceCss = 'span[id="spnEffectivePrice"]'; // w/o discounts
 				const prodPriceStr = await prodTextDetails.$eval(prodPriceCss, el => el.innerText);
