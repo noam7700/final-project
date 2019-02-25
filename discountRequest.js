@@ -6,7 +6,7 @@ async function run() {
     await page.setRequestInterception(true); //set the request option (triggered with goto)
     page.on('request', req => {
         //create data
-        let prodID = 7296073231578; //shoko
+        let prodID = 7296073231578;
         let qty = 2;
         let remarks = '';
         let unitofmeasure = '';
