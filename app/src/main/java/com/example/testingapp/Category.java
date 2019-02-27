@@ -23,6 +23,7 @@ public class Category implements Parcelable {
         *   line 3.3) pd's desc
         *   line 3.4) pd's supplier's desc
         *   line 3.5) pd's price per unit
+        *   line 3.6) pd's image's url source
         */
         try {
             this.catName = bufferreader.readLine(); //line 2.1

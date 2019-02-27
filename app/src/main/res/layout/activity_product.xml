@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/basketproduct_quantityEditText"
+        android:id="@+id/activity_product_quantityEditText"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/basketproduct_pdDescTextView"
