@@ -38,12 +38,14 @@ public class ProductActivity extends AppCompatActivity {
         pdPriceTextView.setText(myPd.getPrice_str());
         pdPrice_perunitTextView.setText(myPd.getPrice_perunit_str());
 
-        Button addBtn = (Button) findViewById(R.id.addBtn);
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        Button updateQuantityBtn = (Button) findViewById(R.id.updateQuantityBtn);
+        updateQuantityBtn.setText("עדכן כמות בסל");
+        updateQuantityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), BasketActivity.class);
-                //TODO: add this pd to the basket (using putExtra)
+                //TODO: update quantity for this product in BasketActivity.currentbasket
+                
                 startActivity(startIntent);
             }
         });

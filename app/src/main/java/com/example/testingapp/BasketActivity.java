@@ -9,12 +9,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class BasketActivity extends AppCompatActivity {
 
     ListView myBasketListView;
-    public static ArrayList<BasketProduct> basketProducts;
+    public static Basket currentBasket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +46,7 @@ public class BasketActivity extends AppCompatActivity {
         });
 
 
-        ProductBasketAdapter productBasketAdapter = new ProductBasketAdapter(this, BasketActivity.basketProducts);
+        ProductBasketAdapter productBasketAdapter = new ProductBasketAdapter(this, BasketActivity.currentBasket);
         myBasketListView.setAdapter(productBasketAdapter);
     }
 

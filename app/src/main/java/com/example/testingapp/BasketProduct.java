@@ -1,6 +1,6 @@
 package com.example.testingapp;
 
-public class BasketProduct {
+public class BasketProduct implements Buyable{
     private Product myProduct;
     private double quantity;
 
@@ -18,5 +18,29 @@ public class BasketProduct {
     }
     public Product getMyProduct(){
         return myProduct;
+    }
+
+    @Override
+    public double getDiscount(double quantity){
+        //TODO: call discountRequest.js which POST requests from the server
+        //maybe call .bat(cmd script) that calls the discountRequest?
+        return 0;
+    }
+
+    @Override
+    public void addToBasket() {
+        //TODO: add to current basket (BasketActivity.basketBuyables)
+        BasketActivity.currentBasket.getBasketBuyables().add(this);
+        return;
+    }
+
+    @Override
+    public String getDesc() {
+        return this.myProduct.getDesc();
+    }
+
+    @Override
+    public double getPrice() {
+        return this.myProduct.getPrice();
     }
 }
