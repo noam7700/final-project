@@ -17,8 +17,9 @@ public class Product implements Parcelable {
     private String supplier_desc;
     //just for user's usage. if the pd is per unit, it's already in the price attr
     private String price_perunit_str;
+    private String img_src;
 
-    Product(String id_str, String price_str, String desc, String supplier_desc, String price_perunit_str) {
+    Product(String id_str, String price_str, String desc, String supplier_desc, String price_perunit_str, String img_src) {
         this.id_str = id_str;
         this.price_str = price_str;
         //parts[0] is the price, parts[1] is NIS symbol
@@ -38,6 +39,7 @@ public class Product implements Parcelable {
         this.desc = desc;
         this.supplier_desc = supplier_desc;
         this.price_perunit_str = price_perunit_str;
+        this.img_src = img_src;
     }
 
     public double getDiscount(double quantity){
@@ -65,6 +67,7 @@ public class Product implements Parcelable {
     public String getPrice_perunit_str() {
         return price_perunit_str;
     }
+    public String getImg_src() { return img_src; }
 
 
     protected Product(Parcel in) {
@@ -74,6 +77,8 @@ public class Product implements Parcelable {
         desc = in.readString();
         supplier_desc = in.readString();
         price_perunit_str = in.readString();
+        img_src = in.readString();
+
     }
 
     @Override
@@ -89,6 +94,7 @@ public class Product implements Parcelable {
         dest.writeString(desc);
         dest.writeString(supplier_desc);
         dest.writeString(price_perunit_str);
+        dest.writeString(img_src);
     }
 
     @SuppressWarnings("unused")

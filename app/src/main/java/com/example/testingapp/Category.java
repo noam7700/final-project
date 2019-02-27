@@ -31,14 +31,15 @@ public class Category implements Parcelable {
 
             //insert cat's pds
             Product pd;
-            String id_str, price_str, desc, supplier_desc, price_perunit_str;
+            String id_str, price_str, desc, supplier_desc, price_perunit_str, img_src;
             for(int i=0; i<numOfPds; i++){
                 id_str = bufferreader.readLine(); //line 3.1
                 price_str = bufferreader.readLine(); //line 3.2
                 desc = bufferreader.readLine(); //line 3.3
                 supplier_desc = bufferreader.readLine(); //line 3.4
                 price_perunit_str = bufferreader.readLine(); //line 3.5
-                pd = new Product(id_str, price_str, desc, supplier_desc, price_perunit_str);
+                img_src = bufferreader.readLine(); //line 3.6
+                pd = new Product(id_str, price_str, desc, supplier_desc, price_perunit_str, img_src);
                 products.add(pd); //push_back
             }
 

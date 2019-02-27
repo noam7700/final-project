@@ -10,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -32,6 +35,10 @@ public class ProductActivity extends AppCompatActivity {
         TextView pdSuppDescTextView = (TextView) findViewById(R.id.activity_product_pdSuppDescTextView);
         TextView pdPriceTextView = (TextView) findViewById(R.id.activity_product_pdPriceTextView);
         TextView pdPrice_perunitTextView = (TextView) findViewById(R.id.activity_product_pdPrice_perunitTextView);
+        ImageView pdImgView = (ImageView) findViewById(R.id.activity_pdImageView);
+        //setting image view
+        Picasso.with(this).load(myPd.getImg_src()).into(pdImgView);
+
 
         pdDescTextView.setText(myPd.getDesc());
         pdSuppDescTextView.setText(myPd.getSupplier_desc());
