@@ -9,10 +9,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -40,17 +45,57 @@ public class ProductActivity extends AppCompatActivity {
         Picasso.with(this).load(myPd.getImg_src()).into(pdImgView);
 
 
+        TextView quantityBtn = (TextView) findViewById(R.id.activity_product_quantityBtn);
+        final EditText quantityEditText = (EditText) findViewById(R.id.activity_product_quantityEditText);
+
         pdDescTextView.setText(myPd.getDesc());
         pdSuppDescTextView.setText(myPd.getSupplier_desc());
         pdPriceTextView.setText(myPd.getPrice_str());
         pdPrice_perunitTextView.setText(myPd.getPrice_perunit_str());
+        quantityBtn.setText("כמות:");
 
-        Button addBtn = (Button) findViewById(R.id.addBtn);
-        addBtn.setOnClickListener(new View.OnClickListener() {
+        Button updateQuantityBtn = (Button) findViewById(R.id.updateQuantityBtn);
+        updateQuantityBtn.setText("עדכן כמות בסל");
+        updateQuantityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(getApplicationContext(), BasketActivity.class);
-                //TODO: add this pd to the basket (using putExtra)
+                //TODO: update quantity for this product in BasketActivity.currentbasket
+
+                String new_quantity_str = quantityEditText.getText().toString();
+                //supports commas in the number. like "1,399.00"
+                NumberFormat format = NumberFormat.getInstance(Locale.US);
+                Number number_new_quantity = null;
+                try {
+                    number_new_quantity = format.parse(new_quantity_str);
+
+                }
+                catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                double new_quantity = number_new_quantity.doubleValue();
+
+                //check if the product already exists in the basket (from last to first)
+                BasketProduct foundPd = null;
+                Buyable buyable;
+                for(int i=BasketActivity.currentBasket.getBasketBuyables().size() - 1; i>=0; i--){
+                    buyable = BasketActivity.currentBasket.getBasketBuyables().get(i);
+                    if(buyable instanceof BasketProduct && buyable.getDesc().equals(myPd.getDesc())) {
+                        foundPd = (BasketProduct) buyable;
+                        break;
+                    }
+                }
+                if(foundPd != null)
+                    //only change his attribute
+                    foundPd.setQuantity(new_quantity);
+                else {
+                    //TODO: add this Product to BasketActivity.currentBasket
+                    //create BasketProduct object
+                    BasketProduct thisBasketProduct = new BasketProduct(myPd, new_quantity);
+                    //add this basketProduct to currentBasket
+                    BasketActivity.currentBasket.getBasketBuyables().add(thisBasketProduct);
+                }
+                
                 startActivity(startIntent);
             }
         });

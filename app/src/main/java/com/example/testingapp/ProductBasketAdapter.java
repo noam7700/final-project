@@ -10,26 +10,24 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class ProductBasketAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private ArrayList<BasketProduct> mBasketProducts;
+    private Basket mBasket;
 
-    public ProductBasketAdapter(Context c, ArrayList<BasketProduct> basketProducts){
-        mBasketProducts = basketProducts; //low copy - important (when deleted here, it should delete the global)
+    public ProductBasketAdapter(Context c, Basket basket){
+        mBasket = basket; //low copy - important (when deleted here, it should delete the global)
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return mBasketProducts.size();
+        return mBasket.getBasketBuyables().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mBasketProducts.get(position);
+        return mBasket.getBasketBuyables().get(position);
     }
 
     @Override
@@ -40,14 +38,16 @@ public class ProductBasketAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = mInflater.inflate(R.layout.basketproduct_layout, null);
-        BasketProduct basketProduct = mBasketProducts.get(position);
+        Buyable buyable = mBasket.getBasketBuyables().get(position);
 
         TextView pdDescTextView = (TextView) view.findViewById(R.id.basketproduct_pdDescTextView);
         TextView quantityTextView = (TextView) view.findViewById(R.id.basketproduct_quantityBtn);
         final EditText quantityEditText = (EditText) view.findViewById(R.id.basketproduct_quantityEditText);
         final TextView pdSumPriceTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumPriceTextView);
 
-        pdDescTextView.setText(basketProduct.getMyProduct().getDesc());
+
+        pdDescTextView.setText(buyable.getDesc());
+
         quantityTextView.setText("כמות:");
         quantityEditText.addTextChangedListener(new TextWatcher() {
             @Override
