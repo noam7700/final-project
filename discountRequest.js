@@ -1,13 +1,16 @@
 const puppeteer = require('puppeteer');
 
 async function run() {
+	discountRequest(7296073280354, 5)
+}
+
+run();
+async function discountRequest(prodID,qty){
     let browser = await puppeteer.launch({headless: false});
     let page = await browser.newPage();
     await page.setRequestInterception(true); //set the request option (triggered with goto)
     page.on('request', req => {
         //create data
-        let prodID = 7296073231578;
-        let qty = 2;
         let remarks = '';
         let unitofmeasure = '';
         var request = {
@@ -36,7 +39,18 @@ async function run() {
     // capture intercepted response
     page.on('response', async response => {
         console.log("Resource Type: "  + response.request().resourceType());
-        console.log("Response Text: " + await response.text());
+		res = await response.text();
+		
+		//retrieving price after discount
+		htmlString=res;
+		s = "<span class='productPrice'>";
+		let price = null;
+		if(htmlString.includes(s)){
+		index = htmlString.indexOf(s) + s.length; // end of first occurance of s (beginning of pd price)
+		offset = htmlString.substring(index).indexOf(' '); // product's price length
+		price = htmlString.substring(index, index + offset);
+        console.log("Price after discount: " + price);
+		}
         console.log("==============");
     });
 
@@ -46,7 +60,21 @@ async function run() {
     //console.log(response.responseText);
 
     //console.log('done');
-
+	
+	
 }
 
-run();
+async function getPriceAterDiscount(htmlString){
+	console.log(htmlString);
+	htmlString = htmlString.toString();
+	console.log(htmlString);
+	s = "<span class='productPrice'>";
+	let price = null;
+	if(htmlString.includes(s)){
+    index = htmlString.indexOf(s) + s.length; // end of first occurance of s (beginning of pd price)
+    console.log("index(first occ of s): "+ index + ". html string length: " + htmlString.length);
+    offset = htmlString.substring(index).indexOf(' '); // product's price length
+    price = htmlString.substring(index, index + offset);
+    return price;
+	}
+}
