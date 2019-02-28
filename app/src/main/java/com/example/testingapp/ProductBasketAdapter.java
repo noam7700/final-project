@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 public class ProductBasketAdapter extends BaseAdapter {
 
@@ -44,8 +47,11 @@ public class ProductBasketAdapter extends BaseAdapter {
         TextView quantityTextView = (TextView) view.findViewById(R.id.basketproduct_quantityBtn);
         final EditText quantityEditText = (EditText) view.findViewById(R.id.basketproduct_quantityEditText);
         final TextView pdSumPriceTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumPriceTextView);
+        ImageView basketproduct_ImageView = (ImageView) view.findViewById(R.id.basketproduct_ImageView);
 
-
+        if(buyable instanceof BasketProduct) {
+            Picasso.with(view.getContext()).load(((BasketProduct)buyable).getMyProduct().getImg_src()).into(basketproduct_ImageView);
+        }
         pdDescTextView.setText(buyable.getDesc());
 
         quantityTextView.setText("כמות:");
