@@ -55,7 +55,7 @@ async function discountRequest(prodID,qty){
 		index = htmlString.indexOf(s) + s.length; // end of first occurance of s (beginning of pd price)
 		offset = htmlString.substring(index).indexOf(' '); // product's price length
 		price = htmlString.substring(index, index + offset);
-        console.log("Price after discount: " + price);
+        console.log(res + "\n Price after discount: " + price);
 		}
         console.log("==============");
     });
