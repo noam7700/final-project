@@ -89,7 +89,7 @@ const writeFile = util.promisify(fs.writeFile);
 			outStream.write(pd_num+'\n'); //line2.2
 			
 			//loop over all the products			
-			for(let i=0; i<pd_num; i++) {
+			for(let i=0; i<pd_num;&&i<30 i++) {
 				//probably not necessary
 				const prodTextDetails = await productsDetails[i].$('div#divProductDetailsTexts');
 				const prodImage = await productsDetails[i].$('div[id^="divProductImage_"]');

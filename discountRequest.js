@@ -1,10 +1,16 @@
 const puppeteer = require('puppeteer');
 
-async function run() {
-	discountRequest(7296073280354, 5)
-}
 
+
+
+async function run() {
+	discountRequest(408354, 8)
+}
 run();
+
+
+
+
 async function discountRequest(prodID,qty){
     let browser = await puppeteer.launch({headless: false});
     let page = await browser.newPage();

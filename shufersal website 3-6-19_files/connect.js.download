@@ -1,0 +1,2656 @@
+﻿/***********************************************************/
+/*               BY - Static class                       */
+/***********************************************************/
+
+/*
+    return types:
+        status - connected, disconnected, unauthorized, unsupported
+        session - 
+/*
+
+/* Main BumpYard sdk class - static */
+function BY_isMobile() {
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        return true;
+    }
+    return false;
+}
+
+var BY_isSafari = false;
+var ua = navigator.userAgent.toLowerCase();
+if (ua.indexOf('safari') != -1) {
+    if (ua.indexOf('chrome') > -1) {
+        BY_isSafari = false;
+    } else {
+        BY_isSafari = true;
+    }
+}
+
+var BY = {
+
+    /* public */
+    brand: undefined,
+    user: null,
+    streamProviderType: { None: -1, General: 0, Facebook: 1 },
+    streamId: "",
+    forceSilenceLogin: false,
+    isBusy: false,
+    isOpen: false,
+    launcher: "",
+    options: "",
+    /* privates */
+    _baseDomain: '//apps.bumpyardpro.com/',
+    _appsSubDomain: 'apps',
+    _supportedProviders: ["google", "twitter", "facebook", "bumpyard"], /* sorted by login priority */
+    _counterProviders: 0,
+    _loginCallback: null,
+    _facebook: null,
+    _initializedProvidersBooleanArray: [], //hash array that hold providers initialized, when all providers initialized we callback to init app function
+    _triggers: [],
+    _urlTypesEnum: Object.freeze({ "matches": 1, "contains": 2, "regex": 3 }),
+    _streamState: "",
+    _intervalHandler: null,
+    _instanceId: null,
+    _appLoadTime: new Date(),
+
+    /* constructor */
+    init: function (options, callback) {
+        BY.Now.init(callback);
+
+        if (options.streamId) {
+            this.streamId = options.streamId;
+        }
+        else {
+            throw { type: "error", message: "missing stream id" };
+        }
+
+        if (options.supportedProviders) {
+            this._supportedProviders = options.supportedProviders;
+        }
+        if (options.forceSilenceLogin && options.forceSilenceLogin == "1") {
+            this.forceSilenceLogin = true;
+        }
+
+        for (var i = 0; i < this._supportedProviders.length; i++) {
+            BY._initializedProvidersBooleanArray[this._supportedProviders[i]] = false;
+        }
+
+        this._getBaseDomain(options);
+
+        if (options.facebook && options.facebook.appId && options.facebook.appId.length > 0) {
+            //parametrs to init facebook
+            this._facebook = options.facebook;
+        }
+
+        this._counterProviders = this._supportedProviders.length;
+
+        // call _getLoginStatus to know if the user is already logged-in on start-up and init BY.user
+        function callbackProxy(res) {
+            //if isLoginPage == true. we don't call again BY._getLoginStatus because we know the user is already disconnected.
+            if (options.isLoginPage != true) {
+                BY._getLoginStatus(function (response) {
+                    callback(res);
+                }, 0);
+            }
+        }
+
+        for (i = 0; i < this._supportedProviders.length; i++) {
+            switch (this._supportedProviders[i]) {
+                case "facebook": {
+                    BY_FacebookConnect.init(callbackProxy);
+                    break;
+                }
+                case "bumpyard": {
+                    BY_BumpyardConnect.init(callbackProxy);
+                    break;
+                }
+                case "twitter": {
+                    BY_TwitterConnect.init(callbackProxy);
+                    break;
+                }
+                case "google": {
+                    BY_GoogleConnect.init(callbackProxy);
+                    break;
+                }
+            }
+        }
+
+        jQuery(document).ready(function () {
+            //build user logged in div
+            var divUserConnected = jQuery("#divUserConnected");
+            if (divUserConnected.length > 0 && BY.forceSilenceLogin == true) {
+                divUserConnected.find("#divDisconnectButton").remove();
+                divUserConnected.find("#divUserName").remove();
+            }
+
+            try {
+                if (window.name && window.name == "by_iframe") {
+                    //this app open from another app. hide "powered by bumpyard"
+                    jQuery("#divPoweredBy").hide();
+                }
+                else {
+                    jQuery("#divPoweredBy").show();
+                }
+            }
+            catch (ex) {
+            }
+            BY.detectAppAccessibility();
+
+        });
+    },
+
+    /* public methods */
+    show: function (appParams) {
+        var instance = BY.instances[BY._instanceId];
+        instance.iframeUrlChanged = false;
+        if (instance.appParamsAdded != null && instance.appParamsAdded != undefined && instance.appParamsAdded.length > 0) {
+            //clear all appParams from url
+            for (var i = 0; i < instance.appParamsAdded.length; i++) {
+                if (instance.iframeUrl.indexOf(instance.appParamsAdded[i]) > -1) {
+                    instance.iframeUrl = instance.iframeUrl.replace(instance.appParamsAdded[i], "");
+                    instance.iframeUrlChanged = true;
+                }
+            }
+        }
+        instance.appParamsAdded = [];
+
+
+        //suport paramters in BY.show function. for example you can call BY.show({"nodeId": "j7_8"}); 
+        if (appParams) {
+            if (appParams.streamId && appParams.streamId.length > 0 && appParams.appName && appParams.appName.length) {
+                //add support for changing app stream id by calling
+                //BY.show({ "appName" : "navigator", "streamId": "THE ENCRYPTED STREAM ID", "nodeId", "OPTIONAL NODE ID" });
+                // change the App StreamId to diffrent App       
+                if (instance.name != appParams.appName) {
+                    delete BY.instances[instance.name];
+                    BY._removeInstance(instance.id);
+                }
+                BY.setStreamId(appParams.appName, appParams.streamId, function (instance) {
+                    f1(instance);
+                }, appParams.subStreamId);
+            }
+            else {
+                f1(instance);
+            }
+
+            function f1(instance) {
+                for (var propertyName in appParams) {
+                    if (propertyName == "streamId") {
+                        continue;
+                    }
+                    // propertyName is what you want
+                    // you can get the value like this: appParams[propertyName]
+                    if (instance.iframeUrl.indexOf(propertyName + "=") == -1) {
+                        //this parameter not exist in url
+                        var paramAdded = "";
+                        if (instance.iframeUrl.indexOf("/?") == -1) {
+                            paramAdded = "/?" + propertyName + "=" + appParams[propertyName];
+                        }
+                        else {
+                            if (instance.urlPrams.length > 0)
+                                paramAdded = "&";
+
+                            paramAdded += propertyName + "=" + appParams[propertyName];
+                        }
+                        instance.iframeUrl += paramAdded;
+                        //save all params for case the BY.show call again and we want to clear old values
+                        if (instance.appParamsAdded == undefined) {
+                            instance.appParamsAdded = [];
+                        }
+                        instance.appParamsAdded.push(paramAdded);
+                    }
+                }
+            }
+        }
+        BY.isOpen = false;
+        if (instance.onclickFunction && instance.onclickFunction.indexOf("window.open") > -1) {
+            window.open(instance.iframeUrl, instance.urlUniqueName, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='" + instance.w + "',height='" + instance.h + "',top='" + instance.top + "',left='" + instance.left + "'").focus();
+        }
+        else {
+            BY._slideOutPreButton(instance.id);
+        }
+    },
+    /* you can register to registerToWindowUnloadEvent event by calling BY.registerToWindowUnloadEvent(callback) with callback function. */
+    registerToWindowUnloadEvent: function (callback) {
+        //realtime event disconnect
+        if (BY.arrOnDisconnect == undefined || BY.arrOnDisconnect == null) {
+            BY.arrOnDisconnect = [];
+            BY.isOnDisconnectTrigger = false;
+
+            //user close window/tab/refresh
+            window.onunload = function () {
+                if (BY.isOnDisconnectTrigger == false) {
+                    BY._onWindowUnload();
+                    BY.isOnDisconnectTrigger = true;
+                }
+            }
+            //user close window/tab/refresh
+            window.onbeforeunload = function () {
+                if (BY.isOnDisconnectTrigger == false) {
+                    BY._onWindowUnload();
+                    BY.isOnDisconnectTrigger = true;
+                }
+            }
+        }
+
+        // push the callback function to array of calbacks
+        BY.arrOnDisconnect.push(callback);
+    },
+
+    inIframe: function () {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
+    },
+
+    // this function roll out to parent page(iframe) and check if app is in Accessibility mode.
+    // after function end roll out we will start to drill down and change the Accessibility mode in all pages(iframes).
+    detectAppAccessibility: function (elem, isAccessabilityVisible) {
+        if (jQuery('#accessibilityIcon').hasClass('accessibilityIconActive')) {
+            isAccessabilityVisible = true;
+        }
+
+        if (isAccessabilityVisible == true) {
+            // change current window to accessibility mode
+            jQuery(elem).contents().find('.accessibilityView').show();
+            jQuery(elem).contents().find('body').addClass('accessibilityMode');
+            // drill down iframes and change to accessibility mode
+            var foundVisibleIframe = false;
+            function f() {
+                for (var i = 0; i < childIframes.length; i++) {
+                    var iframeSrc = childIframes[i].src;
+                    if (iframeSrc && iframeSrc.indexOf(BY._baseDomain) > -1 && jQuery(childIframes[i]).is(":visible")) {
+                        //check if current iframe is in the same baseDomain bumpyard(and from facebook or other iframe).
+                        BY.detectAppAccessibility(childIframes[i], true);
+                        foundVisibleIframe = true;
+                    }
+                }
+            }
+            var childIframes = jQuery(elem).contents().find("[name='by_iframe']");
+            if (childIframes.length > 0) {
+                f();
+            }
+            if (foundVisibleIframe == false) {
+                childIframes = jQuery(elem).contents().find("[name='by_iframe_login']");
+                if (childIframes.length > 0) {
+                    f();
+                }
+            }
+
+        }
+        else {
+            //roll up iframes to check if parent iframe is in accessabilty mode
+            try {
+                if (!BY.inIframe())
+                    return;
+
+                var parentIframes = jQuery("[name='by_iframe']", window.parent.document);
+                if (parentIframes.length == 0) {
+                    if (jQuery('#accessibilityIcon').hasClass('accessibilityIconActive')) {
+                        BY.detectAppAccessibility(elem, true);
+                    }
+                }
+                else {
+                    for (var i = 0; i < parentIframes.length; i++) {
+                        if (jQuery(parentIframes[i]).parent().is(":visible")) {
+                            var isAccessibilityMode = false;
+                            if (jQuery('#accessibilityIcon').hasClass('accessibilityIconActive')) {
+                                isAccessibilityMode = true
+                            }
+                            parent.BY.detectAppAccessibility(jQuery("[name='by_iframe']", window.parent.document)[i], isAccessibilityMode);
+                        }
+                    }
+                }
+            }
+            catch (e) {
+                if (jQuery('#accessibilityIcon').hasClass('accessibilityIconActive')) {
+                    BY.detectAppAccessibility(elem, true);
+                }
+            }
+        }
+        jQuery(elem).css('height', jQuery(elem).contents().find('html').css('height'));
+    },
+
+    getLoginStatus: function (callback, options) {
+        this._getLoginStatus(callback, 0, options);
+    },
+
+    logout: function (callback) {
+        //trigger window unload functions events
+        BY._onWindowUnload();
+        BY_app.isAlreadyConnected = false;
+        var f = function () {
+            //first logout from BY provider
+            BY_FacebookConnect.logout(function (response) {
+                BY_BumpyardConnect.logout(function (response) {
+                    location.reload();
+                });
+            });
+        }
+        if (BY.streamId && BY.objectId) {
+            BY.notifyUser.connect(BY.streamId, BY.objectId, false, function () {
+                f();
+            });
+        }
+        else {
+            f();
+        }
+
+        jQuery.cookie("stopNotifications", "false", { path: '/' });
+    },
+
+    addClassToBody: function (cssClassText) {
+        if (BY.isCssStyleAdded == undefined) {
+            BY.isCssStyleAdded = true;
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.id = 'BY_classes';
+            style.innerHTML = '\n\r' + cssClassText;
+            document.getElementsByTagName('head')[0].appendChild(style);
+        }
+        else {
+            document.getElementById("BY_classes").innerHTML += '\n\r' + cssClassText;
+        }
+    },
+
+    write_gaqEvent: function (type, instanceId) {
+        if (typeof (_gaq) != "undefined") {
+            var instance = BY.instances[instanceId];
+            try {
+                switch (type.toString()) {
+                    case "preButtonClick": {
+                        _gaq.push(['_trackEvent', instance.urlUniqueName, "Pre button click", 'OK']);
+                        console.log(instance.urlUniqueName, "Pre button click")
+                        break;
+                    }
+                    case "close": {
+                        _gaq.push(['_trackEvent', instance.urlUniqueName, "Close", 'OK']);
+                        console.log(instance.urlUniqueName, "Close")
+                        break;
+                    }
+                    case "minimize": {
+                        _gaq.push(['_trackEvent', instance.urlUniqueName, "Minimize", 'OK']);
+                        console.log(instance.urlUniqueName, "Minimize")
+                        break;
+                    }
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+    },
+
+    //Support for users that already used old messenger install
+    messenger: function (options, callback) {
+        BY.chat(options, callback)
+    },
+
+    chat: function (options, callback) {
+        var instance = BY.chat;
+        instance.urlUniqueName = 'chat';
+        instance.id = instance.iframeId = "ifrChat";
+        instance.panelIdToHide = "divPreChatButton";
+        instance.panelIdToShow = "divChatIframe";
+        instance.iframeName = "by_iframe_chat";
+        instance.supportOverlayConfirmClose = true;
+        instance.closeIconsColor = "#fff";
+        instance.keepAppOpen = true;
+        instance.onclickFunction = "BY._slideOutPreButton('" + instance.id + "');"
+
+        if (options.subStreamId && options.subStreamId > 0) {
+            BY.subStreamId = options.subStreamId;
+        }
+
+        if (options.language) {
+            // language(for messages/ accessability...) override by install code
+            instance.language = options.language;
+            BY.defaultLanguage = options.language;
+        }
+
+
+        instance.isStateSupported = function (state) {
+            return (state && (state == '1' || state == '2'));
+        }
+        this._appBaseInit(options, instance, callback);
+        if (!BY_isMobile()) {
+            //support open image from chat- full screen
+            // Here "addEventListener" is for standards-compliant web browsers and "attachEvent" is for IE Browsers.
+            var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+            var eventer = window[eventMethod];
+
+            var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+
+            BY.addClassToBody(".by_allScreen {\n height:100vh !important; width:100vw !important;margin:0 !important;max-width:none !important;\n}");
+            BY.addClassToBody("#divChatIframe {\n webkit-transition: all 0s ease-in;-moz-transition: all 0s ease-in;-o-transition: all 0s ease-in;transition: all 0s ease-in;\n}");
+            BY.addClassToBody("#divChatIframe.by_allScreen {\n webkit-transition: all 0.2s ease-in;-moz-transition: all 0.2s ease-in;-o-transition: all 0.2s ease-in;transition: all 0.2s ease-in;\n}");
+            // Listen to message from child IFrame window
+            eventer(messageEvent, function (e) {
+                if (e.data == "max") {
+                    jQuery('#divChatIframe').addClass('by_allScreen')
+                    jQuery('.BY_imgClose').hide()
+                    jQuery('.BY_imgMinimize').hide()
+                }
+                else {
+                    jQuery('#divChatIframe').removeClass('by_allScreen');
+                    jQuery('.BY_imgClose').show()
+                    jQuery('.BY_imgMinimize').show()
+                }
+            }, false);
+        }
+    },
+
+    contactUs: function (options, callback) {
+        var instance = BY.contactUs;
+        instance.urlUniqueName = 'contact_us';
+        instance.id = instance.iframeId = "ifrContactUs";
+        instance.panelIdToHide = "divPreContactUsButton";
+        instance.panelIdToShow = "divContactUsIframe";
+        instance.iframeName = "by_iframe";
+        instance.supportOverlayConfirmClose = false;
+        instance.closeIconsColor = "#b5b5b5";
+        instance.keepAppOpen = false;
+        instance.preButtonAriaLabel = BY.texts[BY.defaultLanguage].contactUsApp;
+        instance.onclickFunction = "BY._slideOutPreButton('" + instance.id + "');"
+
+        if (options.defaultModuleId) {
+            instance.defaultModuleId = options.defaultModuleId;
+        }
+
+        if (options.language) {
+            // language(for messages/ accessability...) override by install code
+            instance.language = options.language;
+            BY.defaultLanguage = options.language;
+        }
+
+        instance.isStateSupported = function (state) {
+            return (state != '0');
+        }
+
+        this._appBaseInit(options, instance, callback);
+    },
+
+    navigator: function (options, callback) {
+        var instance = BY.navigator;
+        instance.urlUniqueName = 'interactive_navigator';
+        instance.id = instance.iframeId = "ifrInteractiveNavigator";
+        instance.panelIdToHide = "divPreInteractiveNavigatorButton";
+        instance.panelIdToShow = "divInteractiveNavigatorIframe";
+        instance.iframeName = "by_iframe_navigator";
+        instance.closeIconsColor = "#fff";
+        instance.keepAppOpen = false;
+        instance.preButtonAriaLabel = "Navigator Application";
+        instance.vAlign = "middle";
+        instance.supportOverlayConfirmClose = false;
+        instance.h = "100%";
+        instance.isStateSupported = function (state) {
+            return (state && state != '0');
+        }
+        instance.onclickFunction = "BY.show({appName: 'navigator', nodeId: 'node_0'});"; // reset navigator on luancher button click
+
+        if (options.language) {
+            // language(for messages/ accessability...) override by install code
+            instance.language = options.language;
+            BY.defaultLanguage = options.language;
+        }
+
+        this._appBaseInit(options, instance, callback);
+    },
+
+    dataEntry: {
+        renderHtmlForm: function (jsonFields, elm) {
+            var html = "";
+            jQuery.each(jsonFields, function (i, item) {
+                var v = {};
+                v.settingName = item.Name;
+                v.validation = item.Validation;
+                v.type = item.Type;
+                v.dataLabel = item.Label;
+                v.dataInputCss = "userField BY_input"
+                v.dataLabelCss = "formLabel BY_label divAppFormInputField";
+                v.dataLabelUniqueName = item.Name;
+                v.dataMandatory = item.IsMandatory;
+                if ((item.Type == "checkbox" || item.Type == "bool") && (item.DefaultValue === "" || item.DefaultValue == null || item.DefaultValue == undefined)) {
+                    item.DefaultValue = "0";
+                }
+                if (item.Type == "dropdown") {
+                    v.dataWithDefaultValue = true;
+                }
+                v.defaultValue = item.DefaultValue;
+                html += addFormInput((item.DefaultValue != null && item.DefaultValue != undefined && item.DefaultValue !== "") ? item.DefaultValue : "", null, v);
+            });
+            jQuery(elm).append(html);
+            BY_FormInput.renderAll();
+        },
+
+        renderHtmlButton: function (options) {
+            if (!options.title) {
+                options.title = "";
+            }
+            var tabIndex = (options.tabIndex ? " tabindex=\"" + options.tabIndex : "");
+
+            jQuery(".dataEntryButton").remove();
+            options.wrapperElm.append(
+                "<div class='dataEntryButton'>"
+                    + "<button type=\"button\" onclick=" + options.onClick + " id=\"" + options.id + "\" class=\"pull-right inputButton\" " + tabIndex + "\" name=\"'" + options.title + " \" title=\"" + options.title + "\" aria-label=\"" + options.title + "\">"
+                        + "<span class=\"mainThemeColor icon-circle-" + (options.direction == "ltr" ? "right" : "left") + "\"></span>"
+                    + "</button>"
+                + "</div>"
+            );
+        },
+
+        getContentFields: function (options) {
+            var dataEntryInputsWrapperElements = options.dataEntryInputsWrapperElements;
+            var dataEntrySingleElement = options.dataEntrySingleElement;
+
+            var contentFields = [];
+            // todo: send form input if only 1 data entry
+
+            var isFormValid = true;
+            if (dataEntryInputsWrapperElements.length != 0) {
+                jQuery.each(dataEntryInputsWrapperElements, function () {
+                    if (!jQuery(this).data().validate()) {
+                        isFormValid = false;
+                    }
+
+                    var value = jQuery(this).data().getValue();
+                    if (value != null && value != undefined) {
+                        value = value.toString();
+                    }
+
+                    var labelValues = "";
+
+                    if (jQuery(this).data().type == "multiselect") {
+                        var values = jQuery(this).data().getValue().split(",");
+
+                        var validationSeperated = jQuery(this).data().validation.split("(,)");
+                        for (var i = 0; i < values.length; i++) {
+                            for (var x = 0; x < validationSeperated.length; x++) {
+                                var valuePair = validationSeperated[x].split("=");
+                                if (values[i] == valuePair[0]) {
+                                    labelValues += valuePair[1] + ", ";
+                                }
+                            }
+                        }
+
+                        labelValues = labelValues.substring(0, labelValues.length - 2);
+
+                    }
+
+                    
+                    contentFields.push({ "uniqueName": jQuery(this).data().labelUniquename, "value": value, "label": jQuery(this).data().label, "type": jQuery(this).data().type, "labelValues": labelValues });
+                });
+            }
+            else {
+                if (dataEntrySingleElement != undefined && dataEntrySingleElement != null) {
+                    jQuery.each(dataEntrySingleElement, function () {
+                        if (!jQuery(this).data().validate()) {
+                            isFormValid = false;
+                        }
+                        if (jQuery(this).data().labelUniquename == null || jQuery(this).data().labelUniquename == undefined) {
+
+                            var labelValues = "";
+
+                            if (jQuery(this).data().type == "multiselect") {
+                                var values = jQuery(this).data().getValue().split(",");
+
+                                var validationSeperated = jQuery(this).data().validation.split("(,)");
+                                for (var i = 0; i < values.length; i++) {
+                                    for (var x = 0; x < validationSeperated.length; x++) {
+                                        var valuePair = validationSeperated[x].split("=");
+                                        if (values[i] == valuePair[0]) {
+                                            labelValues += valuePair[1] + ", ";
+                                        }
+                                    }
+                                }
+
+                                labelValues = labelValues.substring(0, labelValues.length - 2);
+
+                            }
+
+                            contentFields.push({ "uniqueName": jQuery(this).data().options.attributes.dataName, "value": jQuery(this).data().getValue(), "label": jQuery(this).data().options.attributes.dataLabel, "type": jQuery(this).data().type, "labelValues": labelValues });
+                        }
+                    });
+                }
+            }
+
+            if (isFormValid == false) {
+                return [];
+            }
+            else {
+                return contentFields;
+            }
+        }
+    },
+    setStreamId: function (instanceName, streamId, callback, subStreamId) {
+        //instanceName can be 'navigator', 'chat', 'contactUs'
+        var instanceId = "";
+        switch (instanceName) {
+            case "chat":
+                instanceId = "ifrChat";
+                break;
+            case "navigator":
+                instanceId = "ifrInteractiveNavigator";
+                break;
+            case "contactUs":
+                instanceId = "ifrContactUs";
+                break;
+        }
+        var instance = BY.instances[instanceId];
+        if (subStreamId != undefined && subStreamId != null && subStreamId != "") {
+            BY.options.subStreamId = subStreamId;
+        }
+        //if we move to other app we should load the new settings of the app
+        if ((instance == undefined || BY._streamState == "0") && BY.options != "") {
+            BY.options.streamId = streamId;
+            switch (instanceName) {
+                case "chat":
+                    BY.chat(BY.options, function () {
+                        s1();
+                    });
+                    break;
+                case "navigator":
+                    BY.navigator(BY.options, function () {
+                        s1();
+                    });
+                    break;
+                case "contactUs":
+                    BY.contactUs(BY.options, function () {
+                        s1();
+                    });
+                    break;
+            }
+        }
+        else {
+            s1();
+        }
+
+        function s1() {
+            instance = BY.instances[instanceId];
+            instance.iframeUrl = instance.iframeUrl.replace(instance.streamId, streamId);
+            instance.streamId = streamId;
+            BY.streamId = streamId;
+            if (callback)
+                callback(instance);
+        }
+
+        instance = BY.instances[instanceId];
+        jQuery("#" + instance.iframeId).attr("src", instance.iframeUrl);
+    },
+    bubbles: {
+        hasStaticMessages: false,
+        fireMessage: false,
+        init: function (instance) {
+            if (instance.bubbleMessagesInterval) {
+                if (instance.showTimeout != null && instance.showTimeout != undefined && instance.showTimeout > 0) {
+                    if (instance.bubbleMessagesInterval < instance.showTimeout) {
+                        instance.bubbleMessagesInterval = instance.showTimeout + 100;
+                    }
+                }
+                if (instance.bubbleMessagesInterval < 2000)
+                    instance.bubbleMessagesInterval = 2000;
+            }
+        },
+        renderBubbleMessages: function (instance) {
+            var dock = instance.dock;
+            var direction = instance.direction;
+            var vAlign = instance.vAlign;
+
+            var that = this;
+            if (instance.bubbleMessages == null || instance.bubbleMessages == undefined || instance.bubbleMessages.length == 0)
+                return "";
+
+            var html = "";
+            //support the old version of bubble messages that based on the embed code and sent as an Array
+            var bubbleMessages = (instance.bubbleMessages.constructor === Array ? instance.bubbleMessages : instance.bubbleMessages.split("|^SEPERATOR^|"));
+            for (var i = 0; i < bubbleMessages.length; i++) {
+                html += "<div class='divPreBtnMessage divPreBtnMessage_" + instance.id + " divPreBtnMessage_" + instance.id + "_" + i + " talk-bubble tri-" + (dock == "left" ? "right" : "right") + " border round btm-" + (dock == "left" ? "left" : "right") + "-in' style='display:none;float:" + dock + ";'>"
+                        + "<div class='talktext' style='direction:" + direction + "'>"
+                           + "<p>" + bubbleMessages[i] + "</p>"
+                        + "</div>"
+                     + "</div>";
+            }
+
+            if (instance.bubbleMessagesInterval == undefined || instance.bubbleMessagesInterval == null || instance.bubbleMessagesInterval.toString().length == 0) {
+                instance.bubbleMessagesInterval = 7000;
+            }
+
+            var index = 0;
+            var preButtonImgWidth = null;
+            var timeoutShowMessages = null;
+
+            function showMessage() {
+                if (BY.isOpen)
+                    return;
+
+                if (preButtonImgWidth == null) {
+                    preButtonImgWidth = jQuery("#imgPreButton_" + instance.id + "").width();
+                    jQuery(".divPreBtnMessage_" + instance.id).css("margin-" + dock, (preButtonImgWidth - 40) + "px");
+                }
+
+                var divPreBtnMessage = jQuery(".divPreBtnMessage_" + instance.id + "_" + index);
+                if (divPreBtnMessage.length == 0)
+                    return;
+                divPreBtnMessage.fadeIn(200);
+                index++;
+                if (index > bubbleMessages.length) {
+                    clearTimeout(timeoutShowMessages);
+                    timeoutShowMessages = null;
+                    return;
+                }
+                else {
+                    //play sound message
+                    var playPromise = document.getElementById("audioNotification").play();
+                    // In browsers that don’t yet support this functionality,
+                    // playPromise won’t be defined.
+                    if (playPromise !== undefined) {
+                        playPromise.then(function () {
+                            // Automatic playback started!
+                        }).catch(function (error) {
+                            // Automatic playback failed.
+                            // Show a UI element to let the user manually start playback.
+                        });
+                    }
+                    setTimeout(function () {
+                        //hide message
+                        jQuery(".divPreBtnMessage_" + instance.id).fadeOut();
+
+                        timeoutShowMessages = setTimeout(function () {
+                            showMessage();
+                        }, instance.bubbleMessagesInterval);
+
+                    }, instance.bubbleMessagesInterval + (bubbleMessages[index - 1].length * 100));
+                }
+            }
+
+            timeoutShowMessages = setTimeout(function () {
+                showMessage();
+            }, instance.bubbleMessagesInterval);
+
+            BY._appendCssExtentions();
+            return html;
+        },
+        stop: function (instanceId) {
+            var instance = BY.instances[instanceId];
+            jQuery('.divPreBtnMessage_' + instance.id).remove();
+        }
+    },
+
+
+    //Show all labels input fields
+    toggleAccessibilityView: function () {
+        var iframe = jQuery("#loginDiv");
+        var accessibilityIcon = jQuery("#accessibilityIcon");
+        var accessibilityView = jQuery(".accessibilityView");
+        var show = false;
+
+        if (accessibilityIcon.hasClass("accessibilityIconActive")) {
+            jQuery("body").removeClass("accessibilityMode");
+            accessibilityView.hide();
+            accessibilityIcon.removeClass("accessibilityIconActive").attr("aria-label", texts.accassibilityView).attr("title", texts.accassibilityView);
+
+            if (iframe.length > 0) {
+                iframe.contents().find(".accessibilityView").hide();
+                iframe.contents().find("#divRegister").removeClass("accessibilityVisible");
+            }
+
+            var iframes = jQuery("[name='by_iframe']");
+            for (var i = 0; i < iframes.length; i++) {
+                try {
+                    var iframeSrc = iframes[i].src;
+                    if (iframeSrc && iframeSrc.indexOf(BY._baseDomain) > -1) {
+                        //check if current iframe is in the same baseDomain bumpyard(and from facebook or other iframe).
+                        jQuery(iframes[i]).contents().find('.accessibilityView').hide();
+                        jQuery(iframes[i]).contents().find('body').removeClass("accessibilityMode");
+                        jQuery(iframes[i]).contents().find('#loginDiv').find('.accessibilityView').hide();
+                    }
+                }
+                catch (e) {
+
+                }
+            }
+        }
+        else {
+            jQuery("body").addClass("accessibilityMode");
+            accessibilityView.show();
+
+            if (jQuery('#imgModule_10').hasClass('selected')) {
+                jQuery('label[for="ddlStreams"]').hide();
+            }
+            accessibilityIcon.addClass("accessibilityIconActive").attr("aria-label", texts.cancelAccessibilityView).attr("title", texts.cancelAccessibilityView);
+
+            if (iframe.length > 0) {
+                iframe.contents().find(".accessibilityView").show();
+                iframe.contents().find("#divRegister").addClass("accessibilityVisible");
+            }
+
+            var iframes = jQuery("[name='by_iframe']");
+            for (var i = 0; i < iframes.length; i++) {
+                try {
+                    var iframeSrc = iframes[i].src;
+                    if (iframeSrc && iframeSrc.indexOf(BY._baseDomain) > -1) {
+                        //check if current iframe is in the same baseDomain bumpyard(and from facebook or other iframe).
+                        jQuery(iframes[i]).contents().find('.accessibilityView').show();
+                        jQuery(iframes[i]).contents().find('body').addClass("accessibilityMode");
+                        jQuery(iframes[i]).contents().find('#loginDiv').contents().find('.accessibilityView').show();
+                    }
+                }
+                catch (e) {
+
+                }
+            }
+        }
+    },
+
+    setCookie: function (cname, cvalue, exdays) {
+        var expires = null;
+        if (exdays != null && exdays != undefined) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            expires = "expires=" + d.toGMTString();
+        }
+        document.cookie = cname + "=" + cvalue + (expires != null && expires != undefined && expires.length > 0 ? "; " + expires : "");
+    },
+
+    getCookie: function (cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    },
+
+    isStreamActive: function (streamId, callback) {
+        jQuery.ajax({
+            url: (BY._baseDomain.indexOf("https:") == -1 ? "https:" : "") + BY._baseDomain + "state/" + streamId,
+            async: true,
+            type: 'get',
+            data: {
+            },
+            cache: false,
+            dataType: 'jsonp',
+            crossDomain: true,
+            success: function (data) {
+                if (callback)
+                    callback(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    },
+
+    getForwardButtonData: function (streamId, moduleId, supportedStateIds, callback) {
+        BY.isStreamActive(streamId, function (data) {
+            if (data && data.state != null && data.state != undefined && supportedStateIds.indexOf(data.state.toString()) > -1) {
+                // stream is active!
+                //allow app button
+                callback({ state: data.state, showButton: true });
+            }
+            else {
+                //stream is not active
+                callback({ state: data.state, showButton: false });
+            }
+        });
+    },
+
+    initLauncher: function (streamId, callback) {
+        jQuery.ajax({
+            url: (BY._baseDomain.indexOf("https:") == -1 ? "https:" : "") + BY._baseDomain + "launcher/" + streamId,
+            async: true,
+            type: 'get',
+            data: {
+            },
+            cache: false,
+            dataType: 'jsonp',
+            crossDomain: true,
+            success: function (data) {
+                BY.launcher = data;
+                if (callback)
+                    callback(data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log("err");
+            }
+        });
+    },
+
+    closeAppFrame: function (state, instanceId) {
+        jQuery("#overlayConfirmClose").hide();
+        if (state == "cancel")
+            return;
+
+        var instance = BY.instances[instanceId];
+        var that = this;
+
+        var f = function () {
+            var removeTimeout = 1000;
+            var animatePosition = instance.animatePosition;
+            var panelIdToShow = instance.panelIdToShow;
+            var panelSizeToShow = instance.panelSizeToShow;
+            var panel;
+            if (panelIdToShow) {
+                panel = jQuery('#' + panelIdToShow);
+                panel.fadeOut(200);
+                var pos = animatePosition;
+                switch (pos) {
+                    case "left":
+                        panel.animate({ left: -panel.width() }, removeTimeout);
+                        break;
+                    case "right":
+                        panel.animate({ right: -panel.width() }, removeTimeout);
+                        break
+                    case "bottom":
+                        panel.animate({ bottom: -panel.width() }, removeTimeout);
+                        break
+                }
+            }
+            BY.isOpen = false;
+            BY.isBusy = false;
+            that._slideInPreButton(instance.id, true);
+            jQuery("#btnImgPreButton" + instance.id + "").focus();
+            if (BY_isMobile() && jQuery("meta[name='viewport']").length > 0) {
+                jQuery("body").removeClass("BYOpenFullScreen");
+            }
+        }
+        if (state == "close") {
+            // onclick close is overrided by app.
+            var Iframe = jQuery("#" + instance.iframeId);
+            // add to iframe url paramter #closeWindowState=waitingForResponse
+            Iframe.attr('src', Iframe.attr('src').replace("#closeWindowState=waitingForResponse", "").replace("#closeWindowState=cancel", "").replace("#closeWindowState=close", "") + "#closeWindowState=close");
+            setTimeout(function () {
+                f();
+            }, 300);
+        }
+        else if (state == "minimize") {
+            f();
+        }
+    },
+
+    //get system userId and insert/update user
+    getSetUser: function (callback, user, loginType) {
+        jQuery.ajax({
+            url: '/apjax.axd',
+            async: true,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                ac: 5,
+                sid: BY.streamId,
+                si: user.streamProviderId,
+                at: user.accessToken,
+                fname: user.firstName,
+                lname: user.lastName,
+                streamType: user.streamProviderType,
+                loginType: loginType //1 facebookLogin, 2 getLoginStatus
+            },
+            success: function (userRes) {
+                if (!userRes.error) {
+                    user.id = userRes.id;
+                    user.firstName = userRes.firstName;
+                    user.lastName = userRes.lastName;
+                    user.isConnected = userRes.isConnected;
+                    if (userRes.phone && userRes.phone.length > 4) {
+                        user.phone = userRes.phone;
+                    }
+                    if (userRes.email && userRes.email.length > 3) {
+                        user.email = userRes.email;
+                    }
+                    callback(user);
+                }
+            },
+            error: function (status) {
+                callback({
+                    status: "unsupported", user: null
+                });
+            }
+        });
+    },
+
+    notifyUser: {
+        isConnected: true,
+        isInitDisconectEvents: false,
+        startText: null,
+        //init events to know when user disconnect from app
+        init: function (streamId, objectId) {
+            BY.objectId = objectId;
+            BY.streamId = streamId;
+
+            var onDisconnectUser = function () {
+                //check if this user is already disconnected.
+                if (!BY.notifyUser.isConnected) {
+                    return;
+                }
+                else {
+                    BY.notifyUser.connect(streamId, objectId, false);
+                }
+            }
+
+            if (BY.notifyUser.isInitDisconectEvents == false) {
+                BY.notifyUser.isInitDisconectEvents = true;
+
+                //user close window/tab/refresh
+                BY.registerToWindowUnloadEvent(onDisconnectUser);
+
+                var intervalHasFocus = null;
+                try {
+                    if (BY_isMobile()) {
+                        intervalHasFocus = setInterval(function () {
+                            if (document.hasFocus()) {
+                                if (BY.notifyUser.isConnected != true)
+                                    BY.notifyUser.connect(streamId, objectId, true);
+                            }
+                            else if (BY.notifyUser.isConnected == true) {
+                                onDisconnectUser();
+                            }
+                        }, 3000);
+                    }
+                }
+                catch (e) {
+                    clearInterval(intervalHasFocus);
+                    intervalHasFocus = null;
+                    console.log(e);
+                }
+
+            }
+        },
+
+        connect: function (streamId, objectId, isConnected, callback) {
+            BY.notifyUser.isConnected = isConnected;
+            jQuery.ajax({
+                url: '/apjax.axd',
+                async: (isConnected == true ? true : false), // if user disconnect => async need to be false for the "onunload" event
+                cache: false,
+                type: 'post',
+                dataType: 'text',
+                data: {
+                    ac: 7,
+                    sid: streamId,
+                    oid: objectId,
+                    ic: isConnected
+                },
+                success: function (data) {
+                    if (callback)
+                        callback();
+                },
+                error: function (data) {
+
+                }
+            });
+        },
+
+        unregisterRealtimeEvents: function (objectId) {
+            nowManager.unregisterGroupEvent({
+                groupType: 'object', groupId: objectId, eventType: 'typingMessage'
+            });
+        },
+
+        onTypingMessage: function (textarea, streamId, objectId) {
+            if (BY.notifyUser.startText == null)
+                BY.notifyUser.startText = textarea.attr("placeholder");
+
+
+            nowManager.registerGroupEvents([{ groupType: 'object', groupId: objectId, eventType: 'typingMessage' }], BY.notifyUser.realtimeUserTypingMessage_EventHandler);
+
+            BY.notifyUser.onTypingMessage.timeOutUserTypingMessage = "firstTime";
+            var f = function () {
+                jQuery.ajax({
+                    url: '/apjax.axd',
+                    async: true,
+                    cache: false,
+                    type: 'post',
+                    dataType: 'text',
+                    data: {
+                        ac: 8,
+                        sid: streamId,
+                        oid: objectId
+                    },
+                    success: function (data) {
+
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            }
+
+            textarea.unbind('keydown.typingMessage');
+            textarea.bind('keydown.typingMessage', function () {
+                if (jQuery.trim(jQuery(this).val()) == "" || BY.notifyUser.startText == jQuery(this).val())
+                    return;
+                if (BY.notifyUser.onTypingMessage.timeOutUserTypingMessage == "firstTime" || BY.notifyUser.onTypingMessage.timeOutUserTypingMessage == null) {
+                    BY.notifyUser.onTypingMessage.timeOutUserTypingMessage = true;
+                    setTimeout(function () {
+                        BY.notifyUser.onTypingMessage.timeOutUserTypingMessage = null;
+                    }, 4000);
+                    f();
+                }
+            });
+        },
+
+        realtimeUserTypingMessage_EventHandler: function (data) {
+            startUserTyping(jQuery(".divTyping"));
+        }
+    },
+
+    realTimePulse: {
+        timeoutRealTimeAuthentication: null,
+        /* when user send message check if realtime return message */
+        start: function (timeout, failedCallback) {
+            if (timeout == null || timeout == undefined) {
+                timeout = 5000;
+            }
+            if (BY.realTimePulse.timeoutRealTimeAuthentication == null) {
+                BY.realTimePulse.timeoutRealTimeAuthentication = setTimeout(function () {
+                    BY.realTimePulse.timeoutRealTimeAuthentication = null;
+
+                    if (failedCallback)
+                        failedCallback("realtimeDisconnected");
+
+                }, timeout);
+            }
+        },
+
+        finish: function () {
+            clearTimeout(BY.realTimePulse.timeoutRealTimeAuthentication);
+            BY.realTimePulse.timeoutRealTimeAuthentication = null;
+        }
+    },
+
+    Now: {
+        init: function (callback) {
+            try {
+                nowManager.onConnect.push(function (e) {
+                    BY.realTimePulse.finish(500);
+                    if (callback)
+                        callback({
+                            realTimeCallBack: "realtimeConnected"
+                        });
+                });
+                nowManager.onReconnect.push(function (e) {
+                    BY.realTimePulse.finish(500);
+                });
+                nowManager.onDisconnect.push(function () {
+                    BY.realTimePulse.start(500);
+                    if (callback)
+                        callback({
+                            realTimeCallBack: "realtimeDisconnected"
+                        });
+                });
+                nowManager.onError.push(function (e) {
+                    BY.realTimePulse.start(500);
+                    if (callback)
+                        callback({
+                            realTimeCallBack: "realtimeDisconnected"
+                        });
+                });
+                nowManager.onReconnectFailed.push(function () {
+                    BY.realTimePulse.start(500);
+                    if (callback)
+                        callback({
+                            realTimeCallBack: "realtimeDisconnected"
+                        });
+                });
+            }
+            catch (e) {
+                nowManagerLoaded = false;
+                if (callback)
+                    callback({
+                        realTimeCallBack: "realtimeDisconnected"
+                    });
+            }
+        }
+    },
+
+    session: {
+        arrEvents: [],
+        queueWriteTimeOut: null,
+        _write: function (isAsync) {
+            if (BY.session.arrEvents.length == 0)
+                return;
+
+            if (BY.session.sessionStreamId == null || BY.session.sessionStreamId == undefined || jQuery.trim(BY.session.sessionStreamId).length < 5) {
+                // no sessionId break!
+                return;
+            }
+
+            // isAsync=false used when we want to write session event and the user closed the window 
+            if (isAsync == null || isAsync == undefined)
+                isAsync = true;
+
+            jQuery.ajax({
+                url: (BY._baseDomain.indexOf("https:") == -1 ? "https:" : "") + BY._baseDomain + 'apjax.axd',
+                async: isAsync,
+                cache: false,
+                type: 'post',
+                dataType: 'jsonp',
+                crossDomain: true,
+                data: {
+                    ac: 9,
+                    sid: BY.streamId,
+                    browser_name: BY.getBrowserName(),
+                    sessionStreamId: BY.session.sessionStreamId,
+                    events: JSON.stringify(BY.session.arrEvents),
+                    isMobile: (BY_isMobile() ? 1 : 0)
+                },
+                success: function (data) {
+                    BY.session.arrEvents = [];
+                },
+                error: function (data) {
+                    BY.session.arrEvents = [];
+                }
+            });
+        },
+        addEvent: function (appStreamId, content, label, writeTime, isAsync) {
+            if (BY.session.sessionStreamId == null || BY.session.sessionStreamId == undefined || jQuery.trim(BY.session.sessionStreamId).length < 5) {
+                // no sessionId break!
+                return;
+            }
+
+            if (writeTime == null || writeTime == undefined) {
+                writeTime = 15000;
+            }
+
+            function f() {
+                BY.session._write(isAsync);
+                BY.session.queueWriteTimeOut = null;
+            }
+
+            var now = new Date();
+            var now_utc = now.getUTCFullYear() + " " + (now.getUTCMonth() + 1) + " " + now.getUTCDate() + " " + now.getUTCHours() + ":" + now.getUTCMinutes() + ":" + now.getUTCSeconds().toString();
+            BY.session.arrEvents.push({
+                "streamId": BY.session.sessionStreamId, "appStreamId": appStreamId, "content": content, "label": label, "type": 0, "createdTime": now_utc
+            });
+
+            if (writeTime == 0) {
+                f();
+            }
+            else if (BY.session.queueWriteTimeOut == null) {
+                BY.session.queueWriteTimeOut = setTimeout(function () {
+                    f();
+                }, writeTime);
+            }
+
+            //user close window/tab/refresh
+            if (BY.session.isOnBeforeUnloadInit == null || BY.session.isOnBeforeUnloadInit == undefined) {
+                BY.session.isOnBeforeUnloadInit = true;
+                // regeister to event that will call(immediately) to write event when user close/refresh window
+                BY.registerToWindowUnloadEvent(f);
+            }
+        },
+    },
+
+    GetLoaderSVG: function (size) {
+        if (!size)
+            size = "100px";
+        return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-spin"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"/><g transform="translate(50 50)"><g transform="rotate(0) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.1861 1.1861)"><animate attributeName="opacity" from="1" to="0.1" begin="0s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(45) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.0101 1.0101)"><animate attributeName="opacity" from="1" to="0.1" begin="0.12s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.12s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(90) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.0361 1.0361)"><animate attributeName="opacity" from="1" to="0.1" begin="0.25s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.25s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(135) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.0601 1.0601)"><animate attributeName="opacity" from="1" to="0.1" begin="0.37s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.37s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(180) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.0861 1.0861)"><animate attributeName="opacity" from="1" to="0.1" begin="0.5s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.5s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(225) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.1101 1.1101)"><animate attributeName="opacity" from="1" to="0.1" begin="0.62s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.62s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(270) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.1361 1.1361)"><animate attributeName="opacity" from="1" to="0.1" begin="0.75s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.75s" dur="1s" repeatCount="indefinite"/></circle></g><g transform="rotate(315) translate(34 0)"><circle cx="0" cy="0" r="8" fill="#918f8f" transform="scale(1.1601 1.1601)"><animate attributeName="opacity" from="1" to="0.1" begin="0.87s" dur="1s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" from="1.2" to="1" begin="0.87s" dur="1s" repeatCount="indefinite"/></circle></g></g></svg>';
+    },
+    addThemeColorClasses: function (color) {
+        if (color == null || color == undefined || color.length < 3 || color == "null") {
+            color = "#0396da";
+        }
+        BY.addClassToBody(".mainThemeColor{color: " + color + ";}");
+        BY.addClassToBody(".mainThemeColorBG{background-color: " + color + ";}");
+        BY.addClassToBody(".mainThemeColorBorder{border: 1px solid " + color + " !important;}");
+        BY.addClassToBody("input.BY_input:focus, textarea.BY_input:focus .BY_input_style:focus{border-color:" + color + " !important;}");
+        BY.addClassToBody(".by_button:focus, .by_button:hover{color:" + color + " !important;}");
+    },
+    getBrowserName: function () {
+        this.browserName = null;
+
+        if (this.browserName != null)
+            return this.browserName;
+
+        // Opera 8.0+
+        if ((!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0) {
+            this.browserName = "Opera";
+            return this.browserName;
+        }
+
+        // Firefox 1.0+
+        if (typeof InstallTrigger !== 'undefined') {
+            this.browserName = "Firefox";
+            return this.browserName;
+        }
+
+        // Safari 3.0+ "[object HTMLElementConstructor]" 
+        if (/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)) {
+            this.browserName = "Safari";
+            return this.browserName;
+        }
+
+        // Internet Explorer 6-11
+        var isIE = /*@cc_on!@*/false || !!document.documentMode;
+        if (isIE) {
+            this.browserName = "Explorer";
+            return this.browserName;
+        }
+
+        // Edge 20+
+        if (!isIE && !!window.StyleMedia) {
+            this.browserName = "Edge";
+            return this.browserName;
+        }
+
+        // Chrome 1+
+        if (!!window.chrome && !!window.chrome.webstore) {
+            this.browserName = "Chrome";
+            return this.browserName;
+        }
+
+        this.browserName = "Unknown";
+
+        return this.browserName;
+    },
+
+    setTrigger: function (triggers) {
+        if (triggers && triggers.constructor == Array) {
+            jQuery.each(triggers, function (i, newTrigger) {
+                if (newTrigger.hasOwnProperty("module") && newTrigger.hasOwnProperty("name") && newTrigger.hasOwnProperty("value")) {
+                    if (BY._triggers.length > 0) {
+                        jQuery.each(BY._triggers, function (i, currentTrigger) {
+                            if (newTrigger.module == currentTrigger.module && newTrigger.name == currentTrigger.name)
+                                currentTrigger.value = newTrigger.value;
+                            else
+                                BY._triggers.push(newTrigger);
+                            return false;
+                        });
+                    }
+                    else
+                        BY._triggers.push(newTrigger);
+                }
+            });
+        }
+    },
+
+    /* private methods */
+
+    _onWindowUnload: function () {
+        if (BY.arrOnDisconnect == undefined || BY.arrOnDisconnect == null || BY.arrOnDisconnect.length == 0 || BY.isOnDisconnectTrigger == true) {
+            return;
+        }
+        for (var i = 0; i < BY.arrOnDisconnect.length; i++) {
+            BY.arrOnDisconnect[i]();
+        }
+    },
+
+    _appBaseInit: function (options, instance, callbackfunc) {
+        BY._instanceId = instance.id;
+        BY.options = options;
+        if (BY.instances == undefined) {
+            if (BY_isMobile() && jQuery("meta[name='viewport']").length > 0) {
+                if (!jQuery("body").hasClass("BYOpenFullScreen")) {
+                    BY.addClassToBody(".BYOpenFullScreen{ overflow:hidden !important;position:fixed;z-index:1; }");
+                }
+            }
+            BY.instances = {
+            };
+        }
+
+        //save app instance in BY.instances object.
+        if (BY.instances[instance.id] == undefined) {
+            BY.instances[instance.id] = instance;
+        }
+        this._getBaseDomain(options);
+        var that = this;
+
+        if (options.externalLoginUrl && options.externalLoginUrl.length > 0) {
+            // override login url with external login page. the custumer login page will be open and after user finish login ->
+            // the external page will redirect him back(change the iframe url) with ticket parameter (ta=...)
+            instance.iframeUrl = options.externalLoginUrl;
+        }
+        else {
+
+            if (options.streamId) {
+                instance.streamId = options.streamId;
+                BY.streamId = options.streamId;
+            }
+            else {
+                throw {
+                    type: "error", message: "missing stream id"
+                };
+            }
+
+            if (options.subStreamId && options.subStreamId > 0) {
+                instance.subStreamId = options.subStreamId;
+                BY.subStreamId = options.subStreamId;
+            }
+
+            if (options.trackerStreamId && options.trackerStreamId != "0" && jQuery.trim(options.trackerStreamId).length > 5) {
+                BY.session.sessionStreamId = options.trackerStreamId; //for users we show trackerStreamId. for us is sessionStreamId
+                var sessionContent = {
+                    "sessionType": 1
+                };
+                sessionContent.originUrl = window.location.href;
+                BY.session.addEvent(options.streamId, sessionContent, "enter", 0, true);
+            }
+            else {
+                BY.session.sessionStreamId = null;
+            }
+
+            var parentUrl = window.location.href.replace(/\//g, '~~').replace(/:/g, "^dots^").replace(/\?/g, "^qm^").replace(/&/g, "^amp^").replace(/\+/g, "^plus^").replace(/%2b/ig, "^plus^");
+            if (parentUrl.length > 100)
+                parentUrl = parentUrl.substring(0, 99);
+            instance.iframeUrl = (BY._baseDomain.indexOf("https:") == -1 ? "https:" + BY._baseDomain : BY._baseDomain) + instance.urlUniqueName + "/" + BY.streamId + "/theoriginurl" + parentUrl;
+            instance.urlPrams = "";
+            if (options.ta && jQuery.trim(options.ta).length > 0) {
+                instance.urlPrams += "ta=" + options.ta;
+            }
+
+            if (BY.session.sessionStreamId && BY.session.sessionStreamId.length > 5) {
+                if (instance.urlPrams.length > 0)
+                    instance.urlPrams += "&";
+                instance.urlPrams += "sessionStreamId=" + BY.session.sessionStreamId;
+            }
+            // this is only for chat....
+            if (options.initialText && jQuery.trim(options.initialText).length > 0) {
+                if (instance.urlPrams.length > 0)
+                    instance.urlPrams += "&";
+                instance.urlPrams += "initialText=" + encodeURIComponent(JSON.stringify(options.initialText));
+            }
+            // this is only for chat....
+            if (BY.subStreamId && BY.subStreamId > 0) {
+                if (instance.urlPrams.length > 0)
+                    instance.urlPrams += "&";
+                instance.urlPrams += "substreamid=" + BY.subStreamId;
+            }
+
+            // this is only for contactUs...
+            if (instance.defaultModuleId && instance.defaultModuleId.length > 0) {
+                if (instance.urlPrams.length > 0)
+                    instance.urlPrams += "&";
+                instance.urlPrams += "defaultModuleId=" + instance.defaultModuleId;
+            }
+
+            // this is only for navigator...
+            if (options.nodeId && jQuery.trim(options.nodeId).length > 0) {
+                if (instance.urlPrams.length > 0)
+                    instance.urlPrams += "&";
+                instance.urlPrams += "nodeId=" + options.nodeId;
+            }
+            // this is only for navigator...
+            if (options.data && jQuery.trim(options.data).length > 0) {
+                if (instance.urlPrams.length > 0)
+                    instance.urlPrams += "&";
+                instance.urlPrams += "data=" + encodeURIComponent(JSON.stringify(options.data));
+            }
+
+            if (instance.urlPrams && instance.urlPrams.length > 0) {
+                instance.iframeUrl += "/?" + instance.urlPrams; //=" + options.ta;
+            }
+        }
+
+        //override diviframe style
+        if (options.appWrapperStyle != null && options.appWrapperStyle != undefined && jQuery.trim(options.appWrapperStyle).length > 0) {
+            instance.appWrapperStyle = options.appWrapperStyle;
+        }
+        else {
+            instance.appWrapperStyle = "";
+        }
+
+        if (options.triggers && options.triggers.length > 0) {
+            BY.setTrigger(options.triggers);
+        }
+        this.initLauncher(options.streamId, function () {
+            //run over the rules every 1 sec
+            if (BY.launcher.rules && BY.launcher.rules.length > 0) {
+                if (BY._intervalHandler != null) {
+                    clearInterval(BY._intervalHandler);
+                    BY._intervalHandler = null;
+                }
+            }
+            var callback = null;
+            var launcherSettings = BY.launcher.settings;
+            BY._streamState = JSON.parse(BY.launcher.StreamState).state;
+
+
+            instance.language = BY.defaultLanguage = BY.launcher.language;
+            instance.direction = (instance.language == "" || instance.language == "rtl" ? "" : "ltr");
+
+            if (options.onLoad) {
+                callback = options.onLoad;
+            }
+
+            if (BY._streamState == '0') {
+                BY.isBusy = false;
+                BY.isOpen = false;
+                if (callback)
+                    callback();
+                //execute rules
+                BY._rulesAnalyzaer(instance);
+                BY._intervalHandler = setInterval(function () { BY._rulesAnalyzaer(instance) }, 1000);
+                return;
+            }
+
+
+            instance.imgStyle = "";
+            instance.animateDistance = 0; // the space from right/top/bottom/left-
+            instance.panelSizeToShow = 100;
+            instance.shakeButton = false;
+            instance.vAlign = instance.vAlign ? instance.vAlign : "";
+            instance.topPanelControlsColor = null;
+
+            //width
+            if (options.width && options.width != "")
+                instance.w = options.width;
+            else if (launcherSettings.launcher_width && launcherSettings.launcher_width != "")
+                instance.w = launcherSettings.launcher_width;
+            else
+                instance.w = 350;
+
+            //height 
+            if (options.height && options.height != "")
+                instance.h = options.height;
+            else if (launcherSettings.launcher_height && launcherSettings.launcher_height != "")
+                instance.h = launcherSettings.launcher_height;
+            else if (instance.h == null || instance.h == undefined || instance.h == "")
+                instance.h = 650;
+
+            //show timeout   
+            if (options.showTimeout && options.showTimeout != "")
+                instance.showTimeout = options.showTimeout;
+            else if (launcherSettings.launcher_show_timeout && launcherSettings.launcher_show_timeout != "")
+                instance.showTimeout = launcherSettings.launcher_show_timeout * 1000;
+            else
+                instance.showTimeout = 0;
+
+
+            //initial state  
+            if (options.initialState && options.initialState != "")
+                instance.initialState = options.initialState;
+            else if (launcherSettings.launcher_initial_state && launcherSettings.launcher_initial_state != "")
+                instance.initialState = launcherSettings.launcher_initial_state;
+            else
+                instance.initialState = "preButton";
+
+            //vertical align
+            if (options.preButton && options.preButton.vAlign && options.preButton.vAlign != "")
+                instance.vAlign = options.preButton.vAlign;
+            else if (launcherSettings.launcher_vertical_align && launcherSettings.launcher_vertical_align != "")
+                instance.vAlign = launcherSettings.launcher_vertical_align;
+            else if (instance.vAlign != "")
+                instance.vAlign = instance.vAlign;
+            else
+                instance.vAlign = "bottom";
+
+            //Created in order to enable 100% height of the launcher in case of middle launcher
+            var isMiddleLauncher = (instance.vAlign == "middle");
+
+            //animate distance
+            if (options.animateDistance != undefined && options.animateDistance != null) {
+                instance.animateDistance = options.animateDistance;
+            }
+
+            //dock           
+            if (options.dock && options.dock != "")
+                instance.dock = options.dock;
+            else if (launcherSettings.launcher_dock && launcherSettings.launcher_dock != "")
+                instance.dock = launcherSettings.launcher_dock;
+            else
+                instance.dock = "left";
+
+            instance.animatePosition = instance.dock;
+
+            //animate position
+            if (options.animatePosition != undefined && options.animatePosition != null) {
+                instance.animatePosition = options.animatePosition;
+            }
+
+            //direction     
+            if (options.direction && options.direction != "")
+                instance.direction = options.direction;
+            else if (launcherSettings.launcher_direction && launcherSettings.launcher_direction != "")
+                instance.direction = launcherSettings.launcher_direction;
+            else
+                instance.direction = "ltr";
+
+            //theme color    
+            if (options.themeColor && options.themeColor != "")
+                instance.themeColor = options.themeColor;
+            else if (launcherSettings.theme_color && launcherSettings.theme_color != "")
+                instance.themeColor = launcherSettings.theme_color;
+            else
+                instance.themeColor = "#0396da";
+
+            ///** add brand theme **/
+            if (instance.isThemeColorAdded != true) {
+                instance.isThemeColorAdded = true;
+                BY.addThemeColorClasses(instance.themeColor);
+            }
+
+            //Top Panel Controls Color
+            if (options.topPanelControlsColor && jQuery.trim(options.topPanelControlsColor).length > 1) {
+                instance.closeIconsColor = options.topPanelControlsColor; // override colors for top panel buttons and texts.
+            }
+
+            //validate height
+            if (!instance.h) {
+                instance.h = "70%";
+            }
+            else if (instance.h.toString().indexOf("%") == "-1" && instance.h.toString().indexOf("px") == "-1") {
+                instance.h = instance.h.toString() + "px";
+            }
+
+            //old chat installation was not supported in width. and thare is installaition that send width 70%.(70% is too big for chat)
+            if (instance.w == "70%") {
+                instance.w = "400px";
+            }
+            else if (instance.w.toString().indexOf("%") == "-1" && instance.w.toString().indexOf("px") == "-1") {
+                instance.w = instance.w.toString() + "px";
+            }
+
+            var curWidth = instance.w;
+            var curHeight = instance.w;
+            if (curWidth != null && curWidth != undefined) {
+                curWidth = curWidth.toLowerCase().replace("%", "").replace("px", "");
+            }
+            if (curHeight != null && curHeight != undefined) {
+                curHeight = curHeight.toLowerCase().replace("%", "").replace("px", "");
+            }
+
+            var left = (screen.width / 2) - (curWidth / 2);
+            var top = (screen.height / 2) - (curHeight / 2);
+
+            var openAllOverPage = false;
+            if (BY_isMobile() && jQuery("meta[name='viewport']").length > 0 && BY_isSafari == false) {
+                //this is mobile and current page contain viewport meta tag.
+                instance.w = "100%";
+                instance.h = "100%";
+                left = 0;
+                top = 0;
+                instance.openAllOverPage = openAllOverPage = true;
+            }
+
+            instance.left = left;
+            instance.top = top;
+
+            var launcherMode = (options.mode ? options.mode : launcherSettings.launcher_mode);
+
+            if (launcherMode && launcherMode == "popup" || (BY_isMobile() && openAllOverPage == false) || (BY_isMobile() && BY_isSafari == true)) { //safary browser not allow Third-Party cookies, so we open new window 
+                var windowOpenParams = "'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + instance.w + ",height=" + instance.h + ",top=" + top + ",left=" + left + "').focus()";
+                if (launcherMode != 'popup') {
+                    windowOpenParams = "'_blank'," + windowOpenParams;
+                }
+
+                instance.onclickFunction = "window.open('" + instance.iframeUrl + "', '" + instance.urlUniqueName + "'," + windowOpenParams;
+            }
+
+            instance.preButton = "";
+            if (instance.initialState && (instance.initialState == "hidden")) {
+                instance.preButton = "";
+                instance.preButton = "";
+            }
+            else {
+                //support imageUrl from options.preButton.imageUrl and options.imageUrl
+                if (options.preButton && options.preButton.imageUrl && options.preButton.imageUrl != "") {
+                    instance.imageUrl = options.preButton.imageUrl;
+                    if (instance.imageUrl && instance.imageUrl.indexOf("http://") == 0) {
+                        instance.imageUrl = instance.imageUrl.replace("http:", "");
+                    }
+                }
+                else if (options.imageUrl && options.imageUrl != "") {
+                    instance.imageUrl = options.imageUrl;
+                    if (instance.imageUrl && instance.imageUrl.indexOf("http://") == 0) {
+                        instance.imageUrl = instance.imageUrl.replace("http:", "");
+                    }
+                }
+                else {
+                    if (BY_isMobile() && launcherSettings.launcher_mobile_image_url && launcherSettings.launcher_mobile_image_url != "") {
+                        instance.imageUrl = BY._baseDomain + "/media" + launcherSettings.launcher_mobile_image_url;
+                    }
+                    else if (launcherSettings.launcher_image_url && launcherSettings.launcher_image_url != "")
+                        instance.imageUrl = BY._baseDomain + "/media" + launcherSettings.launcher_image_url;
+                    else
+
+                        instance.imageUrl = BY._baseDomain + "//apps/chat/images/chat.png";
+                }
+
+
+                if (options.preButton && options.preButton.forceSecureUrl && options.preButton.forceSecureUrl == true) {
+                    if (instance.imageUrl.indexOf("http://") == 0) {
+                        //replace http:// in https://
+                        instance.imageUrl = instance.imageUrl.replace("http://", "https://");
+                    }
+                    else if (instance.imageUrl.indexOf("https://") == -1) {
+                        instance.imageUrl = "https://" + instance.imageUrl;
+                        instance.imageUrl = instance.imageUrl.replace("////", "//").replace("///", "//");
+                    }
+                }
+
+                //image alt       
+                if (options.preButton && options.preButton.imageAlt && options.preButton.imageAlt != "")
+                    instance.imageAlt = options.preButton.imageAlt;
+                else if (launcherSettings.launcher_image_alt_text && launcherSettings.launcher_image_alt_text != "")
+                    instance.imageAlt = launcherSettings.launcher_image_alt_text;
+                else
+                    instance.imageAlt = "";
+
+                //image size       
+                if (options.preButton && options.preButton.imageSize && options.preButton.imageSize != "")
+                    instance.imageSize = options.preButton.imageSize;
+                else if (launcherSettings.launcher_image_size && launcherSettings.launcher_image_size != "")
+                    instance.imageSize = launcherSettings.launcher_image_size;
+                else
+                    instance.imageSize = 100;
+
+
+                //launcher shake
+                if (options.preButton && options.preButton.shake && options.preButton.shake != "")
+                    instance.shakeButton = options.preButton.shake;
+                else if (launcherSettings.launcher_shake && launcherSettings.launcher_shake != 0 && launcherSettings.launcher_shake != "")
+                    instance.shakeButton = (launcherSettings.launcher_shake ? true : false);
+                else
+                    instance.shakeButton = false;
+
+                //launcher shake interval
+                if (instance.shakeButton) {
+                    if (options.preButton && options.preButton.shake && options.preButton.shake != "")
+                        instance.shakeInterval = options.preButton.shake;
+                    else if (launcherSettings.launcher_shake_interval && launcherSettings.launcher_shake_interval != "")
+                        instance.shakeInterval = launcherSettings.launcher_shake_interval * 1000;
+                    else
+                        instance.shakeInterval = null;
+                }
+                //bubble messages     
+                if (options.preButton && options.preButton.bubbleMessages && options.preButton.bubbleMessages != "") {
+                    instance.bubbleMessages = options.preButton.bubbleMessages;
+                    BY.bubbles.hasStaticMessages = true;
+
+                }
+                else if (launcherSettings.launcher_bubble_messages && launcherSettings.launcher_bubble_messages != "") {
+                    instance.bubbleMessages = launcherSettings.launcher_bubble_messages;
+                    BY.bubbles.hasStaticMessages = true;
+                }
+                else
+                    instance.bubbleMessages = "";
+
+                //bubble messages interval
+                if (instance.bubbleMessages != "") {
+                    if (options.preButton && options.preButton.bubbleMessagesInterval && options.preButton.bubbleMessagesInterval != "")
+                        instance.bubbleMessagesInterval = options.preButton.bubbleMessagesInterval;
+                    else
+                        instance.bubbleMessagesInterval = 6000;
+
+                    BY.bubbles.init(instance);
+                }
+
+                if (options.preButton && options.preButton.style) {
+                    instance.imgStyle = options.preButton.style;
+                }
+                var alignMiddle = {
+                    val: false
+                };
+
+                if (instance.vAlign != "") {
+                    instance.vAlign = BY._getVeritcalAlign(instance.vAlign, instance.animatePosition, alignMiddle, instance.imageSize);
+                }
+
+                // take the size of the iframe depends on the size the iframe animate 
+                if (instance.animatePosition == "right" || instance.animatePosition == "left") {
+                    instance.panelSizeToShow = instance.w;
+                }
+                if (instance.animatePosition == "top" || instance.animatePosition == "bottom") {
+                    instance.panelSizeToShow = instance.h;
+                }
+
+                instance.preButton = "<div id='" + instance.panelIdToHide + "' style='position:fixed;z-index:99999999999;" + instance.vAlign + (instance.dock == "left" ? "left:0;" : "right:0;") + (instance.initialState == "preButton" ? "" : "display:none;") + "'>"
+                  + "<button id='btnImgPreButton_" + instance.id + "'  aria-label='" + instance.imageAlt + "' title='" + instance.imageAlt + "'  style='cursor:pointer;background-color: transparent !important;padding:0 !important;border:0 !important;display:block;bottom:0;float:" + instance.dock + ";clear:both;' onclick=\"BY.bubbles.stop('" + instance.id + "');BY.write_gaqEvent('preButtonClick', '" + instance.id + "');" + instance.onclickFunction + "\" aria-haspopup='true'>"
+                           + "<img id='imgPreButton_" + instance.id + "' class='preButtonImg' alt='" + instance.imageAlt + "'  " + (instance.imgStyle && instance.imgStyle.length == 0 ? "" : " style='" + instance.imgStyle + "' ") + " src='" + instance.imageUrl + "'/>"
+                      + "</button>"
+                    + "</div>"
+                    + "<audio id='audioNotification' preload='metadata'>"
+                       + "<source src='" + (BY._baseDomain.indexOf("https:") == -1 ? "https:" + BY._baseDomain : BY._baseDomain) + "Images/Audio/newmessage.mp3' type='audio/mpeg' />"
+                    + "</audio>";
+            }
+            function _BY_renderTopButtons(cssClass, icon, alt, tabIndex, imgPosition) {
+                var isMobile = BY_isMobile();
+                return "<div style='position: absolute; top: 0; padding: 0; width: 30px; height: 28px;box-sizing: initial;right:" + (imgPosition * 30) + "px;'>"
+                        + "<button tabindex='" + tabIndex + "' type='button' class='" + cssClass + " BY_TopButton' style='font-weight: normal;font-family:arial;line-height:1;color:"
+                    + (instance.closeIconsColor ? instance.closeIconsColor : "#fff") +
+                    " !important;cursor:pointer;vertical-align:top;margin-top:1px;display: inline-block;height: 27px;width:30px;min-width: 0 !important;background-color: transparent !important;padding:0 !important;border:0 !important;margin-right: 0 !important;margin-left: 0 !important;' title='"
+                    + (cssClass == "BY_imgClose" ? BY.texts[BY.defaultLanguage].closeWindow : BY.texts[BY.defaultLanguage].minimizeWindow) + "' aria-label='"
+                    + (cssClass == "BY_imgClose" ? BY.texts[BY.defaultLanguage].closeWindow : BY.texts[BY.defaultLanguage].minimizeWindow) + "'>"
+                            + icon
+                        + "</button>"
+                     + "</div>";
+            }
+
+
+            //add class to mark the top buttons better
+            BY.addClassToBody(".BY_TopButton:focus{outline:1px solid #000}");
+            BY.addClassToBody("#overlayConfirmClose button:focus{background-color:#fff !important;color:#0396da !important;transition: background 0.3s ease 0s;}");
+            if (instance.iframeId == "ifrChat")
+                instance.preButtonAriaLabel = BY.texts[BY.defaultLanguage].chatWithRepresentative;
+
+            var AppBox = "<div tabindex='1000' id='" + instance.panelIdToShow + "' class='by_iframeDragabale' title='" + BY.texts[BY.defaultLanguage].BumpyardIframe + "'  style='font-size:25px !important;font-family:Open Sans, tahoma, arial, sans-serif;display:none;position:fixed;margin:" + (openAllOverPage == true ? "0" : (isMiddleLauncher ? "40px 40px 0 40px" : "40px")) + ";" + (alignMiddle && alignMiddle.val ? "-webkit-transform: translateY(50%);-moz-transform: translateY(50%);-ms-transform: translateY(50%);-o-transform: translateY(50%);transform: translateY(50%);bottom:50%;" : "bottom:0px;") + "height:" + instance.h + ";" + (openAllOverPage != true ? ";height: calc(" + instance.h + " - " + (isMiddleLauncher || openAllOverPage ? "0" : "80px") + ");" : "") + "max-height:100%;width:" + instance.w + ";max-height: calc(100% - " + (isMiddleLauncher || openAllOverPage ? "0" : "80px") + ");" + (openAllOverPage == true ? "max-width:100%" : "max-width:90%;max-width:calc(100% - 10px)") + ";z-index:99999999999;" + (instance.dock == "left" ? "left:0;" : "right:0;") + instance.appWrapperStyle + "'>"
+                        + _BY_renderTopButtons("BY_imgClose", "<span style='font-weight: normal;font-family:arial;font-size:18px;line-height: 1;color:" + (instance.closeIconsColor ? instance.closeIconsColor : "#fff") + " !important'>✕</span>", BY.texts[BY.defaultLanguage].closeWindow, 3, 0)
+                        + "<div id='overlayConfirmClose' style='background-color: #484848;height: 100%;position: absolute;right: 0;z-index: 9999999999999999999;top: 0;color: #fff;text-align: center;width:90%;width: 100%;padding: 0;display: none;'>"
+                            + "<fieldset style='border: none;display: inline-block;'>"
+                                + "<legend style='margin: auto;display:block !important;color:#fff !important;font-size:15px;padding-top: 150px;direction:" + BY.texts[BY.defaultLanguage].dir + ";' aria-label= '" + BY.texts[BY.defaultLanguage].areYouSure + "'>" + BY.texts[BY.defaultLanguage].areYouSure + "</legend>"
+                                + "<div class=\"divInputClose\" style='display: inline-block;margin: 1.5em;border-radius: 0.5em;'><button type=\"button\" class=\"mainThemeColorBG\" id=\"btnConfirmClose\" style=\"font-size:15px;line-height:15px;padding: 7px 10px;margin:0 !important;min-width:70px;height:36px;cursor:pointer;color:#fff;background-color:  " + instance.themeColor + ";border-radius: 0.5em;border:0;\" onclick=\"BY.write_gaqEvent('close', '" + instance.id + "');BY.closeAppFrame('close', '" + instance.id + "');\"  tabindex=\"150\"><span class=\"spnName\">" + BY.texts[BY.defaultLanguage].yes + "</span></button></div>"
+                                + "<div class=\"divInputClose\" style='display: inline-block;margin: 1.5em;border-radius: 0.5em;'><button type=\"button\" class=\"mainThemeColorBG\" id=\"btnUnConfirmClose\" style=\"font-size:15px;line-height:15px;padding: 7px 10px;margin:0 !important;min-width:70px;height:36px;cursor:pointer;color:#fff;background-color:  " + instance.themeColor + ";border-radius: 0.5em;border:0;\" onclick=\"BY.closeAppFrame('cancel', '" + instance.id + "');\"  tabindex=\"151\"><span class=\"spnName\">" + BY.texts[BY.defaultLanguage].no + "</span></button></div>"
+                            + "</fieldset>"
+                        + "</div>"
+                       + '<div id="div_imgLoader" style="position: absolute; top: calc(50% - 2em); padding: 0; width: 4em; height: 4em;left:calc(50% - 2em)">' + BY.GetLoaderSVG("5em") + '</div>'
+                       + "<iframe tabindex='1001' allow='geolocation; microphone; camera' id='" + instance.iframeId + "' name='" + instance.iframeName + "' title= '" + instance.preButtonAriaLabel + "' style='border:0;border-radius:10px;padding:0;margin:0;box-shadow: 0 4px 35px rgba(0,0,0,0.25) !important;height:100%; width:100%;background-color:#fff;' src=''></iframe>"
+                       + "<button tabindex='1002' style='width:1px !important;height:1px !important;opacity:0 !important;position:fixed !important;padding:0 !important;margin:0 !important;' onfocus='jQuery(\".BY_imgClose.BY_TopButton\").focus();'></button>"
+               + "</div>"
+            setTimeout(function () {
+                if (instance.preButton.length > 0)
+                    jQuery('body').append(instance.preButton);
+                jQuery('body').append(AppBox);
+
+                try {
+                    var appBox = jQuery("#" + instance.panelIdToShow);
+                    //Fix blurry text. if appBox Height is 501px and translate y is 50% than we will get blurry text, that is because we land on a .5 pixel value.
+                    // what we will do is to set the height value to 500px.
+                    if (appBox.length > 0 && appBox.outerHeight() % 2 != 0) {
+                        var height = appBox.css("height");
+
+                        if (height.indexOf("px") > -1) {
+                            var height = height.replace("px", "");
+                            appBox.css("height", (height - 1) + "px");
+                        }
+                        else if (height.indexOf("%") > -1) {
+                            var height = height.replace("%", "");
+                            appBox.css("height", "calc(" + height + "% - 1px)");
+                        }
+                    }
+                }
+                catch (ex) {
+
+                }
+
+                //check if app was opened.
+                var cookieState = BY.getCookie("byInitialState_" + instance.iframeId);
+                if (cookieState != "" && cookieState == "opened" && instance.keepAppOpen == true && !BY_isMobile()) {
+                    // keep app open
+                    instance.initialState = "opened";
+                    instance.showTimeout = 0;
+                    BY.bubbles.stop(instance.id);
+                    BY._stopShakePreButton(instance.id);
+                }
+                if (instance.initialState == "opened") {
+                    //slide app without button
+                    //todo yechiel: change the timeout with other async method
+                    setTimeout(function () {
+                        BY._slideOutPreButton(instance.id);
+                        BY.bubbles.stop(instance.id);
+                        BY._stopShakePreButton(instance.id);
+                    }, 150);
+                }
+                else if (instance.animatePosition && instance.initialState == "preButton") {
+                    if (instance.isStateSupported(BY._streamState)) {
+                        // 1 = Available 2 = OverLoaded 
+                        // slide button
+                        BY._slideInPreButton(instance.id, false);
+                    }
+                    else {
+                        // 3 = UnAvailable => when unavailable and preButton we don't show preButton
+                        jQuery("#" + instance.panelIdToHide).remove();
+                    }
+                }
+                BY.isBusy = false;
+                if (callback)
+                    callback();
+                if (callbackfunc)
+                    callbackfunc();
+
+                //execute rules
+                BY._rulesAnalyzaer(instance);
+                BY._intervalHandler = setInterval(function () {
+                    BY._rulesAnalyzaer(instance)
+                }, 1000);
+
+                if (BY.bubbles.hasStaticMessages) {
+                    jQuery('#btnImgPreButton_' + instance.id).before(BY.bubbles.renderBubbleMessages(instance));
+                }
+
+            }, instance.showTimeout);
+        });
+    },
+
+    _getVeritcalAlign: function (vAlign, animatePosition, alignMiddle, imageSize) {
+        //if (animatePosition == "right" || animatePosition == "left") {                   
+        if (vAlign && vAlign.length > 0) {
+            switch (vAlign) {
+                case "middle":
+                    {
+                        alignMiddle.val = true;
+                        if (!imageSize)
+                            imageSize = 100;
+                        vAlign = "bottom:calc(50% - " + imageSize / 2 + "px);";
+                        break;
+                    }
+                case "bottom":
+                    {
+                        vAlign = "bottom:0;";
+                        break;
+                    }
+                default:
+                    {
+                        vAlign = "bottom:0;";
+                        break;
+                    }
+            }
+        }
+        else {
+            vAlign = "bottom:0;";
+        }
+        return vAlign;
+        // }
+        return "";
+    },
+
+    _appendCssExtentions: function () {
+        var cssId = 'extentions';  // you could encode the css path itself to generate id..
+        if (!document.getElementById(cssId)) {
+            var head = document.getElementsByTagName('head')[0];
+            var link = document.createElement('link');
+            link.id = cssId;
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = (BY._baseDomain.indexOf("https:") == -1 ? "https:" + BY._baseDomain : BY._baseDomain) + '/Styles/extentions.css';
+            link.media = 'all';
+            head.appendChild(link);
+        }
+    },
+
+    _showUserConnected: function (showUser) {
+        var divUserConnected = jQuery("#divUserConnected");
+        var divUserName = jQuery("#divUserName");
+        var divDisconnectButton = jQuery("#divDisconnectButton");
+        if (divUserConnected.length > 0) {
+            if (showUser) {
+                if (BY.user) {
+                    var connectedName = "";
+                    if (BY.user.firstName && BY.user.firstName.length > 0) {
+                        connectedName = BY.user.firstName;
+                    }
+                    if (BY.user.lastName && BY.user.lastName.length > 0) {
+                        if (connectedName.length > 0) {
+                            connectedName += " ";
+                        }
+                        connectedName += BY.user.lastName;
+                    }
+                    if (connectedName.length == 0) {
+                        // user without name, try to take email or phone.
+                        if (BY.user.email && BY.user.email.length > 0) {
+                            connectedName = BY.user.email;
+                        }
+                        else if (BY.user.phone && BY.user.phone.length > 0) {
+                            connectedName = BY.user.phone;
+                        }
+                    }
+                    if (connectedName.length > 0) {
+                        divUserName.html("");
+                        divUserName.append("<div class='pull-right'><span>" + texts.connectedAs + "</span> <span title='" + connectedName + "'>" + connectedName + "</span></div>");
+                        divUserConnected.show();
+                        divDisconnectButton.show();
+                        divUserName.show();
+                    }
+                }
+                else {
+                    divUserName.hide();
+                    jQuery(".a_l").hide();
+                }
+            }
+            else {
+                divDisconnectButton.hide();
+                divUserName.hide();
+                divUserConnected.hide();
+            }
+        }
+    },
+
+    //slide out pre button and slide in panel(iframe)
+    _slideOutPreButton: function (instanceId) {
+        if (BY.isBusy == true || BY.isOpen == true)
+            return;
+
+        var instance = BY.instances[instanceId];
+        if (instance.iframeUrlChanged == true) {
+            jQuery("#" + instance.iframeId).attr("src", "");
+        }
+
+        var iframeId = instance.iframeId;
+        var removeTimeout = 1000;
+        var panelIdToHide = instance.panelIdToHide;
+        var animatePosition = instance.animatePosition;
+        var animateDistance = instance.animateDistance;
+        var imageSize = jQuery('.preButtonImg').width();
+        var panelIdToShow = instance.panelIdToShow;
+        var panelSizeToShow = instance.panelSizeToShow;
+        var preButton = jQuery("#btnImgPreButton_" + iframeId);
+        preButton.attr("tabIndex", "-1");
+        BY.setCookie("byInitialState_" + iframeId, "opened", (1 / 24 / 12)); //set cookie for 5 minutes  
+        BY.isOpen = true;
+        BY.isBusy = true;
+        this._stopShakePreButton(instance.id);
+        var that = this;
+
+        var panel;
+        if (panelIdToShow) {
+            panel = jQuery('#' + panelIdToShow);
+            //panel.show();
+            if (BY.isMinimize == undefined || BY.isMinimize == false) {
+                panel.find("#div_imgLoader").show();
+            }
+        }
+
+        if (BY.isMinimize == undefined || BY.isMinimize == false) {
+            var iframe = jQuery("#" + iframeId);
+            setTimeout(function () {
+                jQuery("#" + iframeId).attr("src", instance.iframeUrl);
+                //check if jquery support on, thare is old jquery plugins in sites that not support "on"
+                if (iframe.on) {
+                    iframe.on("load", function () {
+                        panel.find("#div_imgLoader").hide();
+                        BY.isBusy = false;
+                    });
+                }
+                else {
+                    iframe.load(function () {
+                        panel.find("#div_imgLoader").hide();
+                        BY.isBusy = false;
+                    });
+                }
+            }, removeTimeout);
+        }
+
+        //used eval because animate function can't recive string (animatePosition)
+        eval("jQuery('#' + panelIdToHide).animate({" + animatePosition + ": -(animateDistance + imageSize) + 'px' }, removeTimeout)");
+        if (panelIdToShow) {
+            //add event to close panel if user click on close button
+            if (!BY.addEventClose) {
+                BY.addEventClose = true;
+                jQuery('.BY_imgClose').click(function () {
+                    jQuery(".preButtonImg").focus();
+                    //loop focus between 2 buttons
+                    jQuery("#btnUnConfirmClose").on("blur", function () {
+                        jQuery("#btnConfirmClose").focus();
+                    });
+                    jQuery("#btnConfirmClose").on("blur", function () {
+                        jQuery("#btnUnConfirmClose").focus();
+                    });
+
+                    if (BY.session.sessionStreamId && BY.session.sessionStreamId.length > 5) {
+                        var sessionContent = {
+                            "sessionType": 1
+                        }
+                        sessionContent.originUrl = window.location.href;
+                        BY.session.addEvent(BY.streamId, sessionContent, "close", 0, true);
+                    }
+                    BY.isMinimize = false;
+
+                    if (instance.supportOverlayConfirmClose == true) {
+                        var appIframe = jQuery("#" + instance.iframeId);
+                        if (appIframe.length > 0 && appIframe.is(":visible")) {
+                            jQuery("#overlayConfirmClose").show();
+                            jQuery('#btnConfirmClose').focus();
+                        }
+                        else {
+                            BY.write_gaqEvent('close', instance.id);
+                            BY.closeAppFrame("close", instance.id);
+                        }
+                    }
+                    else {
+                        BY.write_gaqEvent('close', instance.id);
+                        BY.closeAppFrame("close", instance.id);
+                    }
+                });
+            }
+
+            //add event to minimize panel if user click on minimize button
+            if (!BY.addEventMinimize) {
+                BY.addEventMinimize = true;
+                jQuery('.BY_imgMinimize').click(function () {
+                    BY.write_gaqEvent('minimize', instance.id);
+                    BY.isMinimize = true;
+                    BY.closeAppFrame("minimize", instance.id);
+                });
+            }
+            if (animatePosition == undefined) {
+                animatePosition = "bottom";
+            }
+            panel.css(animatePosition, -panel.width()).css("opacity", "0.3");
+            if (instance.openAllOverPage && instance.openAllOverPage == true) {
+                eval("panel.animate({" + animatePosition + " : '0px' }, 500)");
+                if (BY_isMobile() && jQuery("meta[name='viewport']").length > 0) {
+                    //this is mobile and current page contain viewport meta tag.
+                    // add body scrollbar visibility hidden
+                    jQuery("body").addClass("BYOpenFullScreen");
+                }
+            }
+            else {
+                eval("panel.animate({" + animatePosition + " : (animateDistance) + 'px' }, 500)");
+            }
+
+            panel.fadeTo(500, 1);
+        }
+    },
+
+    _slideInPreButton: function (instanceId, focusLauncher) {
+        if (BY.isOpen == true)
+            return;
+
+        var instance = BY.instances[instanceId];
+
+        var iframeId = instance.iframeId;
+        var panelId = instance.panelIdToHide;
+        var animatePosition = instance.animatePosition;
+        var imageSize = jQuery('.preButtonImg').width();
+        var animateDistance = instance.animateDistance;
+
+        var shakeButton = instance.shakeButton;
+        var shakeInterval = instance.shakeInterval;
+        var preButton = jQuery("#btnImgPreButton_" + iframeId);
+        preButton.removeAttr("tabIndex");
+
+        BY.isOpen = false;
+        BY.isBusy = true;
+        BY.setCookie("byInitialState_" + iframeId, "");
+
+        setTimeout(function () {
+            if (iframeId && (BY.isMinimize == undefined || BY.isMinimize == false)) {
+                jQuery("#" + iframeId).attr("src", '');
+            }
+        }, 1000);
+
+        var divPreButton = jQuery('#' + panelId);
+        divPreButton.show();
+        switch (animatePosition) {
+            case "top":
+                divPreButton.css('top', -imageSize);
+                divPreButton.animate({
+                    top: animateDistance + "px"
+                }, 1000);
+                break;
+            case "bottom":
+                divPreButton.css('bottom', -imageSize);
+                divPreButton.animate({
+                    bottom: animateDistance + "px"
+                }, 1000);
+                break;
+            case "right":
+                divPreButton.css('right', -imageSize);
+                divPreButton.animate({
+                    right: animateDistance + "px"
+                }, 1000);
+                break;
+            case "left":
+                divPreButton.css('left', -imageSize);
+                divPreButton.animate({
+                    left: animateDistance + "px"
+                }, 1000);
+                break;
+        }
+        setTimeout(function () {
+            BY.isBusy = false;
+            BY._shakePreButton(instance.id);
+            if (focusLauncher) {
+                jQuery("#btnImgPreButton_" + iframeId).focus();
+            }
+        }, 1000);
+    },
+
+    _shakePreButton: function (instanceId) {
+        var instance = BY.instances[instanceId];
+        var panelId = instance.panelIdToHide;
+        var shakeButton = instance.shakeButton;
+        var shakeInterval = instance.shakeInterval;
+
+        if (instance.isAlreadyShaked == true) {
+            return;
+        }
+
+        if (shakeButton && shakeButton == true) {
+            var divPreButton = jQuery('#' + panelId).find("#imgPreButton_" + instance.id + "");
+            if (instance.intervalPreButton != null) {
+                clearTimeout(instance.intervalPreButton);
+                instance.intervalPreButton = null;
+            }
+
+            var intervalTime = 4000;
+            if (shakeInterval && shakeInterval.toString().length > 0 && parseInt(shakeInterval) > 1000) {
+                intervalTime = parseInt(shakeInterval);
+            }
+            var maxNumShakes = 3;
+            function _shake() {
+                if (maxNumShakes <= 0)
+                    return;
+                maxNumShakes--;
+                if (instance.shakeInProcess == undefined)
+                    instance.shakeInProcess = false;
+
+                if (instance.shakeInProcess == false) {
+                    instance.shakeInProcess = true;
+                    var l = 10;
+                    for (var i = 0, j = 0; i < 10; i++) {
+                        divPreButton.animate({
+                            'margin-left': "+=" + (l = -l) + 'px',
+                            'margin-right': "-=" + l + 'px'
+                        }, 50, function () {
+                            if (++j == i) {
+                                instance.shakeInProcess = false;
+                                instance.intervalPreButton = setTimeout(_shake, intervalTime);
+                            }
+                        });
+                    }
+                }
+            }
+            instance.intervalPreButton = setTimeout(_shake, intervalTime);
+        }
+    },
+
+    _stopShakePreButton: function (instanceId) {
+        var instance = BY.instances[instanceId];
+        instance.isAlreadyShaked = true;
+        instance.shakeButton = false;
+        if (instance.intervalPreButton != null) {
+            clearTimeout(instance.intervalPreButton);
+            instance.intervalPreButton = null;
+        }
+    },
+
+
+    //if user logged to facebook/bumpyard..
+    //recursive function => check all providers..
+    _getLoginStatus: function (callback, indexProviders, options) {
+
+        // callback function for the recursive getLoginStatus for each provider
+        var f = function (response) {
+            if (BY._counterProviders > 0) {
+                BY._counterProviders--;
+            }
+
+            if (response.status == 'connected') {
+                BY._showUserConnected(true);
+                callback(response);
+            }
+            else {
+                BY._getLoginStatus(callback, ++indexProviders, options);
+            }
+        }
+
+        // recursive call: exit condition
+        if (indexProviders >= this._supportedProviders.length) {
+            BY._showUserConnected(false);
+            callback({
+                status: "disconnected", user: null
+            });
+        }
+        else {
+            switch (this._supportedProviders[indexProviders]) {
+                case "facebook": BY_FacebookConnect.getLoginStatus(f, options); break;
+                case "bumpyard": BY_BumpyardConnect.getLoginStatus(f, options); break;
+                case "google": BY_GoogleConnect.getLoginStatus(f, options); break;
+                case "twitter": BY_TwitterConnect.getLoginStatus(f, options); break;
+                default: {
+                    if (BY._counterProviders > 0)
+                        BY._counterProviders--;
+                    BY._getLoginStatus(callback, ++indexProviders, options);
+                }
+            }
+        }
+    },
+
+    //recursive function => logout user from all providers
+    _logout: function (callback, indexProviders) {
+        if (indexProviders >= this._supportedProviders.length) {
+            callback({
+                status: "disconnected"
+            });
+        }
+        else {
+
+            switch (this._supportedProviders[indexProviders]) {
+                case "facebook":
+                    {
+                        BY_FacebookConnect.logout(function (response) {
+                            BY._counterProviders--;
+                            BY._logout(callback, ++indexProviders);
+                        });
+                    }
+                    break;
+                case "bumpyard":
+                    {
+                        BY_BumpyardConnect.logout(function (response) {
+                            BY._counterProviders--;
+                            BY._logout(callback, ++indexProviders);
+                        });
+                        break;
+                    }
+                case "google":
+                    {
+                        BY_GoogleConnect.logout(function (response) {
+                            BY._counterProviders--;
+                            BY._logout(callback, ++indexProviders);
+                        });
+                        break;
+                    }
+                case "twitter":
+                    {
+                        BY_TwitterConnect.logout(function (response) {
+                            BY._counterProviders--;
+                            BY._logout(callback, ++indexProviders);
+                        });
+                        break;
+                    }
+                default:
+                    {
+                        BY._counterProviders--;
+                        BY._logout(callback, ++indexProviders);
+                    }
+            }
+        }
+    },
+
+    _callbackIfAllProvidersInitialized: function (callback) {
+        var allProvidersInitialized = true;
+        for (var i = 0; i < BY._supportedProviders.length; i++) {
+            if (BY._initializedProvidersBooleanArray[BY._supportedProviders[i]] == false) {
+                allProvidersInitialized = false;
+            }
+        }
+        if (allProvidersInitialized) {
+            callback({
+                initStatus: "ok"
+            });
+        }
+    },
+
+    // load the baseDomain parameter from the script tag if it is in absolute path otherwise from the options
+    _getBaseDomain: function (options) {
+        var connectScript = jQuery("#connectScript");
+        var baseDoaminSrc = "";
+        if (connectScript) {
+            baseDoaminSrc = connectScript.attr("src");
+            if (baseDoaminSrc.indexOf("http:") > -1 || baseDoaminSrc.indexOf("https:") > -1) {
+                baseDoaminSrc = baseDoaminSrc.replace("http:", "").replace("https:", "");
+                baseDoaminSrc = baseDoaminSrc.substring(0, baseDoaminSrc.toLowerCase().indexOf("script"));
+                this._baseDomain = baseDoaminSrc;
+            }
+            else {
+                if (baseDoaminSrc && baseDoaminSrc.length > 0 && baseDoaminSrc.indexOf("//") == 0 && baseDoaminSrc.toString().toLowerCase().indexOf("/scripts") > 0) {
+                    baseDoaminSrc = baseDoaminSrc.substring(0, baseDoaminSrc.toLowerCase().indexOf("script"));
+                    this._baseDomain = baseDoaminSrc;
+                }
+                else {
+                    baseDoaminSrc = "";
+                }
+            }
+        }
+
+        if (baseDoaminSrc == "") {
+            if (options.baseDomain) {
+                if (options.appsSubDomain && options.appsSubDomain != "")
+                    this._baseDomain = "//" + options.appsSubDomain + "." + options.baseDomain;
+                else
+                    this._baseDomain = "//" + BY._appsSubDomain + "." + options.baseDomain;
+            }
+        }
+    },
+
+    _rulesAnalyzaer: function (instance) {
+        if (BY.launcher.rules) {
+            if (BY.launcher.rules.length > 0) {
+                var rules = BY.launcher.rules.reverse();
+                for (i = rules.length - 1; i >= 0; i -= 1) {
+                    var rule = rules[i];
+                    if (rule != null) {
+                        /****************************************FILTERS****************************************/
+                        var ruleIsValid = true;
+                        //stream state
+                        if (rule.Filters.StreamState)
+                            if (BY._streamState == rule.Filters.StreamState)
+                                ruleIsValid = true;
+                            else
+                                ruleIsValid = false;
+
+                        //time pass
+                        if (ruleIsValid && rule.Filters.TimePass && rule.Filters.TimePass != "") {
+                            if ((new Date().getTime() - BY._appLoadTime.getTime()) / 1000 > rule.Filters.TimePass)
+                                ruleIsValid = true;
+                            else
+                                ruleIsValid = false;
+                        }
+
+                        //custom triggers
+                        if (ruleIsValid && rule.Filters.CustomTrigger && rule.Filters.CustomTrigger.length > 0) {
+                            ruleIsValid = false;
+                            jQuery.each(rule.Filters.CustomTrigger, function (i, customTrigger) {
+                                if (ruleIsValid)
+                                    return false;
+                                jQuery.each(BY._triggers, function (i, pulledTrigger) {
+                                    if (customTrigger.module && customTrigger.module == pulledTrigger.module.toLowerCase() && customTrigger.name && customTrigger.name == pulledTrigger.name.toLowerCase() && customTrigger.value && customTrigger.value == pulledTrigger.value.toLowerCase()) {
+                                        ruleIsValid = true;
+                                        return false;
+                                    }
+                                });
+                            });
+                        }
+                        //url
+                        if (ruleIsValid && rule.Filters.Url && rule.Filters.Url.length > 0) {
+                            ruleIsValid = false;
+                            var currentUrl = (window.location != window.parent.location) ? document.referrer.toLowerCase() : parent.document.location.href.toLowerCase();
+
+                            jQuery.each(rule.Filters.Url, function (i, url) {
+                                switch (parseInt(url.type)) {
+                                    case BY._urlTypesEnum.matches:
+                                        if (url.value == currentUrl) {
+                                            ruleIsValid = true;
+                                            return false;
+                                        }
+                                        break;
+                                    case BY._urlTypesEnum.contains:
+                                        if (~currentUrl.indexOf(url.value)) {
+                                            ruleIsValid = true;
+                                            return false;
+                                        }
+                                        break;
+                                    case BY._urlTypesEnum.regex:
+                                        var regex = new RegExp(url.value);
+                                        if (currentUrl.match(regex)) {
+                                            ruleIsValid = true;
+                                            return false;
+                                        }
+                                        break;
+                                }
+                            });
+
+                        }
+                        //active in streams
+                        if (ruleIsValid && rule.Filters.Streams && rule.Filters.Streams.length > 0) {
+                            var that = this;
+                            ruleIsValid = false;
+                            jQuery.each(rule.Filters.Streams, function (i, ssid) {
+                                if (ssid == BY.options.streamId) {
+                                    ruleIsValid = true;
+                                    return false;
+                                }
+                            });
+                        }
+                        /****************************************ACTIONS    ****************************************/
+                        var cookieState = BY.getCookie("byInitialState_" + instance.iframeId);
+                        if (ruleIsValid && rule.Actions) {
+                            var waitingTime = 0;
+                            //Move To Stream
+                            if (rule.Actions.MoveToStream && rule.Actions.MoveToStream != "") {
+                                waitingTime = 3000;
+                                var appName = "";
+                                var streamId = "";
+                                switch (rule.Actions.MoveToStream.Item3) {
+                                    case 9:
+                                        appName = "chat"
+                                        break;
+                                    case 25:
+                                        appName = "navigator"
+                                        break;
+                                    case 21:
+                                        appName = "contactUs"
+                                        break;
+                                }
+                                var streamId = "";
+                                var subStreamId = "";
+                                //sub stream id
+                                if (rule.Actions.MoveToStream.Item2 && rule.Actions.MoveToStream.Item2 != "") {
+                                    subStreamId = rule.Actions.MoveToStream.Item2;
+                                }
+                                //stream id
+                                if (rule.Actions.MoveToStream.Item1 && rule.Actions.MoveToStream.Item1 != "") {
+                                    streamId = rule.Actions.MoveToStream.Item1;
+                                }
+                                if (appName != "" && streamId != "" && instance.streamId != streamId) {
+                                    if (BY._intervalHandler != null) {
+                                        clearInterval(BY._intervalHandler);
+                                        BY._intervalHandler = null;
+
+                                    }
+                                    if (instance.name != appName) {
+                                        BY._removeInstance(instance.id);
+                                    }
+                                    if (BY._streamState == 0) {
+                                        //makes problems when the stream is not active
+                                    }
+
+                                    BY.setStreamId(appName, streamId, false, subStreamId);
+                                }
+                            }
+                            //"mve to stream" is an async operation, so we use setTimeout method(in this case, callback is too complicated)
+                            setTimeout(function () {
+                                if (!BY.isOpen) {
+                                    //Auto Reply
+                                    if (rule.Actions.AutoReply && rule.Actions.AutoReply != "") {
+                                        //Rules messages override others
+                                        if (BY.bubbles.hasStaticMessages) {
+                                            instance.bubbleMessages = [rule.Actions.AutoReply];
+                                            BY.bubbles.hasStaticMessages = false;
+                                        }
+                                        else {
+                                            if (instance.bubbleMessages == undefined || instance.bubbleMessages == "") {
+                                                instance.bubbleMessages = [];
+                                            }
+                                            instance.bubbleMessages.push(rule.Actions.AutoReply);
+                                        }
+                                        BY.bubbles.fireMessage = true;
+                                    }
+                                    //Launch app
+                                    if (rule.Actions.LaunchApp && rule.Actions.LaunchApp == "1") {
+                                        BY.bubbles.stop(instance.id);
+                                        BY.bubbles.fireMessage = false;
+                                        if (!BY.isOpen)
+                                            BY.show();
+
+                                    }
+                                    if (BY.bubbles.fireMessage && cookieState != "opened") {
+                                        jQuery('.divPreBtnMessage').remove();
+                                        jQuery('#btnImgPreButton_' + instance.id).before(BY.bubbles.renderBubbleMessages(instance));
+                                        instance.bubbleMessages = [];
+                                        BY.bubbles.fireMessage = false;
+                                    }
+                                }
+                                BY.launcher.rules.splice(i, 1);
+                            }, waitingTime);
+                        }
+                    }
+                }
+
+            }
+            else {
+                clearInterval(BY._intervalHandler);
+            }
+        }
+    },
+
+    _removeInstance: function (instanceid) {
+        if (instanceid) {
+            var instance = BY.instances[instanceid];
+            if (instance) {
+                jQuery("#" + instance.panelIdToHide).remove();
+            }
+        }
+
+    }
+
+};
+
+
+//default languages for connect
+BY.texts = {};
+BY.texts["en"] = BY.texts["he"] = BY.texts["ar"] = BY.texts["ru"] = BY.texts["pr"] = BY.texts["tr"] = BY.texts["fr"] = BY.texts["es"] = {};
+
+BY.texts["en"] = { "yes": "Yes", "no": "No", "areYouSure": "Are you sure you want to exit?", "dir": "ltr", "chatWithRepresentative": "Chat with a representative", "closeWindow": "Close window", "minimizeWindow": "Minimize window", "contactUsApp": "Contact Us Application", "BumpyardIframe": "Bumpyard_iframe" };
+BY.texts["he"] = { "yes": "כן", "no": "לא", "areYouSure": "האם את/ה בטוח/ה שברצונך לצאת?", "dir": "rtl", "chatWithRepresentative": "לצאט עם נציג", "closeWindow": "סגור חלון", "minimizeWindow": "מזער חלון", "contactUsApp": "יישומון צור קשר", "BumpyardIframe": "מסגרת_באמפ-יארד" };
+BY.texts["ar"] = { "yes": "نعم فعلا", "no": "لا", "areYouSure": "هل أنت متأكد أنك تريد الخروج؟", "dir": "rtl", "chatWithRepresentative": "الدردشة مع ممثل", "closeWindow": "أغلق النافذة", "minimizeWindow": "تصغير النافذة", "contactUsApp": "اتصل بنا التطبيق", "BumpyardIframe": "Bumpyard_iframe" };
+BY.texts["ru"] = { "yes": "да", "no": "Нет", "areYouSure": "Вы уверены, что хотите выйти?", "dir": "ltr", "chatWithRepresentative": "Чат с представителем", "closeWindow": "Закрой окно", "minimizeWindow": "Свернуть окно", "contactUsApp": "Свяжитесь с нами", "BumpyardIframe": "Bumpyard_iframe" };
+BY.texts["pr"] = { "yes": "Sim", "no": "Não", "areYouSure": "Você tem certeza que quer sair?", "dir": "ltr", "chatWithRepresentative": "Conversar com um representante", "closeWindow": "Janela fechada", "minimizeWindow": "Minimizar a janela", "contactUsApp": "Fale Conosco Aplicação", "BumpyardIframe": "Bumpyard_iframe" };
+BY.texts["tr"] = { "yes": "Evet", "no": "yok hayır", "areYouSure": "Çıkmak istediğine emin misin?", "dir": "ltr", "chatWithRepresentative": "Bir temsilci ile sohbet edin", "closeWindow": "Pencereyi kapat", "minimizeWindow": "Pencereyi küçült", "contactUsApp": "Bize Ulaşın Uygulama", "BumpyardIframe": "Bumpyard_iframe" };
+BY.texts["fr"] = { "yes": "Oui", "no": "Non", "areYouSure": "Êtes-vous sûr de vouloir quitter?", "dir": "ltr", "chatWithRepresentative": "Chat avec un représentant", "closeWindow": "Fermer la fenêtre", "minimizeWindow": "Minimiser la fenêtre", "contactUsApp": "Contactez-nous Application", "BumpyardIframe": "Bumpyard_iframe" };
+BY.texts["es"] = { "yes": "Si", "no": "No", "areYouSure": "¿Seguro que quieres salir?", "dir": "ltr", "chatWithRepresentative": "Chatear con un representante", "closeWindow": "Cerrar ventana", "minimizeWindow": "Contáctenos Aplicación" };
+var BY_userLang = navigator.language || navigator.userLanguage;
+switch (BY_userLang.split("-")[0]) {
+    case "en":
+    case "eng":
+    case "engs":
+        {
+            BY.defaultLanguage = "en";
+            break;
+        }
+    case "he":
+    case "heb":
+    case "engs":
+        {
+            BY.defaultLanguage = "he";
+            break;
+        }
+    case "ar":
+    case "ara":
+        {
+            BY.defaultLanguage = "ar";
+            break;
+        }
+    case "ru":
+    case "rus":
+        {
+            BY.defaultLanguage = "ru";
+            break;
+        }
+    case "pt":
+    case "por":
+        {
+            BY.defaultLanguage = "pr";
+            break;
+        }
+    case "tr":
+    case "tur":
+        {
+            BY.defaultLanguage = "tr";
+            break;
+        }
+    case "fr":
+    case "fra":
+    case "fras":
+        {
+            BY.defaultLanguage = "fr";
+            break;
+        }
+    case "es":
+    case "spa":
+        {
+            BY.defaultLanguage = "es";
+            break;
+        }
+    default: {
+        BY.defaultLanguage = "en";
+    }
+}

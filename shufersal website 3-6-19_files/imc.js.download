@@ -1,0 +1,79 @@
+var imcAPI_url = "https://www.shufersal.co.il/LandingPages/imc/api/customers";
+function ReadCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+function CreateCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    }
+
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+function getIBMCookie() {
+    var cookieName = 'com.silverpop.iMAWebCookie';
+    return ReadCookie(cookieName);
+}
+function getGoogleGaCookie() {
+    var cookieName = '_ga';
+    return ReadCookie(cookieName);
+}
+function getImcAnonymousFlagCookie() {
+    var cookieName = 'ImcAnonymousFlag';
+    return ReadCookie(cookieName);
+}
+function getImcVisitorFlagCookie() {
+    var cookieName = 'ImcVisitorFlag';
+    return ReadCookie(cookieName);
+}
+function ibm_ImcApi(club, channel, token, ImcVisitorStatus) {
+    //Anonymous Customer
+    if (!token) {
+        var ImcAnonymousFlag = getImcAnonymousFlagCookie();
+        //Firsr time entrance(no cookie)
+        if (ImcAnonymousFlag == null || ImcAnonymousFlag != "1") {
+            CreateCookie("ImcAnonymousFlag", 1, 730)
+            Google_GaCode = getGoogleGaCookie();
+            IBM_VisitorKey = getIBMCookie();
+            //Create the pixel
+            var imgtag = document.createElement('img');
+            imgtag.height = '1';
+            imgtag.width = '1';
+            imgtag.style = 'border-style:none;';
+            imgtag.alt = '';
+            imgtag.src = imcAPI_url + '?Google_GaCode=' + Google_GaCode + '&IBM_VisitorKey=' + IBM_VisitorKey + '&club=' + club + '&channel=' + channel + '&token=';
+
+        }
+        //else "Flag Exist - Do nothing"
+    }
+        //Identified Customer
+    else {
+        //Firsr time entrance(no cookie)
+        CreateCookie("ImcVisitorFlag", ImcVisitorStatus, 730)
+        Google_GaCode = getGoogleGaCookie();
+        IBM_VisitorKey = getIBMCookie();
+        //Create the pixel
+        var imgtag = document.createElement('img');
+        imgtag.height = '1';
+        imgtag.width = '1';
+        imgtag.style = 'border-style:none;';
+        imgtag.alt = '';
+        imgtag.src = imcAPI_url + '?Google_GaCode=' + Google_GaCode + '&IBM_VisitorKey=' + IBM_VisitorKey + '&club=' + club + '&channel=' + channel + '&token=' + token;
+    }
+}
+function ImcVisitorFlagIsExist() {
+    var ret = true;
+    var ImcVisitorFlag = getImcVisitorFlagCookie();
+    if (ImcVisitorFlag == null || ImcVisitorFlag != 1)
+        ret = false;
+    return ret;
+}
