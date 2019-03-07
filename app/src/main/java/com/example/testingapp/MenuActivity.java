@@ -21,7 +21,9 @@ import java.io.InputStreamReader;
 public class MenuActivity extends AppCompatActivity {
 
     ListView myListView;
-    Shop myAppShop;
+    //static because when reopening the activity, shouldn't reload from the text file
+    static Shop myAppShop = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +33,26 @@ public class MenuActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //backbutton
 
-        BufferedReader bufferReader = null;
-        try{
-            InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
-            bufferReader = new BufferedReader(new InputStreamReader(productsTextData_is, "UTF-8"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        if(MenuActivity.myAppShop == null) { //if it wasn't loaded before, load it
+            BufferedReader bufferReader = null;
+            try {
+                InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
+                bufferReader = new BufferedReader(new InputStreamReader(productsTextData_is, "UTF-8"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            Shop appShop = new Shop(bufferReader);
+            MenuActivity.myAppShop = appShop;
         }
-        Shop appShop = new Shop(bufferReader);
+
         TextView loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         loadingTextView.setText("קטגוריות");
         loadingTextView.setBackgroundColor(Color.GREEN);
 
-        myAppShop = appShop;
+        //setting the listView to depend on the (possibly new) loaded appShop
         myListView = (ListView) findViewById(R.id.categoriesListView);
 
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, myAppShop);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(this, MenuActivity.myAppShop);
         myListView.setAdapter(categoryAdapter);
     }
 

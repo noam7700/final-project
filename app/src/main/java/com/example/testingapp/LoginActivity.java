@@ -4,14 +4,18 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +24,11 @@ public class LoginActivity extends AppCompatActivity {
         forceRTLIfSupported();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //backbutton
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_login);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
 
         EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         EditText passloginPassword = (EditText) findViewById(R.id.passwordEditText);
@@ -36,18 +45,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case android.R.id.home: //backbutton
-                finish();
-                return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(mToggle.onOptionsItemSelected(item)){
+            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
