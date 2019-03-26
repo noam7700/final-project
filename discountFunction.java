@@ -28,8 +28,8 @@ public class discountFunction{
 			HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
 			
 			conn.setRequestProperty( "charset", "UTF-8");
-			conn.setRequestProperty("Cookie", "ASP.NET_SessionId=lbfycn45xacz3y55hfpifk2n; BIGipServerPool_ShufersalDirect_Commerce_Servers_HTTP=1953305610.20480.0000;");								
-			// Send post request
+			conn.setRequestProperty("Cookie", "SMC=UID=ef6d67a7-bb61-470c-878f-5ec40050c744; expires=No;");
+// Send post request
 			conn.setDoOutput(true);
 			
 			DataOutputStream wr = new DataOutputStream( conn.getOutputStream());
@@ -39,7 +39,7 @@ public class discountFunction{
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			String HtmlObject="",line; while((line = in.readLine()) != null) HtmlObject += line; // casting the response to string
-			discount = parseDiscFromHtml(HtmlObject);
+			discount = parseDiscFromHtml(HtmlObject);//HtmlObject;//
 			in.close();
 		}
 		catch(Exception e) {e.printStackTrace();}
@@ -47,7 +47,7 @@ public class discountFunction{
 		return discount;
 	}
 	public static void main(String[] args){
-		String qty = "94", prodID = "408354";
+		String qty = "94", prodID = "7296073231578";
 		System.out.println("discount for " + qty + " products of {pd: pd_id = " +prodID + "} is:  " + getDiscount(prodID, qty)); // notice that the values are strings
 		
 	}
