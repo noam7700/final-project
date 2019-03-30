@@ -24,14 +24,15 @@ public class serverThread extends Thread {
 			RequestParser.parse(br, out);
 		} catch (IOException ex) {
 			System.err.println("Unable to get streams from client");
+			System.err.println(ex.getMessage());
 		} finally {
 			try {
 				in.close();
 				out.close();
 				socket.close();
 			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+				System.err.println("Error closing resources");
+				System.err.println(ex.getMessage()); }
 		}
 	}
 }

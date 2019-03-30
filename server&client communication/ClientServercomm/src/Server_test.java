@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class Server_test {
-    public static final int PORT_NUMBER = 8085;
+    public static final int PORT_NUMBER = 8080;
     
     public static void main(String[] args) {
         System.out.println("server example");
@@ -22,7 +22,8 @@ public class Server_test {
                 if (server != null)
                     server.close();
             } catch (IOException ex) {
-                ex.printStackTrace();
+            	System.err.println("unable to close server socket");
+                System.err.println(ex.getMessage());
             }
         }
     }

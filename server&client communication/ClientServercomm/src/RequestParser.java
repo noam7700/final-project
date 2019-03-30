@@ -63,6 +63,7 @@ public class RequestParser {
 			}
 		} catch (IOException e) {
 			System.err.println("Error in writing data to client");
+			System.err.println(e.getMessage());
 		}
 /* echo server example */
 //		String request;
