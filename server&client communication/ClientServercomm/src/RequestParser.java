@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,21 +11,24 @@ import java.util.Map;
 import com.google.api.client.http.UrlEncodedParser;
 
 public class RequestParser {
-	private RequestParser() {}
+	private RequestParser() {
+	}
+
+	// private static final String[] convetinalQueriesFormat = {...}
 	private static byte[] getData() {
 		System.out.println("Getting Products data..");
-		while (!Sync.updateLock.tryLock()); // waiting for update to execute
+		while (Sync.updateLock.isLocked()); // waiting for update to execute
 		
 		synchronized (Sync.counter_lock) {
 			Sync.DataConsumers++;
 		}
 		File file = new File(".\\ProductsTextData.txt");
-
 		byte[] fileContent = null;
 		try {
 			fileContent = Files.readAllBytes(file.toPath());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("Error converting product's text file to bytes");
+			System.err.println(e.getMessage());
 		}
 		synchronized (Sync.counter_lock) {
 			Sync.DataConsumers--;
@@ -33,13 +37,16 @@ public class RequestParser {
 		System.out.println(fileContent.toString());
 		return fileContent;
 	}
-	
-	static void parse(BufferedReader br, OutputStream out) {
+
+	static void parse(BufferedReader input, OutputStream out) {
 		System.out.println("Parsing Client's request..");
 		Map<String, String> m = new HashMap();
-		// TODO: check validity of input data format. what happens if key not exists while executing map.get(key)?
+		// TODO: check validity of input data format. what happens if key not exists
+		// while executing map.get(key)?
+
+		// ValidateFormat(input);
 		try {
-			UrlEncodedParser.parse(br.readLine(), m); 
+			UrlEncodedParser.parse(input.readLine(), m);
 		} catch (Exception e) {
 			System.err.println("Error parsing request.");
 		}
@@ -60,23 +67,12 @@ public class RequestParser {
 				// saveBasket(m.get("username"), m.get("password"),m.get("basket"));
 				out.write("basket saved".getBytes());
 				break;
+			default:
+				out.write("unknown action".getBytes());
 			}
 		} catch (IOException e) {
 			System.err.println("Error in writing data to client");
 			System.err.println(e.getMessage());
 		}
-/* echo server example */
-//		String request;
-//		try {
-//			while ((request = br.readLine()) != null) {
-//				System.out.println("Message received:" + request);
-//				request += '\n';
-//				out.write(request.getBytes());
-//			}
-//		} catch (IOException ex) {
-//			System.out.println("Unable to read streams from client");
-//		}
 	}
-
-	
 }

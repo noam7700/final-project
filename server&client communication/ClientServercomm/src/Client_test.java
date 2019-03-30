@@ -36,7 +36,7 @@ public class Client_test {
 		try {
 			serverSocket = new Socket(serverHostname, port);
 			out = new PrintWriter(serverSocket.getOutputStream(), true);
-			in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
+			in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream(), "UTF-8"));
 		} catch (UnknownHostException e) {
 			System.err.println("Unknown host: " + serverHostname);
 			System.exit(1);

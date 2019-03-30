@@ -13,7 +13,9 @@ public class serverThread extends Thread {
 		System.out.println("New client connected from " + socket.getInetAddress().getHostAddress());
 		start();
 	}
+
 	public void run() {
+		System.out.println("I'm in thread: " + this.getName());
 		InputStream in = null;
 		OutputStream out = null;
 		try {
@@ -32,7 +34,9 @@ public class serverThread extends Thread {
 				socket.close();
 			} catch (IOException ex) {
 				System.err.println("Error closing resources");
-				System.err.println(ex.getMessage()); }
+				System.err.println(ex.getMessage());
+			}
 		}
 	}
+
 }

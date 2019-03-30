@@ -21,9 +21,10 @@ public class DataUpdateThread extends Thread {
 
 	long calcTimeTill(String time) {
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-		Date dateTo = null;
+		Date dateTo = null, zero_p = null;
 		try {
 			dateTo = format.parse(time);
+			zero_p = format.parse("00:00:00");
 		} catch (Exception e) {
 			System.err.println("Error in parsing time for update-thread to sleep");
 		}
@@ -32,7 +33,8 @@ public class DataUpdateThread extends Thread {
 		cal.set(Calendar.SECOND, 0); cal.set(Calendar.MILLISECOND, 0);
 		long zero_point = cal.getTimeInMillis();
 		long timeNow = System.currentTimeMillis() - zero_point;
-		return dateTo.getTime() - timeNow;
+		long timeTo = dateTo.getTime() - zero_p.getTime();
+		return timeTo - timeNow;
 	}
 
 	public void run() {

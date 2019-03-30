@@ -12,7 +12,8 @@ public class Server_test {
             new DataUpdateThread(); // updates products data every 00:00
             
             while (true) { // always listening to client requests
-                new serverThread(server.accept()); // creating thread to handle client's request (thus able to handle multiple requests)
+                new serverThread(server.accept());
+                // creating thread to handle client's request (thus able to handle multiple requests)
             }
             
         } catch (IOException ex) {
