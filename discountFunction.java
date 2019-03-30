@@ -28,10 +28,9 @@ public class discountFunction{
 			HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
 			
 			conn.setRequestProperty( "charset", "UTF-8");
-			conn.setRequestProperty("Cookie", "SMC=UID=ef6d67a7-bb61-470c-878f-5ec40050c744; expires=No;");
+			conn.setRequestProperty("Cookie", "SMC=UID=ef6d67a7-bb61-470c-878f-5ec40050c744; expires=No;"); // maybe update the cookie once in a while in a file (while updating the data), because it expires after few days
 // Send post request
 			conn.setDoOutput(true);
-			
 			DataOutputStream wr = new DataOutputStream( conn.getOutputStream());
 			wr.writeBytes( urlParameters );
 			wr.flush();

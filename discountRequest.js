@@ -10,7 +10,20 @@ run();
 
 
 
+async function CalcAndPrintDisc(htmlString){
+	//retrieving price after discount
+			console.log(htmlString);
 
+		s = "<span class='productPrice'>";
+		let price = null;
+		if(htmlString.includes(s)){
+		index = htmlString.indexOf(s) + s.length; // end of first occurance of s (beginning of pd price)
+		offset = htmlString.substring(index).indexOf(' '); // product's price length
+		price = htmlString.substring(index, index + offset);
+		}
+		console.log("price after discount = " + price);
+		return price;
+}
 async function discountRequest(prodID,qty){
     let browser = await puppeteer.launch({headless: false});
     let page = await browser.newPage();
@@ -40,23 +53,18 @@ async function discountRequest(prodID,qty){
             },
             'postData': reqBody
         };
+		console.log("Request Headers: " + request.headers);
+		console.log("request: " + request);
         req.continue(data);
     });
     // capture intercepted response
     page.on('response', async response => {
         console.log("Resource Type: "  + response.request().resourceType());
+		console.log("Response Headers: " + response.headers);
+		console.log("Response: " + response);
 		res = await response.text();
-		
-		//retrieving price after discount
-		htmlString=res;
-		s = "<span class='productPrice'>";
-		let price = null;
-		if(htmlString.includes(s)){
-		index = htmlString.indexOf(s) + s.length; // end of first occurance of s (beginning of pd price)
-		offset = htmlString.substring(index).indexOf(' '); // product's price length
-		price = htmlString.substring(index, index + offset);
-        console.log(res + "\n Price after discount: " + price);
-		}
+		price = CalcAndPrintDisc(res);
+        //console.log(res + "\n Price after discount: " + price);
         console.log("==============");
     });
 
@@ -70,17 +78,3 @@ async function discountRequest(prodID,qty){
 	
 }
 
-async function getPriceAterDiscount(htmlString){
-	console.log(htmlString);
-	htmlString = htmlString.toString();
-	console.log(htmlString);
-	s = "<span class='productPrice'>";
-	let price = null;
-	if(htmlString.includes(s)){
-    index = htmlString.indexOf(s) + s.length; // end of first occurance of s (beginning of pd price)
-    console.log("index(first occ of s): "+ index + ". html string length: " + htmlString.length);
-    offset = htmlString.substring(index).indexOf(' '); // product's price length
-    price = htmlString.substring(index, index + offset);
-    return price;
-	}
-}
