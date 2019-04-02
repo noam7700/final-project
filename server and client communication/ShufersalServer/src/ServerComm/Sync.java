@@ -1,3 +1,4 @@
+package ServerComm;
 import java.util.concurrent.locks.ReentrantLock;
 
 // global synchronization variables

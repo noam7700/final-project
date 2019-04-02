@@ -146,7 +146,8 @@ const writeFile = util.promisify(fs.writeFile);
 		}, 5000); */
 		
 		console.log('done!');
-		
+		process.exit();
+
 		
 	} catch(e) {
 		writeFile('errors_readProductsData.txt'+e+'\n\n');
