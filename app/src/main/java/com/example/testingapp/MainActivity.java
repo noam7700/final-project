@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent startIntent;
                 switch(menuItem.getItemId()){
                     case R.id.nav_main:
-
                         startIntent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(startIntent);
+                        return true;
                     case R.id.nav_menu:
                         startIntent = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(startIntent);
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_login:
                         startIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(startIntent);
+                        return true;
                     default:
                         return false;
                 }
