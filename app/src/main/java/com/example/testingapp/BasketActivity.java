@@ -18,7 +18,11 @@ import android.widget.TextView;
 public class BasketActivity extends AppCompatActivity {
 
     ListView myBasketListView;
+    //current basket which is managed (when we add products, add to this global basket).
+    //it's static so even if this activity not "open" you can still add products to it.
+    //and it won't vanish, while we're still shopping
     public static Basket currentBasket;
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -67,7 +71,9 @@ public class BasketActivity extends AppCompatActivity {
         myBasketListView = (ListView) findViewById(R.id.activity_basket_basketListView);
 
         activity_basket_titleTextView.setText("הסל שלי");
-        activity_basket_sumTextView.setText("0.00$"); //TODO: maintain sumTextView
+        activity_basket_sumTextView.setText("0.00$");
+        double newSumPrice = BasketActivity.currentBasket.getPrice();
+        activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
 
         activity_basket_buyBtn.setText("בצע קנייה");
         activity_basket_buyBtn.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +92,7 @@ public class BasketActivity extends AppCompatActivity {
         });
 
 
-        ProductBasketAdapter productBasketAdapter = new ProductBasketAdapter(this, BasketActivity.currentBasket);
+        ProductBasketAdapter productBasketAdapter = new ProductBasketAdapter(this, BasketActivity.currentBasket, activity_basket_sumTextView);
         myBasketListView.setAdapter(productBasketAdapter);
     }
 

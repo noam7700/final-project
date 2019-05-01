@@ -13,14 +13,21 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+
 public class ProductBasketAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private Basket mBasket;
+    private TextView activity_basket_sumTextView;
 
-    public ProductBasketAdapter(Context c, Basket basket){
+    public ProductBasketAdapter(Context c, Basket basket, TextView activity_basket_sumTextView){
         mBasket = basket; //low copy - important (when deleted here, it should delete the global)
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //used to update overall sum when we update quantity of some product
+        this.activity_basket_sumTextView = activity_basket_sumTextView;
     }
 
     @Override
@@ -41,7 +48,7 @@ public class ProductBasketAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = mInflater.inflate(R.layout.basketproduct_layout, null);
-        Buyable buyable = mBasket.getBasketBuyables().get(position);
+        final Buyable buyable = mBasket.getBasketBuyables().get(position);
 
         TextView pdDescTextView = (TextView) view.findViewById(R.id.basketproduct_pdDescTextView);
         TextView quantityTextView = (TextView) view.findViewById(R.id.basketproduct_quantityBtn);
@@ -54,7 +61,10 @@ public class ProductBasketAdapter extends BaseAdapter {
         }
         pdDescTextView.setText(buyable.getDesc());
 
+        pdSumPriceTextView.setText(String.valueOf(buyable.getPrice()));
+
         quantityTextView.setText("כמות:");
+        quantityEditText.setText(String.valueOf(buyable.getQuantity()));
         quantityEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -67,10 +77,32 @@ public class ProductBasketAdapter extends BaseAdapter {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) { //update quantity
                 String newQty = quantityEditText.getText().toString();
-                //TODO: update pdSumPriceTextView
-                pdSumPriceTextView.setText("0.00");
+
+                //supports commas in the number. like "1,399.00"
+                NumberFormat format = NumberFormat.getInstance(Locale.US);
+                Number number = null;
+                double newQty_double;
+                try {
+                    number = format.parse(newQty); //here it might fail
+                    newQty_double = number.doubleValue();
+                }
+                catch (ParseException e) { //if couldn't parse, just say it's 0
+                    newQty_double = 0.0;
+                    //e.printStackTrace();
+                }
+
+
+                buyable.setQuantity(newQty_double);
+
+                //TODO: check if discount has changed, and update pdSumPriceTextView
+                double newPrice = buyable.getPrice();
+                pdSumPriceTextView.setText(String.valueOf(newPrice));
+
+                //TODO: update SumPrice
+                double newSumPrice = mBasket.getPrice();
+                activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
             }
         });
 

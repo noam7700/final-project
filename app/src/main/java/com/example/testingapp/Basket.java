@@ -7,6 +7,7 @@ public class Basket implements Buyable {
     private String name;
     private String author;
     private ArrayList<Buyable> basketBuyables;
+    private double quantity;
 
     public Basket(){
         this("Default", "Default", null);
@@ -25,7 +26,7 @@ public class Basket implements Buyable {
     }
 
     @Override
-    public double getDiscount(double quantity) {
+    public double getDiscount() {
         return 0;
     }
 
@@ -72,4 +73,15 @@ public class Basket implements Buyable {
     public void setBasketBuyables(ArrayList<Buyable> basketBuyables) {
         this.basketBuyables = basketBuyables;
     }
+
+    @Override
+    public double getQuantity(){
+        return quantity;
+    }
+
+    @Override
+    public void setQuantity(double quantity){
+        this.quantity = quantity;
+    }
+
 }

@@ -10,18 +10,22 @@ public class BasketProduct implements Buyable{
     }
 
     //getters & setters
+    @Override
     public double getQuantity(){
         return quantity;
     }
+
+    @Override
     public void setQuantity(double quantity){
         this.quantity = quantity;
     }
+
     public Product getMyProduct(){
         return myProduct;
     }
 
     @Override
-    public double getDiscount(double quantity){
+    public double getDiscount(){
         //TODO: call discountRequest.js which POST requests from the server
         //maybe call .bat(cmd script) that calls the discountRequest?
         return 0;
@@ -41,6 +45,6 @@ public class BasketProduct implements Buyable{
 
     @Override
     public double getPrice() {
-        return this.myProduct.getPrice();
+        return quantity * myProduct.getPrice();
     }
 }
