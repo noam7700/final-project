@@ -66,7 +66,7 @@ public class ProductBasketAdapter extends BaseAdapter {
         pdDescTextView.setText(buyable.getDesc());
 
         pdSumPriceTextView.setText(String.valueOf(buyable.getPrice()));
-        pdSumDiscountTextView.setText(String.valueOf(-1 * buyable.getDiscount()));
+        pdSumDiscountTextView.setText(String.valueOf(buyable.getDiscount()) + "-"); //discounts shows as minus
 
         quantityTextView.setText("כמות:");
         quantityEditText.setText(String.valueOf(buyable.getQuantity()));
@@ -104,13 +104,13 @@ public class ProductBasketAdapter extends BaseAdapter {
                 double newPrice = buyable.getPrice();
                 pdSumPriceTextView.setText(String.valueOf(newPrice));
                 double newDiscount = buyable.getDiscount();
-                pdSumDiscountTextView.setText(String.valueOf(-1 * newDiscount));
+                pdSumDiscountTextView.setText(String.valueOf(newDiscount) + "-"); //discounts shows as minus
 
                 //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
                 activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
                 double newSumDiscount = mBasket.getDiscount();
-                activity_basket_sumDiscountTextView.setText(String.valueOf(-1 * newSumDiscount));
+                activity_basket_sumDiscountTextView.setText(String.valueOf(newSumDiscount) + "-"); //discounts shows as minus
 
             }
         });
