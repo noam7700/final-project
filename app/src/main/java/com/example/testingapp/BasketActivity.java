@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 public class BasketActivity extends AppCompatActivity {
 
     ListView myBasketListView;
@@ -73,9 +75,9 @@ public class BasketActivity extends AppCompatActivity {
 
         activity_basket_titleTextView.setText("הסל שלי");
         double newSumPrice = BasketActivity.currentBasket.getPrice();
-        activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
+        activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
         double newDiscount = BasketActivity.currentBasket.getDiscount();
-        activity_basket_sumDiscountTextView.setText(String.valueOf(newDiscount) + "-"); //discounts shows as minus
+        activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newDiscount) + "-"); //discounts shows as minus
 
         activity_basket_buyBtn.setText("בצע קנייה");
         activity_basket_buyBtn.setOnClickListener(new View.OnClickListener() {

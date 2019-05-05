@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -65,8 +66,8 @@ public class ProductBasketAdapter extends BaseAdapter {
         }
         pdDescTextView.setText(buyable.getDesc());
 
-        pdSumPriceTextView.setText(String.valueOf(buyable.getPrice()));
-        pdSumDiscountTextView.setText(String.valueOf(buyable.getDiscount()) + "-"); //discounts shows as minus
+        pdSumPriceTextView.setText(new DecimalFormat("##.##").format(buyable.getPrice()));
+        pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(buyable.getDiscount()) + "-"); //discounts shows as minus
 
         quantityTextView.setText("כמות:");
         quantityEditText.setText(String.valueOf(buyable.getQuantity()));
@@ -102,15 +103,15 @@ public class ProductBasketAdapter extends BaseAdapter {
                 buyable.setQuantity(newQty_double);
 
                 double newPrice = buyable.getPrice();
-                pdSumPriceTextView.setText(String.valueOf(newPrice));
+                pdSumPriceTextView.setText(new DecimalFormat("##.##").format(newPrice));
                 double newDiscount = buyable.getDiscount();
-                pdSumDiscountTextView.setText(String.valueOf(newDiscount) + "-"); //discounts shows as minus
+                pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(newDiscount) + "-"); //discounts shows as minus
 
                 //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
-                activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
+                activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
                 double newSumDiscount = mBasket.getDiscount();
-                activity_basket_sumDiscountTextView.setText(String.valueOf(newSumDiscount) + "-"); //discounts shows as minus
+                activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newSumDiscount) + "-"); //discounts shows as minus
 
             }
         });
