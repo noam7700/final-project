@@ -66,14 +66,16 @@ public class BasketActivity extends AppCompatActivity {
 
         TextView activity_basket_titleTextView = (TextView) findViewById(R.id.activity_basket_titleTextView);
         TextView activity_basket_sumTextView = (TextView) findViewById(R.id.activity_basket_sumTextView);
+        TextView activity_basket_sumDiscountTextView = (TextView) findViewById(R.id.activity_basket_sumDiscountTextView);
         Button activity_basket_buyBtn = (Button) findViewById(R.id.activity_basket_buyBtn);
         Button activity_basket_saveBasketBtn = (Button) findViewById(R.id.activity_basket_saveBasketBtn);
         myBasketListView = (ListView) findViewById(R.id.activity_basket_basketListView);
 
         activity_basket_titleTextView.setText("הסל שלי");
-        activity_basket_sumTextView.setText("0.00$");
         double newSumPrice = BasketActivity.currentBasket.getPrice();
         activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
+        double newDiscount = BasketActivity.currentBasket.getDiscount();
+        activity_basket_sumDiscountTextView.setText(String.valueOf(-1 * newDiscount));
 
         activity_basket_buyBtn.setText("בצע קנייה");
         activity_basket_buyBtn.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +94,8 @@ public class BasketActivity extends AppCompatActivity {
         });
 
 
-        ProductBasketAdapter productBasketAdapter = new ProductBasketAdapter(this, BasketActivity.currentBasket, activity_basket_sumTextView);
+        ProductBasketAdapter productBasketAdapter = new ProductBasketAdapter(this, BasketActivity.currentBasket,
+                activity_basket_sumTextView, activity_basket_sumDiscountTextView);
         myBasketListView.setAdapter(productBasketAdapter);
     }
 

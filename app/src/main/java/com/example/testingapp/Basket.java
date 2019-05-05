@@ -27,7 +27,11 @@ public class Basket implements Buyable {
 
     @Override
     public double getDiscount() {
-        return 0;
+        double sum_discounts = 0.0;
+        for(int i = 0; i < basketBuyables.size(); i++) {
+            sum_discounts += this.basketBuyables.get(i).getDiscount();
+        }
+        return sum_discounts;
     }
 
     @Override

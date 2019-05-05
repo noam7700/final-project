@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,12 +22,15 @@ public class ProductBasketAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Basket mBasket;
     private TextView activity_basket_sumTextView;
+    private TextView activity_basket_sumDiscountTextView;
 
-    public ProductBasketAdapter(Context c, Basket basket, TextView activity_basket_sumTextView){
+    public ProductBasketAdapter(Context c, Basket basket, TextView activity_basket_sumTextView,
+                                TextView activity_basket_sumDiscountTextView){
         mBasket = basket; //low copy - important (when deleted here, it should delete the global)
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         //used to update overall sum when we update quantity of some product
         this.activity_basket_sumTextView = activity_basket_sumTextView;
+        this.activity_basket_sumDiscountTextView = activity_basket_sumDiscountTextView;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class ProductBasketAdapter extends BaseAdapter {
         TextView quantityTextView = (TextView) view.findViewById(R.id.basketproduct_quantityBtn);
         final EditText quantityEditText = (EditText) view.findViewById(R.id.basketproduct_quantityEditText);
         final TextView pdSumPriceTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumPriceTextView);
+        final TextView pdSumDiscountTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumDiscountTextView);
         ImageView basketproduct_ImageView = (ImageView) view.findViewById(R.id.basketproduct_ImageView);
 
         if(buyable instanceof BasketProduct) {
@@ -62,6 +66,7 @@ public class ProductBasketAdapter extends BaseAdapter {
         pdDescTextView.setText(buyable.getDesc());
 
         pdSumPriceTextView.setText(String.valueOf(buyable.getPrice()));
+        pdSumDiscountTextView.setText(String.valueOf(-1 * buyable.getDiscount()));
 
         quantityTextView.setText("כמות:");
         quantityEditText.setText(String.valueOf(buyable.getQuantity()));
@@ -96,13 +101,17 @@ public class ProductBasketAdapter extends BaseAdapter {
 
                 buyable.setQuantity(newQty_double);
 
-                //TODO: check if discount has changed, and update pdSumPriceTextView
                 double newPrice = buyable.getPrice();
                 pdSumPriceTextView.setText(String.valueOf(newPrice));
+                double newDiscount = buyable.getDiscount();
+                pdSumDiscountTextView.setText(String.valueOf(-1 * newDiscount));
 
-                //TODO: update SumPrice
+                //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
                 activity_basket_sumTextView.setText(String.valueOf(newSumPrice));
+                double newSumDiscount = mBasket.getDiscount();
+                activity_basket_sumDiscountTextView.setText(String.valueOf(-1 * newSumDiscount));
+
             }
         });
 
