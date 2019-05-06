@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -81,10 +82,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_mainactivity, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(mToggle.onOptionsItemSelected(item)){ //if it's
             return true;
         }
+        else
+            switch (item.getItemId()){
+                case R.id.menu_mainactivity_myaccount:
+                    //TODO: if not logged in, goto LoginActivity. if logged in, goto AccountActivity
+                    Intent startIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(startIntent);
+                    return true;
+            }
 
         return super.onOptionsItemSelected(item);
     }

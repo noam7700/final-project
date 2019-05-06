@@ -2,4 +2,7 @@
     <string name="app_name">TestingApp</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <string name="myaccount">המשתמש שלי</string>
+    <string name="about">אודות</string>
 </resources>
