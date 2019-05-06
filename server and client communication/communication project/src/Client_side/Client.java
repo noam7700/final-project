@@ -30,42 +30,49 @@ public class Client {
 
 	public static void main(String args[]) {
 
-		ResponseObject ro = verifyUser("blakjn1", "blajhb2");
+		ResponseObject ro = register("noam1234", "noam12");
 		if (ro.Error())
 			System.out.println("error. " + ro.getError());
 		else
 			System.out.println(ro.getResponse().toString());
 
-		Data basket = new Data();
-		basket.setData("sdsc");
-		ro = saveBasket(basket);
-		if (ro.Error())
-			System.out.println("error. " + ro.getError());
-		else {
-			System.out.println(ro.getResponse().toString());
-		}
-		ro = getSavedBaskets();
-		if (ro.Error())
-			System.out.println("error. " + ro.getError());
-		else {
-			Object[] o = (Object[]) ro.getResponse();
-			List<Data> dArr = new ArrayList<>();
-			for (Object ob : o) {
-				Data d = (Data) ob;
-				dArr.add(d);
-				System.out.println(d.getData());
-			}
-		}
+//		ResponseObject ro = verifyUser("blakjn1", "blajhb2");
+//		if (ro.Error())
+//			System.out.println("error. " + ro.getError());
+//		else
+//			System.out.println(ro.getResponse().toString());
+
+//		Data basket = new Data();
+//		basket.setData("sdsc");
+//		ro = saveBasket(basket);
+//		if (ro.Error())
+//			System.out.println("error. " + ro.getError());
+//		else {
+//			System.out.println(ro.getResponse().toString());
+//		}
+//		ro = getSavedBaskets();
+//		if (ro.Error())
+//			System.out.println("error. " + ro.getError());
+//		else {
+//			Object[] o = (Object[]) ro.getResponse();
+//			List<Data> dArr = new ArrayList<>();
+//			for (Object ob : o) {
+//				Data d = (Data) ob;
+//				dArr.add(d);
+//				System.out.println(d.getData());
+//			}
+//		}
 	}
 
-	public static boolean isSigned() {
-		return clientUsername != null && clientPass != null;
-	}
-
-	/**
-	 * ----Explanation---- the functions returns true on success, false on failure.
-	 * message sent by server written in {@msgReceived}
-	 */
+//
+//	public static boolean isSigned() {
+//		return clientUsername != null && clientPass != null;
+//	}
+//
+//	/**
+//	 * ----Explanation---- the functions returns true on success, false on failure.
+//	 * message sent by server written in {@msgReceived}
+//	 */
 	public static ResponseObject register(String un, String ps) {
 		setDetails(un, ps);
 		RequestObject req = new RequestObject(AcceptedQuery.register, un, ps);
@@ -119,9 +126,8 @@ public class Client {
 
 	private static ResponseObject send(RequestObject req) { // false for error, true otherwise
 		System.out.println("Connecting to host " + serverHostname + " on port " + port + ".");
-//		SSLSocketFactory factory =
-//                (SSLSocketFactory)SSLSocketFactory.getDefault();
-//            SSLSocket serverSocket = null;
+//		SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+//		SSLSocket serverSocket = null;
 		Socket serverSocket = null;
 		ObjectInputStream in = null;
 		ObjectOutputStream out = null;
@@ -132,7 +138,8 @@ public class Client {
 		try {
 			System.out.println("connecting to server: ");
 			serverSocket = new Socket(serverHostname, port);
-//			serverSocket = (SSLSocket)factory.createSocket(serverHostname, port);
+//			factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+//			serverSocket = (SSLSocket) factory.createSocket(serverHostname, port);
 //			serverSocket.startHandshake();
 			out = new ObjectOutputStream(serverSocket.getOutputStream());
 			in = new ObjectInputStream(serverSocket.getInputStream());

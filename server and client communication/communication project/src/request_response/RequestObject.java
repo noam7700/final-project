@@ -1,6 +1,8 @@
 package request_response;
 import java.io.Serializable;
 
+import hash.sha1;
+
 public class RequestObject implements Serializable{
 	static final long serialVersionUID = 0;
 	AcceptedQuery query;
@@ -12,6 +14,7 @@ public class RequestObject implements Serializable{
 		objectToSend = o;
 		username = un;
 		password = ps;
+
 	}
 
 	public RequestObject(AcceptedQuery q, String un, String ps) {

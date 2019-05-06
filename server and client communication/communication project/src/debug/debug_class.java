@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -111,11 +113,40 @@ public class debug_class implements Serializable {
 		return object;
 	}
 
+	static String sha1(String input) throws NoSuchAlgorithmException {
+		MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+		byte[] result = mDigest.digest(input.getBytes());
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < result.length; i++) {
+			sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+		}
+
+		return sb.toString();
+	}
+
 	public static void main(String args[]) throws SQLException, InterruptedException {
+
+		MessageDigest mDigest = null;
+		try {
+			mDigest = MessageDigest.getInstance("SHA1");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] result = mDigest.digest("blabla".getBytes());
+		String rawSha1 = new String(result);
+		System.out.println(rawSha1);
+		try {
+			String hashed = sha1("blabla");
+			System.out.println(hashed + ", sha1 len:" + hashed.length() + ", raw sha1 len:" + rawSha1.length());
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Data[] data = new Data[10];
 		data[0] = new Data();
 		data[1] = new Data();
-		
+
 		data[0].data = "data0";
 		data[1].data = "data1";
 		byte[] bytes = getByteArrayObject(data);
@@ -255,7 +286,7 @@ public class debug_class implements Serializable {
 //			break;
 //		}
 //	}
-	
+
 	static long calcTimeTill(String time) {
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 		Date dateTo = null, zero_p = null;

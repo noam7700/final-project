@@ -57,16 +57,18 @@ public class DBExecutor {
 
 	public static boolean addUser(String username, String password) {
 		String sqlquery = "INSERT INTO " + usersdetailsTable + " values ('" + username + "', '" + password + "');";
+		boolean success = false;
 		try {
 			synchronized (DBLock) {
 				if (!userExists(username))
-					return DBConnector.connStmt.execute(sqlquery);
+					success = DBConnector.connStmt.execute(sqlquery);
 			}
+			System.out.println("User added: " + username + ", password saved: " + password);
 		} catch (SQLException e) {
 			System.err.println("Error in adding user");
 			System.err.println(e.getMessage());
 		}
-		return false;
+		return success;
 	}
 
 	public static void addBasket(String username, byte[] basket) {

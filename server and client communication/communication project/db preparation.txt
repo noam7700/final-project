@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS ZUXezOHIFk;
 USE ZUXezOHIFk;
 
 DROP TABLE IF EXISTS usersDetails;
-CREATE TABLE usersDetails (username varchar(20), password varchar(20));
+CREATE TABLE usersDetails (username varchar(20), password varchar(40));
 
 DROP TABLE IF EXISTS usersBaskets;
 CREATE TABLE usersBaskets (username varchar(20), basket Blob);
