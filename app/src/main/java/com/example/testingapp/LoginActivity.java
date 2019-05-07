@@ -46,9 +46,15 @@ public class LoginActivity extends AppCompatActivity {
                         startIntent = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(startIntent);
                         return true;
-                    case R.id.nav_login:
-                        startIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(startIntent);
+                    case R.id.nav_myaccount:
+                        if(MainActivity.isLoggedIn == false) {
+                            startIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(startIntent);
+                        }
+                        else{
+                            startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
+                            startActivity(startIntent);
+                        }
                         return true;
                     default:
                         return false;
@@ -57,15 +63,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-        EditText passloginPassword = (EditText) findViewById(R.id.passwordEditText);
+        final EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+        final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
         final Button loginBtn = (Button) findViewById(R.id.loginBtn);
+        loginBtn.setText(R.string.login);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
                 //TODO: update user's data(maybe an object)
+
+                MainActivity.loggedUser = new User(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                MainActivity.isLoggedIn = true;
                 startActivity(startIntent);
             }
         });

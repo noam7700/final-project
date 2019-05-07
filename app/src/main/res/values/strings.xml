@@ -2,7 +2,18 @@
     <string name="app_name">TestingApp</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="login">התחבר</string>
+    <string name="mybaskets">הסלים שלי</string>
+    <string name="myhistory">הסטוריית הזמנות</string>
 
+    <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
+    <string name="title_shufersal">שופרסל</string>
+
+    <!-- sidebar buttons titles (navigation menu) -->
     <string name="myaccount">המשתמש שלי</string>
+    <string name="menu">תפריט</string>
+    <string name="main">ראשי</string>
+
+    <!-- bar titles -->
     <string name="about">אודות</string>
 </resources>

@@ -16,6 +16,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
     public static boolean isLoggedIn = false; //TODO: use this information
+    public static User loggedUser = null; //TODO: use this information in myaccount
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -46,9 +47,15 @@ public class MainActivity extends AppCompatActivity {
                         startIntent = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(startIntent);
                         return true;
-                    case R.id.nav_login:
-                        startIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(startIntent);
+                    case R.id.nav_myaccount:
+                        if(MainActivity.isLoggedIn == false) {
+                            startIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(startIntent);
+                        }
+                        else{
+                            startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
+                            startActivity(startIntent);
+                        }
                         return true;
                     default:
                         return false;
@@ -62,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button loginBtn = (Button) findViewById(R.id.loginBtn);
+        loginBtn.setText(R.string.login);
+        if(MainActivity.isLoggedIn == true)
+            loginBtn.setVisibility(View.INVISIBLE);
         loginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -95,9 +105,14 @@ public class MainActivity extends AppCompatActivity {
         else
             switch (item.getItemId()){
                 case R.id.menu_mainactivity_myaccount:
-                    //TODO: if not logged in, goto LoginActivity. if logged in, goto AccountActivity
-                    Intent startIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(startIntent);
+                    if(MainActivity.isLoggedIn == false) {
+                        Intent startIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(startIntent);
+                    }
+                    else{
+                        Intent startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
+                        startActivity(startIntent);
+                    }
                     return true;
             }
 

@@ -59,9 +59,15 @@ public class MenuActivity extends AppCompatActivity {
                         startIntent = new Intent(getApplicationContext(), MenuActivity.class);
                         startActivity(startIntent);
                         return true;
-                    case R.id.nav_login:
-                        startIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(startIntent);
+                    case R.id.nav_myaccount:
+                        if(MainActivity.isLoggedIn == false) {
+                            startIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(startIntent);
+                        }
+                        else{
+                            startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
+                            startActivity(startIntent);
+                        }
                         return true;
                     default:
                         return false;

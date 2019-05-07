@@ -10,6 +10,8 @@ public class User {
 
     public User(String username, String password){
         //TODO: implement User's c'tor with amit
+        this.username = username;
+        this.password = password;
     }
 
     public void addBasket(Basket basket){
