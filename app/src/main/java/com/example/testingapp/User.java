@@ -10,7 +10,6 @@ public class User {
     private String username; // this details can be maintained is Client class as well (it will anyway contain so)
     private String password;
 
-    private ArrayList<Basket> mBaskets; // there is no need in mBaskets, besides maybe the use of removing basket by index
     private Client serverExecutor;
 
     public User(String username, String password) {
@@ -53,7 +52,6 @@ public class User {
     }
 
     public void addBasket(Basket basket) {
-        mBaskets.add(basket);
         ResponseObject server_response = serverExecutor.saveBasket(basket);
         if (server_response.Error()) {
             String error_message = server_response.getError();
@@ -61,9 +59,25 @@ public class User {
         }
     }
 
-    public void deleteBasket_byIndex(int position) {
-        mBaskets.remove(position);
-        ResponseObject server_response = serverExecutor.removeBasket(mBaskets.get(position));
+    public ArrayList<Basket> getSavedBaskets() {
+        ResponseObject server_response = serverExecutor.getSavedBaskets();
+        Object[] basketObjects = (Object[]) server_response.getResponse();
+        ArrayList<Basket> savedBaskets = new ArrayList<>();
+        if (server_response.Error()) {
+            String error_message = server_response.getError();
+            //TODO: error case (unexpected problem)
+            return null;
+        } else {
+            for (Object basketObject : basketObjects) {
+                savedBaskets.add((Basket) basketObject);
+            }
+        }
+        return savedBaskets;
+    }
+
+    public void deleteBasket_byIndex(int position) { //this is a bit expensive in complexity compared to deleting by value
+        ArrayList<Basket> userBaskets = getSavedBaskets();
+        ResponseObject server_response = serverExecutor.removeBasket(userBaskets.get(position));
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case (unexpected problem)
@@ -71,7 +85,6 @@ public class User {
     }
 
     public void removeAllBaskets() {
-        mBaskets.clear();
         ResponseObject server_response = serverExecutor.removeAllBaskets();
         if (server_response.Error()) {
             String error_message = server_response.getError();
@@ -79,15 +92,11 @@ public class User {
         }
     }
 
-    public int findBasketIndex_byName(String name) {
-        for (int i = 0; i < mBaskets.size(); i++)
-            if (mBaskets.get(i).getName() == name)
+    public int findBasketIndex_byName(ArrayList<Basket> baskets, String name) {
+        for (int i = 0; i < baskets.size(); i++)
+            if (baskets.get(i).getName() == name)
                 return i;
         return -1;
-    }
-
-    public ArrayList<Basket> getmBaskets() {
-        return mBaskets;
     }
 
     public String getUsername() {
