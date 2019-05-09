@@ -16,19 +16,29 @@ import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.google.api.client.http.UrlEncodedParser;
-
 import debug.debug_class.Data;
 import request_response.AcceptedQuery;
 import request_response.RequestObject;
 import request_response.ResponseObject;
 
 public class Client {
-	static final String serverHostname = "127.0.0.1"; // local host for now
-	static final int port = 8080;
-	static String clientPass = null;
-	static String clientUsername = null;
-
-	public static void main(String args[]) {
+	String serverHostname = "127.0.0.1"; // local host for now
+	int port = 8080;
+	String password = null;
+	String username = null;
+	public Client(String username, String password, String host, int port) {
+		this.serverHostname = host;
+		this.port = port;
+		this.username = username;
+		this.password = password;
+	}
+	public Client(String username, String password) {
+		this.username = username;
+		this.password = password;
+		this.serverHostname =  "127.0.0.1";
+		this.port = 8080;
+	}
+	public void main(String args[]) {
 
 		ResponseObject ro = register("noam1234", "noam12");
 		if (ro.Error())
@@ -65,7 +75,7 @@ public class Client {
 	}
 
 //
-//	public static boolean isSigned() {
+//	public boolean isSigned() {
 //		return clientUsername != null && clientPass != null;
 //	}
 //
@@ -73,58 +83,58 @@ public class Client {
 //	 * ----Explanation---- the functions returns true on success, false on failure.
 //	 * message sent by server written in {@msgReceived}
 //	 */
-	public static ResponseObject register(String un, String ps) {
+	public ResponseObject register(String un, String ps) {
 		setDetails(un, ps);
 		RequestObject req = new RequestObject(AcceptedQuery.register, un, ps);
 		return send(req);
 
 	}
 
-	public static ResponseObject verifyUser(String un, String ps) {
+	public ResponseObject verifyUser(String un, String ps) {
 		setDetails(un, ps);
 		RequestObject req = new RequestObject(AcceptedQuery.verifyUser, un, ps);
 		return send(req);
 	}
 
-	public static ResponseObject getSavedBaskets() {
+	public ResponseObject getSavedBaskets() {
 //		if (!isSigned())
 //			return false;
-		RequestObject req = new RequestObject(AcceptedQuery.getBaskets, clientUsername, clientPass);
+		RequestObject req = new RequestObject(AcceptedQuery.getBaskets, username, password);
 		return send(req);
 	}
 
-	public static ResponseObject saveBasket(Object basket) {
+	public ResponseObject saveBasket(Object basket) {
 //		if (!isSigned())
 //			return false;
-		RequestObject req = new RequestObject(AcceptedQuery.saveBasket, basket, clientUsername, clientPass);
+		RequestObject req = new RequestObject(AcceptedQuery.saveBasket, basket, username, password);
 		return send(req);
 	}
 
-	public static ResponseObject removeBasket(Object basket) {
+	public ResponseObject removeBasket(Object basket) {
 //		if (!isSigned())
 //			return null;
-		RequestObject req = new RequestObject(AcceptedQuery.removeBasket, basket, clientUsername, clientPass);
+		RequestObject req = new RequestObject(AcceptedQuery.removeBasket, basket, username, password);
 		return send(req);
 	}
 
-	public static ResponseObject removeAllBaskets() {
+	public ResponseObject removeAllBaskets() {
 //		if (!isSigned())
 //			return false;
-		RequestObject req = new RequestObject(AcceptedQuery.removeAllBaskets, clientUsername, clientPass);
+		RequestObject req = new RequestObject(AcceptedQuery.removeAllBaskets, username, password);
 		return send(req);
 	}
 
-	public static ResponseObject getData() {
-		RequestObject req = new RequestObject(AcceptedQuery.getData, clientUsername, clientPass);
+	public ResponseObject getData() {
+		RequestObject req = new RequestObject(AcceptedQuery.getData, username, password);
 		return send(req);
 	}
 
-	private static void setDetails(String un, String ps) {
-		clientUsername = un;
-		clientPass = ps;
+	private void setDetails(String un, String ps) {
+		username = un;
+		password = ps;
 	}
 
-	private static ResponseObject send(RequestObject req) { // false for error, true otherwise
+	private ResponseObject send(RequestObject req) { // false for error, true otherwise
 		System.out.println("Connecting to host " + serverHostname + " on port " + port + ".");
 //		SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 //		SSLSocket serverSocket = null;
