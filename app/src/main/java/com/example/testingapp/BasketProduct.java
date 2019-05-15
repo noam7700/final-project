@@ -1,5 +1,9 @@
 package com.example.testingapp;
 
+import android.os.Parcel;
+
+import java.util.ArrayList;
+
 public class BasketProduct implements Buyable{
     private Product myProduct;
     private double quantity;
@@ -46,5 +50,22 @@ public class BasketProduct implements Buyable{
     @Override
     public double getPrice() {
         return quantity * myProduct.getPrice();
+    }
+
+    //implement Parcelable
+    protected BasketProduct(Parcel in) {
+        quantity = in.readDouble();
+        myProduct = (Product) in.readValue(Product.class.getClassLoader()); //i hope it works
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(quantity);
+        dest.writeValue(myProduct);
     }
 }

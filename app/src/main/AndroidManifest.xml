@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyAccountActivity"></activity>
+        <activity android:name=".MyAccountBasketsActivity"></activity>
+        <activity android:name=".MyAccountActivity" />
         <activity android:name=".BasketActivity" />
         <activity android:name=".ProductActivity" />
         <activity android:name=".CategoryActivity" />

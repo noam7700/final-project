@@ -1,7 +1,9 @@
 package com.example.testingapp;
 
+import android.os.Parcelable;
+
 //current basket will hold list of Buyable's
-public interface Buyable {
+public interface Buyable extends Parcelable {
 
     public double getDiscount(); //calculate overall discount
     public void addToBasket(); //add to current basket that's

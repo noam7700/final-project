@@ -1,5 +1,8 @@
 package com.example.testingapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 public class Basket implements Buyable {
@@ -88,4 +91,47 @@ public class Basket implements Buyable {
         this.quantity = quantity;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    //implement Parcelable
+    protected Basket(Parcel in) {
+        this.name = in.readString();
+        this.author = in.readString();
+        this.quantity = in.readDouble();
+        if (in.readByte() == 0x01) {
+            this.basketBuyables = new ArrayList<Buyable>();
+            in.readList(this.basketBuyables, Basket.class.getClassLoader());
+        } else {
+            this.basketBuyables = null;
+        }
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.author);
+        dest.writeDouble(this.quantity);
+        if(this.basketBuyables == null){
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(this.basketBuyables);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Basket> CREATOR = new Parcelable.Creator<Basket>() {
+        @Override
+        public Basket createFromParcel(Parcel in) {
+            return new Basket(in);
+        }
+
+        @Override
+        public Basket[] newArray(int size) {
+            return new Basket[size];
+        }
+    };
 }
