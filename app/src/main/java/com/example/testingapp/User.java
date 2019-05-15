@@ -1,5 +1,7 @@
 package com.example.testingapp;
 
+import android.util.Log;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -13,39 +15,41 @@ public class User {
     private Client serverExecutor;
 
     public User(String username, String password) {
-        serverExecutor = new Client(username, password);
+        serverExecutor = new Client(username, password, "192.168.1.210", 8080);
         this.username = username;
         this.password = password;
-
+        Log.d("DEBUG","username = "+username + ", password = "+password);
         this.register();
         this.login();
     }
 
     public void register() {
-        ResponseObject server_response = serverExecutor.register(username, password);
+        ResponseObject server_response = serverExecutor.register();
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case - username already exists
-        } else { // user details added to the system
-            ResponseObject updatedFileObject = serverExecutor.getData();
-            File productsData = (File) updatedFileObject.getResponse();
-            File currentFile = new File("TestingApp\\app\\src\\main\\assets\\ProductsTextData");
-            //TODO: update current file
         }
+//        else { // user details added to the system
+//            ResponseObject updatedFileObject = serverExecutor.getData();
+//            File productsData = (File) updatedFileObject.getResponse();
+//            File currentFile = new File("TestingApp\\app\\src\\main\\assets\\ProductsTextData");
+//            //TODO: update current file
+//        }
     }
 
     public void login() {
-        ResponseObject server_response = serverExecutor.verifyUser(username, password);
+        ResponseObject server_response = serverExecutor.verifyUser();
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case - username/password are wrong
             this.username = "I DONT KNOW YOU";
-        } else { //
-            ResponseObject updatedFileObject = serverExecutor.getData();
-            File productsData = (File) updatedFileObject.getResponse();
-            File currentFile = new File("TestingApp\\app\\src\\main\\assets\\ProductsTextData");
-            //TODO: update current file
         }
+//        else { //
+//            ResponseObject updatedFileObject = serverExecutor.getData();
+//            File productsData = (File) updatedFileObject.getResponse();
+//            File currentFile = new File("TestingApp\\app\\src\\main\\assets\\ProductsTextData");
+//            //TODO: update current file
+//        }
     }
 
     public void enterAsGuest() {
