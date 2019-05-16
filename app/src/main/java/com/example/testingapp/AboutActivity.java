@@ -12,10 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
-public class LoginActivity extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -23,12 +22,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_about);
         forceRTLIfSupported();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //backbutton
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_login);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_about);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -64,22 +62,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        final EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
-        final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
-        final Button loginBtn = (Button) findViewById(R.id.loginBtn);
-        loginBtn.setText(R.string.login);
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
-                //TODO: update user's data(maybe an object)
+        TextView activity_about_titleTextView = (TextView) findViewById(R.id.activity_about_titleTextView);
+        activity_about_titleTextView.setText(R.string.about);
 
-                MainActivity.loggedUser = new User(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                MainActivity.isLoggedIn = true;
-                startActivity(startIntent);
-            }
-        });
+        TextView activity_about_contentTextView = (TextView) findViewById(R.id.activity_about_contentTextView);
+        activity_about_contentTextView.setText(R.string.about_content);
+
     }
 
     @Override

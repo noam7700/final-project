@@ -53,6 +53,7 @@ public class MyAccountBasketAdapter extends BaseAdapter {
         basketitem_setBasketBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: check if previous basket is not saved (and ask him to save it..)
                 BasketActivity.currentBasket = currBasket; //change current editable basket to be this basket
                 //goto BasketActivity
                 Intent startIntent = new Intent(parent.getContext(), BasketActivity.class);
