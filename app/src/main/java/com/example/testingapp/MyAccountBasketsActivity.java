@@ -3,12 +3,12 @@ package com.example.testingapp;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,14 +77,13 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
             //TODO: load from server //mBaskets = MainActivity.loggedUser.getSavedBaskets();
             mBaskets = new ArrayList<Basket>();
 
-        mBaskets.add(new Basket("Bar BQ", "Mr. fluffy"));
         MyAccountBasketAdapter myAccountBasketAdapter = new MyAccountBasketAdapter(this, mBaskets);
         myListView.setAdapter(myAccountBasketAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_mainactivity, menu);
+        getMenuInflater().inflate(R.menu.menu_my_account_baskets, menu);
         return true;
     }
 
@@ -108,6 +107,15 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
                 case R.id.menu_mainactivity_about:
                     Intent startIntent = new Intent(getApplicationContext(), AboutActivity.class);
                     startActivity(startIntent);
+                case R.id.menu_my_account_baskets_addBasket:
+                    //add new basket
+                    String new_basket = getResources().getString(R.string.new_basket);
+                    String anonymous = getResources().getString(R.string.anonymous);
+                    MyAccountBasketsActivity.mBaskets.add(new Basket(new_basket, anonymous));
+
+                    //cast to our type of adapter to use notifyDataSetChanged...
+                    MyAccountBasketAdapter myAccountBasketAdapter = (MyAccountBasketAdapter) myListView.getAdapter();
+                    myAccountBasketAdapter.notifyDataSetChanged();
             }
 
         return super.onOptionsItemSelected(item);

@@ -7,6 +7,8 @@
     <string name="myhistory">הסטוריית הזמנות</string>
     <string name="setBasket">בחר סל זה לעריכה</string>
     <string name="about_content">אפליקציה זו נבנתה במסגרת פרוייקט שנתי של תואר ראשון במדעי המחשב ע"י נעם בלגובסקי ועמית פלד</string>
+    <string name="new_basket">סל חדש</string>
+    <string name="anonymous">אנונימי</string>
 
     <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
     <string name="title_shufersal">שופרסל</string>
@@ -15,6 +17,7 @@
     <string name="myaccount">המשתמש שלי</string>
     <string name="menu">תפריט</string>
     <string name="main">ראשי</string>
+    <string name="addBasket">הוסף סל</string>
 
     <!-- bar titles -->
     <string name="about">אודות</string>
