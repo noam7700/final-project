@@ -5,6 +5,7 @@
     <string name="login">התחבר</string>
     <string name="mybaskets">הסלים שלי</string>
     <string name="myhistory">הסטוריית הזמנות</string>
+    <string name="setBasket">בחר סל זה לעריכה</string>
 
     <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
     <string name="title_shufersal">שופרסל</string>

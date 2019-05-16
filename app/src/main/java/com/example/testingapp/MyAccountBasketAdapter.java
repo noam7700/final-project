@@ -1,10 +1,13 @@
 package com.example.testingapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -41,9 +44,28 @@ public class MyAccountBasketAdapter extends BaseAdapter {
 
         TextView basketitem_basketName = (TextView) view.findViewById(R.id.basketitem_basketName);
         TextView basketitem_authorName = (TextView) view.findViewById(R.id.basketitem_authorName);
+        Button basketitem_setBasketBtn = (Button) view.findViewById(R.id.basketitem_setBasketBtn);
+        ImageButton basketitem_deleteImageButton = (ImageButton) view.findViewById(R.id.basketitem_deleteImageButton);
 
         basketitem_basketName.setText(currBasket.getName());
         basketitem_authorName.setText(currBasket.getAuthor());
+        basketitem_setBasketBtn.setText(R.string.setBasket);
+        basketitem_setBasketBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BasketActivity.currentBasket = currBasket; //change current editable basket to be this basket
+                //goto BasketActivity
+                Intent startIntent = new Intent(parent.getContext(), BasketActivity.class);
+                parent.getContext().startActivity(startIntent);
+            }
+        });
+        basketitem_deleteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBaskets.remove(position);
+                notifyDataSetChanged();
+            }
+        });
 
         return view;
     }

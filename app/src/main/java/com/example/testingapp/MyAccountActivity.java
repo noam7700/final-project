@@ -1,5 +1,6 @@
 package com.example.testingapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,7 +29,8 @@ public class MyAccountActivity extends AppCompatActivity {
         activity_myaccount_mybasketsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: goto user's baskets
+                Intent startIntent = new Intent(getApplicationContext(), MyAccountBasketsActivity.class);
+                startActivity(startIntent);
             }
         });
 
