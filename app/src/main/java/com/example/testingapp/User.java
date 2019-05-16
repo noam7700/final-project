@@ -5,7 +5,7 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 
-import Client_side.Client;
+//import Client_side.Client;
 import request_response.ResponseObject;
 
 public class User {
@@ -14,18 +14,28 @@ public class User {
 
     private Client serverExecutor;
 
+
+    public static void main(String[] args){
+        User user = new User("NOAM", "NOAM");
+        user.register();
+    }
+
+
     public User(String username, String password) {
         serverExecutor = new Client(username, password, "192.168.1.210", 8080);
+//        Client c = new Client(username, password);
+//        c.register();
         this.username = username;
         this.password = password;
-        Log.d("DEBUG","username = "+username + ", password = "+password);
+//      Log.d("DEBUG","username = "+username + ", password = "+password);
         this.register();
         this.login();
-    }
+       }
 
     public void register() {
         ResponseObject server_response = serverExecutor.register();
         if (server_response.Error()) {
+            System.out.println(server_response.getError());
             String error_message = server_response.getError();
             //TODO: error case - username already exists
         }
