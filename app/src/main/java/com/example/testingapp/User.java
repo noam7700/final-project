@@ -1,12 +1,11 @@
 package com.example.testingapp;
 
-import android.util.Log;
-
 import java.io.File;
 import java.util.ArrayList;
 
-//import Client_side.Client;
 import request_response.ResponseObject;
+
+//import Client_side.Client;
 
 public class User {
     private String username; // this details can be maintained is Client class as well (it will anyway contain so)
@@ -28,8 +27,8 @@ public class User {
         this.username = username;
         this.password = password;
 //      Log.d("DEBUG","username = "+username + ", password = "+password);
-        this.register();
-        this.login();
+        //this.register();
+        //this.login();
        }
 
     public void register() {

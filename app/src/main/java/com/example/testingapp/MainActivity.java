@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             BasketActivity.currentBasket = new Basket();
         }
 
-        Button loginBtn = (Button) findViewById(R.id.loginBtn);
+        Button loginBtn = (Button) findViewById(R.id.main_activity_loginBtn);
         loginBtn.setText(R.string.login);
         if(MainActivity.isLoggedIn == true)
             loginBtn.setVisibility(View.INVISIBLE);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
-        Button startShoppingBtn = (Button) findViewById(R.id.startShoppingBtn);
+        Button startShoppingBtn = (Button) findViewById(R.id.main_activity_startShoppingBtn);
         startShoppingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
+        Button registerBtn = (Button) findViewById(R.id.main_activity_registerBtn);
+        registerBtn.setText(R.string.register);
+
 
     }
 

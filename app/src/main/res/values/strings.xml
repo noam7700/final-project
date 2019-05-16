@@ -3,6 +3,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="login">התחבר</string>
+    <string name="register">הרשם</string>
     <string name="mybaskets">הסלים שלי</string>
     <string name="myhistory">הסטוריית הזמנות</string>
     <string name="setBasket">בחר סל זה לעריכה</string>
