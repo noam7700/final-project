@@ -52,7 +52,7 @@ public class User {
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case - username/password are wrong
-            this.username = "I DONT KNOW YOU";
+            this.username = server_response.getError();
         }
 //        else { //
 //            ResponseObject updatedFileObject = serverExecutor.getData();
