@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -66,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        TextView activity_login_titleTextView = (TextView) findViewById(R.id.activity_login_titleTextView);
+        activity_login_titleTextView.setText(R.string.login);
 
         final Button loginBtn = (Button) findViewById(R.id.activity_login_loginBtn);
         loginBtn.setText(R.string.login);

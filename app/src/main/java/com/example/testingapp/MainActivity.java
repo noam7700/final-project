@@ -89,6 +89,15 @@ public class MainActivity extends AppCompatActivity {
         });
         Button registerBtn = (Button) findViewById(R.id.main_activity_registerBtn);
         registerBtn.setText(R.string.register);
+        if(MainActivity.isLoggedIn == true)
+            registerBtn.setVisibility(View.INVISIBLE);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(startIntent);
+            }
+        });
 
 
     }

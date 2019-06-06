@@ -93,6 +93,19 @@ public class MyAccountActivity extends AppCompatActivity {
                 //TODO: goto user's history
             }
         });
+        Button activity_myaccount_logoutBtn = (Button) findViewById(R.id.activity_myaccount_logoutBtn);
+        activity_myaccount_logoutBtn.setText(R.string.logout);
+        activity_myaccount_logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //update MainActivity attributes of the logged user
+                MainActivity.loggedUser = null;
+                MainActivity.isLoggedIn = false;
+                //goto MainActivity
+                Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(startIntent);
+            }
+        });
 
 
 
