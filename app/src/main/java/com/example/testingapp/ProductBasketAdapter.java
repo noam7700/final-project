@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -60,10 +61,26 @@ public class ProductBasketAdapter extends BaseAdapter {
         final TextView pdSumPriceTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumPriceTextView);
         final TextView pdSumDiscountTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumDiscountTextView);
         ImageView basketproduct_ImageView = (ImageView) view.findViewById(R.id.basketproduct_ImageView);
+        ImageButton basketproduct_deleteProductBtn = (ImageButton) view.findViewById(R.id.basketproduct_deleteProductBtn);
 
         if(buyable instanceof BasketProduct) {
             Picasso.with(view.getContext()).load(((BasketProduct)buyable).getMyProduct().getImg_src()).into(basketproduct_ImageView);
         }
+
+        basketproduct_deleteProductBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBasket.getBasketBuyables().remove(position);
+                notifyDataSetChanged();
+
+                //TODO: update SumPrice efficently (add the delta instead of re-calculating)
+                double newSumPrice = mBasket.getPrice();
+                activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
+                double newSumDiscount = mBasket.getDiscount();
+                activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newSumDiscount) + "-"); //discounts shows as minus
+            }
+        });
+
         pdDescTextView.setText(buyable.getDesc());
 
         pdSumPriceTextView.setText(new DecimalFormat("##.##").format(buyable.getPrice()));
@@ -93,6 +110,7 @@ public class ProductBasketAdapter extends BaseAdapter {
                 try {
                     number = format.parse(newQty); //here it might fail
                     newQty_double = number.doubleValue();
+                    newQty_double = (double)((int)(newQty_double)); //make it a whole number - sorry :/
                 }
                 catch (ParseException e) { //if couldn't parse, just say it's 0
                     newQty_double = 0.0;
