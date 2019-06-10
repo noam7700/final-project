@@ -3,15 +3,8 @@ package com.example.testingapp;
 import android.os.Parcel;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 //amit's imports
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.DataOutputStream;
-import java.net.URL;
-import java.net.HttpURLConnection;
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class BasketProduct implements Buyable{
@@ -40,12 +33,13 @@ public class BasketProduct implements Buyable{
 
     @Override
     public double getDiscount(){
+        //TODO: check with amit the server
         //amit's "parameters"
         String prodID = myProduct.getId_str(); //for example: "divProduct_112552446"
         prodID = prodID.substring(prodID.lastIndexOf("_") + 1); //get the number itself
         String qty = new DecimalFormat("##.##").format(quantity); //take only two digits after the dot
 
-        String paramUM = "";
+        /*String paramUM = "";
         String discount = "";
         try {
             String urlParameters  = "AjaxCallAction=AddProductToBasket&paramProductID="+prodID+"&paramQuantity="+qty+"&paramRemarks=&paramUM="+paramUM;
@@ -55,7 +49,7 @@ public class BasketProduct implements Buyable{
 
             conn.setRequestProperty( "charset", "UTF-8");
             conn.setRequestProperty("Cookie", "SMC=UID=ef6d67a7-bb61-470c-878f-5ec40050c744; expires=No;"); // maybe update the cookie once in a while in a file (while updating the data), because it expires after few days
-// Send post request
+            // Send post request
             conn.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream( conn.getOutputStream());
             wr.writeBytes( urlParameters );
@@ -69,7 +63,8 @@ public class BasketProduct implements Buyable{
         }
         catch(Exception e) {e.printStackTrace();}
 
-        return Double.parseDouble(discount);
+        return Double.parseDouble(discount);*/
+        return 0.0;
     }
 
     //help function for getDiscount

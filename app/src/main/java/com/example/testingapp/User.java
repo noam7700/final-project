@@ -26,18 +26,16 @@ public class User {
 //        c.register();
         this.username = username;
         this.password = password;
-//      Log.d("DEBUG","username = "+username + ", password = "+password);
-        //this.register();
-        //this.login();
        }
 
-    public void register() {
+    public String register() {
         ResponseObject server_response = serverExecutor.register();
         if (server_response.Error()) {
             System.out.println(server_response.getError());
             String error_message = server_response.getError();
-            //TODO: error case - username already exists
+            return error_message;
         }
+        return "";
 //        else { // user details added to the system
 //            ResponseObject updatedFileObject = serverExecutor.getData();
 //            File productsData = (File) updatedFileObject.getResponse();
@@ -46,13 +44,15 @@ public class User {
 //        }
     }
 
-    public void login() {
+    public String login() {
         ResponseObject server_response = serverExecutor.verifyUser();
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case - username/password are wrong
             this.username = server_response.getError();
+            return this.username; //maybe I'll show it to user on the screen
         }
+        return ""; //No error
 //        else { //
 //            ResponseObject updatedFileObject = serverExecutor.getData();
 //            File productsData = (File) updatedFileObject.getResponse();

@@ -68,6 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         TextView activity_login_titleTextView = (TextView) findViewById(R.id.activity_login_titleTextView);
+        TextView activity_login_errorMessageTextView = (TextView) findViewById(R.id.activity_login_errorMessageTextView);
+
+        activity_login_errorMessageTextView.setText(""); //empty for now
         activity_login_titleTextView.setText(R.string.login);
 
         final Button loginBtn = (Button) findViewById(R.id.activity_login_loginBtn);
@@ -80,6 +83,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 MainActivity.loggedUser = new User(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 MainActivity.isLoggedIn = true;
+
+                //TODO: check with amit the server
+                /*String errorMessage = MainActivity.loggedUser.login();
+                activity_login_errorMessageTextView.setText(errorMessage); //can be empty
+                if(!errorMessage.equals(""))
+                    return; //dont go anywhere. he should try again*/
+
+
                 startActivity(startIntent);
             }
         });

@@ -77,7 +77,7 @@ public class BasketActivity extends AppCompatActivity {
         TextView activity_basket_sumTextView = (TextView) findViewById(R.id.activity_basket_sumTextView);
         TextView activity_basket_sumDiscountTextView = (TextView) findViewById(R.id.activity_basket_sumDiscountTextView);
         Button activity_basket_buyBtn = (Button) findViewById(R.id.activity_basket_buyBtn);
-        Button activity_basket_saveBasketBtn = (Button) findViewById(R.id.activity_basket_saveBasketBtn);
+
         myBasketListView = (ListView) findViewById(R.id.activity_basket_basketListView);
 
         activity_basket_titleTextView.setText("הסל שלי");
@@ -91,14 +91,6 @@ public class BasketActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO: show on screen all the bought products? :/
-            }
-        });
-
-        activity_basket_saveBasketBtn.setText("שמור סל");
-        activity_basket_saveBasketBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: save made basket to the server. and update "My Baskets"
             }
         });
 

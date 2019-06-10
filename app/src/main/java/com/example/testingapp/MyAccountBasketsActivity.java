@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -70,7 +71,21 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
 
 
         TextView activity_my_account_baskets_titleTextView = (TextView) findViewById(R.id.activity_my_account_baskets_titleTextView);
+        Button activity_my_account_baskets_saveAllBasketsBtn = (Button) findViewById(R.id.activity_my_account_baskets_saveAllBasketsBtn);
+
         activity_my_account_baskets_titleTextView.setText(R.string.mybaskets);
+        activity_my_account_baskets_saveAllBasketsBtn.setText(R.string.saveAllBaskets);
+        activity_my_account_baskets_saveAllBasketsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i=0; i<mBaskets.size(); i++) {
+                    //TODO: check with amit the server
+                    /*MainActivity.loggedUser.deleteBasket_byIndex(i); //remove old version
+                    MainActivity.loggedUser.addBasket(mBaskets.get(i));*/
+                }
+            }
+        });
+
         myListView = (ListView) findViewById(R.id.activity_my_account_baskets_basketsListView);
 
         if(MyAccountBasketsActivity.mBaskets == null) //first time loading this activity
