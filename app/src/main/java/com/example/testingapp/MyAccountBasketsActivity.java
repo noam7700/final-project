@@ -88,9 +88,15 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
 
         myListView = (ListView) findViewById(R.id.activity_my_account_baskets_basketsListView);
 
-        if(MyAccountBasketsActivity.mBaskets == null) //first time loading this activity
-            //TODO: load from server //mBaskets = MainActivity.loggedUser.getSavedBaskets();
-            mBaskets = new ArrayList<Basket>();
+        if(MyAccountBasketsActivity.mBaskets == null) { //first time loading this activity
+            mBaskets = new ArrayList<Basket>(); //should be deleted once we un-comment amit's
+            //TODO: check with amit the server
+            //mBaskets = MainActivity.loggedUser.getSavedBaskets();
+
+            //add custom basket if it was edited before loggining
+            if (BasketActivity.currentBasket.getBasketBuyables().size() > 0) //he added some pds already
+                mBaskets.add(BasketActivity.currentBasket);
+        }
 
         MyAccountBasketAdapter myAccountBasketAdapter = new MyAccountBasketAdapter(this, mBaskets);
         myListView.setAdapter(myAccountBasketAdapter);
