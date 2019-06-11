@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
+
         if(BasketActivity.currentBasket == null){
             BasketActivity.currentBasket = new Basket();
         }

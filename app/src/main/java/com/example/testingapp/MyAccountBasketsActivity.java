@@ -69,6 +69,8 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
 
         TextView activity_my_account_baskets_titleTextView = (TextView) findViewById(R.id.activity_my_account_baskets_titleTextView);
         Button activity_my_account_baskets_saveAllBasketsBtn = (Button) findViewById(R.id.activity_my_account_baskets_saveAllBasketsBtn);

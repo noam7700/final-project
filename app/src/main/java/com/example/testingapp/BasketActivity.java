@@ -73,6 +73,9 @@ public class BasketActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
+
         TextView activity_basket_titleTextView = (TextView) findViewById(R.id.activity_basket_titleTextView);
         TextView activity_basket_sumTextView = (TextView) findViewById(R.id.activity_basket_sumTextView);
         TextView activity_basket_sumDiscountTextView = (TextView) findViewById(R.id.activity_basket_sumDiscountTextView);

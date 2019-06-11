@@ -65,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
+
         final EditText usernameEditText = (EditText) findViewById(R.id.usernameEditText);
         final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
         TextView activity_login_titleTextView = (TextView) findViewById(R.id.activity_login_titleTextView);

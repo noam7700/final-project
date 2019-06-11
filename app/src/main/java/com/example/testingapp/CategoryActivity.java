@@ -68,6 +68,9 @@ public class CategoryActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
+
         myCategory = getIntent().getParcelableExtra("com.example.testingapp.CATEGORY");
         myListView = (ListView) findViewById(R.id.productsListView);
 

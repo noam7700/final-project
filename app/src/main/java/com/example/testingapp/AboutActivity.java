@@ -62,6 +62,8 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
 
         TextView activity_about_titleTextView = (TextView) findViewById(R.id.activity_about_titleTextView);
         activity_about_titleTextView.setText(R.string.about);

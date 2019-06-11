@@ -74,6 +74,9 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
+
         myPd = getIntent().getParcelableExtra("com.example.testingapp.PRODUCT");
         myCategory = getIntent().getParcelableExtra("com.example.testingapp.CATEGORY");
 

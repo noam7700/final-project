@@ -77,6 +77,9 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        setTitle(R.string.title_shufersal);
+
+
         if(MenuActivity.myAppShop == null) { //if it wasn't loaded before, load it
             BufferedReader bufferReader = null;
             try {
