@@ -5,36 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/basketitem_basketName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/basketitem_authorName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/basketitem_basketName"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/basketitem_basketName" />
-
     <Button
         android:id="@+id/basketitem_setBasketBtn"
         android:layout_width="wrap_content"
@@ -47,11 +17,11 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_toEndOf="@+id/basketitem_basketName"
-        android:layout_toRightOf="@+id/basketitem_basketName"
+        android:layout_toEndOf="@+id/basketitem_basketNameBtn"
+        android:layout_toRightOf="@+id/basketitem_basketNameBtn"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/basketitem_basketName"
+        app:layout_constraintStart_toEndOf="@+id/basketitem_basketNameBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
@@ -64,7 +34,7 @@
         android:background="#0000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_cancel_black_24dp"/>
+        app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
     <Button
         android:id="@+id/basketitem_SaveBasketBtn"
@@ -76,4 +46,28 @@
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/basketitem_setBasketBtn" />
+
+    <Button
+        android:id="@+id/basketitem_basketNameBtn"
+        android:layout_width="89dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFFFFF"
+        android:text="Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/basketitem_authorNameBtn"
+        android:layout_width="86dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:background="#FFFFFF"
+        android:text="Button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/basketitem_basketNameBtn" />
 </android.support.constraint.ConstraintLayout>

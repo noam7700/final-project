@@ -42,14 +42,34 @@ public class MyAccountBasketAdapter extends BaseAdapter {
         View view = mInflater.inflate(R.layout.basketitem_layout, null);
         Basket currBasket = mBaskets.get(position);
 
-        TextView basketitem_basketName = (TextView) view.findViewById(R.id.basketitem_basketName);
-        TextView basketitem_authorName = (TextView) view.findViewById(R.id.basketitem_authorName);
+        TextView basketitem_basketNameBtn = (TextView) view.findViewById(R.id.basketitem_basketNameBtn);
+        TextView basketitem_authorNameBtn = (TextView) view.findViewById(R.id.basketitem_authorNameBtn);
         Button basketitem_setBasketBtn = (Button) view.findViewById(R.id.basketitem_setBasketBtn);
         Button basketitem_SaveBasketBtn = (Button) view.findViewById(R.id.basketitem_SaveBasketBtn);
         ImageButton basketitem_deleteImageButton = (ImageButton) view.findViewById(R.id.basketitem_deleteImageButton);
 
-        basketitem_basketName.setText(currBasket.getName());
-        basketitem_authorName.setText(currBasket.getAuthor());
+        basketitem_basketNameBtn.setText(currBasket.getName());
+        basketitem_basketNameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pop EditBasketNamePopActivity - to edit name & creator
+                Intent startIntent = new Intent(v.getContext(), EditBasketNamePopActivity.class);
+                startIntent.putExtra("BasketIndex", position);
+                v.getContext().startActivity(startIntent);
+            }
+        });
+
+        basketitem_authorNameBtn.setText(currBasket.getAuthor());
+        basketitem_authorNameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //pop EditBasketNamePopActivity - to edit name & creator
+                Intent startIntent = new Intent(v.getContext(), EditBasketNamePopActivity.class);
+                startIntent.putExtra("BasketIndex", position);
+                v.getContext().startActivity(startIntent);
+            }
+        });
+
         basketitem_setBasketBtn.setText(R.string.setBasket);
         basketitem_setBasketBtn.setOnClickListener(new View.OnClickListener() {
             @Override

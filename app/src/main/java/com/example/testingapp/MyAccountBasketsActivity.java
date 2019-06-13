@@ -105,6 +105,15 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+
+        //refresh the listView because maybe popUp updated it
+        MyAccountBasketAdapter myAccountBasketAdapter = (MyAccountBasketAdapter) myListView.getAdapter();
+        myAccountBasketAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_my_account_baskets, menu);
         return true;

@@ -13,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".EditBasketNamePopActivity"
+            android:theme="@style/AppTheme.PopMe">
+
+        </activity>
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".MyAccountBasketsActivity" />
         <activity android:name=".MyAccountActivity" />
