@@ -84,8 +84,8 @@ public class MyAccountBasketAdapter extends BaseAdapter {
         basketitem_deleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: check with amit the server
-                //MainActivity.loggedUser.deleteBasket_byIndex(position);
+                //TODO: check with amit the server - DONE
+                MainActivity.loggedUser.deleteBasket_byIndex(position);
                 mBaskets.remove(position);
                 notifyDataSetChanged();
             }
@@ -94,9 +94,9 @@ public class MyAccountBasketAdapter extends BaseAdapter {
         basketitem_SaveBasketBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: check with amit the server
-                /*MainActivity.loggedUser.deleteBasket_byIndex(position); //remove old version
-                MainActivity.loggedUser.addBasket(mBaskets.get(position));*/
+                //TODO: check with amit the server - DONE
+                MainActivity.loggedUser.deleteBasket_byIndex(position); //remove old version
+                MainActivity.loggedUser.addBasket(mBaskets.get(position));
             }
         });
 

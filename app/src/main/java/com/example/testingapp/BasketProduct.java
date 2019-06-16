@@ -33,7 +33,7 @@ public class BasketProduct implements Buyable{
 
     @Override
     public double getDiscount(){
-        //TODO: check with amit the server
+        //TODO: check with amit the server - LATER
         //amit's "parameters"
         String prodID = myProduct.getId_str(); //for example: "divProduct_112552446"
         prodID = prodID.substring(prodID.lastIndexOf("_") + 1); //get the number itself

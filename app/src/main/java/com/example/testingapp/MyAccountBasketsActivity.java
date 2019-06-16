@@ -81,9 +81,9 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 for(int i=0; i<mBaskets.size(); i++) {
-                    //TODO: check with amit the server
-                    /*MainActivity.loggedUser.deleteBasket_byIndex(i); //remove old version
-                    MainActivity.loggedUser.addBasket(mBaskets.get(i));*/
+                    //TODO: check with amit the server - DONE
+                    MainActivity.loggedUser.deleteBasket_byIndex(i); //remove old version
+                    MainActivity.loggedUser.addBasket(mBaskets.get(i));
                 }
             }
         });
@@ -92,8 +92,8 @@ public class MyAccountBasketsActivity extends AppCompatActivity {
 
         if(MyAccountBasketsActivity.mBaskets == null) { //first time loading this activity
             mBaskets = new ArrayList<Basket>(); //should be deleted once we un-comment amit's
-            //TODO: check with amit the server
-            //mBaskets = MainActivity.loggedUser.getSavedBaskets();
+            //TODO: check with amit the server - DONE
+            mBaskets = MainActivity.loggedUser.getSavedBaskets();
 
             //add custom basket if it was edited before loggining
             if (BasketActivity.currentBasket.getBasketBuyables().size() > 0) //he added some pds already

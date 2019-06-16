@@ -85,11 +85,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //dont login, just create temp user to register to server, and ask from him to login afterwards
                 User temp = new User(usernameEditText.getText().toString(), passwordEditText.getText().toString());
-                //TODO: check with amit the server
-                /*String errorMessage = temp.register();
+                //TODO: check with amit the server - DONE
+                String errorMessage = temp.register();
                 activity_register_errorMessageTextView.setText(errorMessage);
                 if(!errorMessage.equals(""))
-                    return; //dont go to login. he should try again*/
+                    return; //dont go to login. he should try again
 
                 //goto loginActivity
                 Intent startIntent = new Intent(getApplicationContext(), LoginActivity.class);
