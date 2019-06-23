@@ -13,10 +13,10 @@ import request_response.RequestObject;
 import request_response.ResponseObject;
 
 public class Client {
-    static String serverHostname = "192.168.1.210";// "127.0.0.1"; // local host for now
+    static String serverHostname = "localhost";// "127.0.0.1"; // local host for now
     static int port = 8080;
-    String password = null;
-    String username = null;
+    String password;
+    String username;
 
     public Client(String username, String password, String host, int port) {
         this.serverHostname = host;
@@ -53,7 +53,7 @@ public class Client {
 //		else
 //			System.out.println(responseObject.getResponse().toString());
 //		System.exit(1);
-        Client client = new Client("noam1234", "noam12", "192.168.1.210");
+        Client client = new Client("noam1234", "noam12", "127.0.0.1");
 
         ResponseObject ro = client.register();
         if (ro.Error())

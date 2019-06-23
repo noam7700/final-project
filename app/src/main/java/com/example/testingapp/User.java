@@ -14,19 +14,19 @@ public class User {
     private Client serverExecutor;
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         User user = new User("NOAM", "NOAM");
         user.register();
     }
 
 
     public User(String username, String password) {
-        serverExecutor = new Client(username, password, "192.168.1.210", 8080);
+        serverExecutor = new Client(username, password, "127.0.0.1", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
         this.password = password;
-       }
+    }
 
     public String register() {
         ResponseObject server_response = serverExecutor.register();
@@ -69,7 +69,7 @@ public class User {
     }
 
     // set dest = source (update dest to have source's content)
-    public void updateProductsTextData(File source){
+    public void updateProductsTextData(File source) {
         /*try {
             InputStream source_stream = new FileInputStream(source);
             Path dest = Paths.get("TestingApp\\app\\src\\main\\assets\\ProductsTextData");
