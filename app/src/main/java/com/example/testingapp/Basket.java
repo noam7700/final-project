@@ -3,10 +3,10 @@ package com.example.testingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Basket implements Buyable {
-
+public class Basket implements Buyable, Serializable {
     private String name;
     private String author;
     private ArrayList<Buyable> basketBuyables;

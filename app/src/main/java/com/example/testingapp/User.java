@@ -15,13 +15,13 @@ public class User {
 
 
     public static void main(String[] args) {
-        User user = new User("NOAM", "NOAM");
+        User user = new User("NOAM1234", "NOAM");
         user.register();
     }
 
 
     public User(String username, String password) {
-        serverExecutor = new Client(username, password, "127.0.0.1", 8080);
+        serverExecutor = new Client(username, password, "132.74.209.214", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
@@ -94,7 +94,7 @@ public class User {
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case (unexpected problem)
-            return null;
+            return savedBaskets;
         } else {
             for (Object basketObject : basketObjects) {
                 savedBaskets.add((Basket) basketObject);
@@ -105,7 +105,15 @@ public class User {
 
     public void deleteBasket_byIndex(int position) { //this is a bit expensive in complexity compared to deleting by value
         ArrayList<Basket> userBaskets = getSavedBaskets();
-        ResponseObject server_response = serverExecutor.removeBasket(userBaskets.get(position));
+
+        Basket basket = null;
+        try{
+            basket = userBaskets.get(position);
+        }catch (Exception e){
+            e.printStackTrace();
+            //TODO handle exception
+        }
+        ResponseObject server_response = serverExecutor.removeBasket(basket);
         if (server_response.Error()) {
             String error_message = server_response.getError();
             //TODO: error case (unexpected problem)
