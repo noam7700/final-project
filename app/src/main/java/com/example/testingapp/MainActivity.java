@@ -90,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startIntent);
             }
         });
+        Button automaticShoppingBtn = (Button) findViewById(R.id.activity_main_automaticShoppingBtn);
+        automaticShoppingBtn.setText(R.string.automaticShopping);
+        automaticShoppingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), AutoBuyActivity.class);
+                startActivity(startIntent);
+            }
+        });
+
         Button registerBtn = (Button) findViewById(R.id.main_activity_registerBtn);
         registerBtn.setText(R.string.register);
         if(MainActivity.isLoggedIn == true)
