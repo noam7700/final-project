@@ -11,7 +11,7 @@ import request_response.RequestObject;
 import request_response.ResponseObject;
 
 public class Client {
-    static String serverHostname = "localhost";// "127.0.0.1"; // local host for now
+    static String serverHostname = "10.0.2.2";// "127.0.0.1"; // local host for now
     static int port = 8080;
     String password;
     String username;

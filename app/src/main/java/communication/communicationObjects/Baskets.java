@@ -2,8 +2,7 @@ package communication.communicationObjects;
 
 import java.io.Serializable;
 import java.util.List;
-
-import databaseClasses.Basket;
+import com.example.testingapp.Basket;
 
 public class Baskets implements Serializable {
 	 private static final long serialVersionUID = 1L;
