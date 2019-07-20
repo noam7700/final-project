@@ -21,7 +21,7 @@ public class User {
 
 
     public User(String username, String password) {
-        serverExecutor = new Client(username, password, "132.74.209.214", 8080);
+        serverExecutor = new Client(username, password, "10.100.102.4", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
