@@ -21,6 +21,8 @@
     <string name="quantity">כמות</string>
     <string name="addProduct">הוסף מוצר</string>
     <string name="startAutoBuy">התחל קנייה אוטומטית</string>
+    <string name="continueToNextProduct">המשך למוצר הבא</string>
+    <string name="chooseBestOption">בחר באפשרות המתאימה ביותר</string>
 
     <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
     <string name="title_shufersal">שופרסל</string>

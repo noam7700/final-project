@@ -1,7 +1,8 @@
 package com.example.testingapp;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -45,6 +46,14 @@ public class AutoBuyActivity extends AppCompatActivity {
         });
 
         startBtn.setText(R.string.startAutoBuy);
+        startBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), AutoBuyLoopActivity.class);
+                startIntent.putExtra("com.example.testingapp.LOOPINDEX", 1); //start of loop
+                startActivity(startIntent);
+            }
+        });
         //startBtn.setOnClickListener(...); - does nothing for now
 
         myListView = findViewById(R.id.activity_auto_buy_wanteditemsListView);
