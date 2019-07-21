@@ -90,7 +90,10 @@ public class LoginActivity extends AppCompatActivity {
                 //TODO: check with amit the server - DONE
                 String errorMessage = MainActivity.loggedUser.login();
                 activity_login_errorMessageTextView.setText(errorMessage); //can be empty
-                if(!errorMessage.equals("")){
+                if(!errorMessage.equals("")){ //there's some error
+                    usernameEditText.setText(""); //start over
+                    passwordEditText.setText(""); //start over
+
                     MainActivity.loggedUser = null;
                     MainActivity.isLoggedIn = false;
                     return; //dont go anywhere. he should try again
