@@ -5,8 +5,8 @@ import com.example.testingapp.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-import communication.communicationObjects.Products;
-import communication.databaseClasses.ProductInfo;
+import communicationObjects.Products;
+import communicationObjects.ProductInfo;
 
 public class DatabaseObjectParser {
 
@@ -20,6 +20,6 @@ public class DatabaseObjectParser {
 //            productsList.add(parseDbProduct(dbProduct));
 //        }
 //        return productsList;
-        return productsRetrieved.getProductsInfo();
+        return productsRetrieved.getProducts();
     }
 }
