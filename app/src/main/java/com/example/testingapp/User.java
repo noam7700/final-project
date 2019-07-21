@@ -1,5 +1,7 @@
 package com.example.testingapp;
 
+import android.util.Pair;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -133,6 +135,10 @@ public class User {
             if (baskets.get(i).getName() == name)
                 return i;
         return -1;
+    }
+
+    public ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem){
+        return null;
     }
 
     public String getUsername() {

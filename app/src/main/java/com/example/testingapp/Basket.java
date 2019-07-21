@@ -19,7 +19,7 @@ public class Basket implements Buyable, Serializable {
         this(name, author, null);
     }
 
-    public Basket(String name, String author, ArrayList<BasketProduct> basketBuyables){
+    public Basket(String name, String author, ArrayList<Buyable> basketBuyables){
         this.name = name;
         this.author = author;
         if(basketBuyables != null)

@@ -56,7 +56,7 @@ public class ProductBasketAdapter extends BaseAdapter {
         final Buyable buyable = mBasket.getBasketBuyables().get(position);
 
         TextView pdDescTextView = (TextView) view.findViewById(R.id.basketproduct_pdDescTextView);
-        TextView quantityTextView = (TextView) view.findViewById(R.id.basketproduct_quantityBtn);
+        TextView quantityTextView = (TextView) view.findViewById(R.id.basketproduct_quantityTextView);
         final EditText quantityEditText = (EditText) view.findViewById(R.id.basketproduct_quantityEditText);
         final TextView pdSumPriceTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumPriceTextView);
         final TextView pdSumDiscountTextView = (TextView) view.findViewById(R.id.basketproduct_pdSumDiscountTextView);
