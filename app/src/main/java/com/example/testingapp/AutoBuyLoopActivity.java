@@ -51,11 +51,11 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             if(searchedResult == null){
                 this.searcheditems = null;
             } else {
-                this.searcheditems = new ArrayList<Buyable>(searchedResult.size());
+                this.searcheditems = new ArrayList<Buyable>();
 
                 double wanted_qty = loop_object.second;
                 for (int i = 0; i < searchedResult.size(); i++) {
-                    this.searcheditems.set(i, new BasketProduct(searchedResult.get(i), wanted_qty));
+                    this.searcheditems.add(new BasketProduct(searchedResult.get(i), wanted_qty));
                 }
             }
         }
@@ -191,6 +191,21 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        int loop_index;
+        loop_index = getIntent().getIntExtra("com.example.testingapp.LOOPINDEX", -1);
+
+        /*someone returned to this activity after adding this wanteditem. so delete him, and let him
+          start over...*/
+        //for example: if loop_index=1, and size is already 1, then wanteditem was already added
+        if(AutoBuyLoopActivity.chosenitems.size() >= loop_index)
+            AutoBuyLoopActivity.chosenitems.remove(AutoBuyLoopActivity.chosenitems.size()-1);
 
     }
 }
