@@ -16,6 +16,18 @@
     <string name="anonymous">אנונימי</string>
     <string name="basketName">שם הסל</string>
     <string name="basketAuthorName">שם כותב הסל</string>
+    <string name="automaticShopping">קנייה אוטומטית</string>
+    <string name="productName">שם מוצר</string>
+    <string name="quantity">כמות</string>
+    <string name="addProduct">הוסף מוצר</string>
+    <string name="startAutoBuy">התחל קנייה אוטומטית</string>
+    <string name="continueToNextProduct">המשך למוצר הבא</string>
+    <string name="finishAndCreateBasket">סיים וצור סל</string>
+    <string name="chooseBestOption">בחר באפשרות המתאימה ביותר</string>
+    <string name="alert">התראה</string>
+    <string name="chooseOptionToContinue">יש לבחור מוצר מהרשימה המתאים לך כדי להמשיך</string>
+    <string name="understood">הבנתי</string>
+    <string name="automaticBasket">סל אוטומטי</string>
 
     <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
     <string name="title_shufersal">שופרסל</string>

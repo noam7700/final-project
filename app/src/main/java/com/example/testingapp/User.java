@@ -1,5 +1,7 @@
 package com.example.testingapp;
 
+import android.util.Pair;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -21,7 +23,8 @@ public class User {
 
 
     public User(String username, String password) {
-        serverExecutor = new Client(username, password, "192.168.78.1", 8080);
+
+        serverExecutor = new Client(username, password, "10.0.0.2", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
@@ -133,6 +136,10 @@ public class User {
             if (baskets.get(i).getName() == name)
                 return i;
         return -1;
+    }
+
+    public ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem){
+        return null;
     }
 
     public String getUsername() {
