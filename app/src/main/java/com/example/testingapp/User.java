@@ -118,7 +118,7 @@ public class User {
         ResponseObject server_response = serverExecutor.removeBasket(basket);
         if (server_response.Error()) {
             String error_message = server_response.getError();
-            //TODO: error case (unexpected problem)
+            //TODO: error case (unexpected problem) --call AlertDialog
         }
     }
 
