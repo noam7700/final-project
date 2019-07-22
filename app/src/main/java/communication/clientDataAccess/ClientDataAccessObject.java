@@ -19,7 +19,7 @@ import communicationObjects.ProductInfo;
 import communicationObjects.User;
 
 public class ClientDataAccessObject {
-    static public String serverHostname = " 10.0.0.2";
+    static public String serverHostname = " 10.0.2.2";
     static public int port = 8080;
     static public String password = null;
     static public String username = null;
@@ -67,6 +67,9 @@ public class ClientDataAccessObject {
                 System.out.println("user: " + user.getUsername() + " verified successfully");
             else
                 System.out.println("wrong details");
+
+            List<ProductInfo> productInfos = client.searchProducts("חלב");
+            productInfos = client.getProductsData();
 
         } catch (ConnectException e) {
             e.printStackTrace();
@@ -167,16 +170,16 @@ public class ClientDataAccessObject {
 
     public List<ProductInfo> getProductsData() throws ConnectException, UnexpectedResponseFromServer {
         Request req = new Request(ClientQuery.GET_PRODUCTS_DATA, username, password);
-        Object products;
+        Object object;
         try {
-            products = sendToServer(req);
+            object = sendToServer(req);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ConnectException();
         }
         try {
-            Products productsRetrieved = (Products) products;
-            return productsRetrieved.getProducts();
+            Products products = (Products) object;
+            return products.getProducts();
         } catch (Exception e) {
             throw new UnexpectedResponseFromServer();
         }
@@ -184,15 +187,15 @@ public class ClientDataAccessObject {
 
     public List<ProductInfo> searchProducts(String productDescription) throws ConnectException, UnexpectedResponseFromServer {
         Request req = new Request(ClientQuery.SEARCH_PRODUCTS, productDescription, username, password);
-        Object products;
+        Object object;
         try {
-            products = sendToServer(req);
+            object = sendToServer(req);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ConnectException();
         }
         try {
-            Products productsRetrieved = (Products) products;
+            Products productsRetrieved = (Products) object;
             return productsRetrieved.getProducts();
         } catch (Exception e) {
             throw new UnexpectedResponseFromServer();
