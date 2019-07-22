@@ -8,6 +8,7 @@
     <string name="mybaskets">הסלים שלי</string>
     <string name="myhistory">הסטוריית הזמנות</string>
     <string name="setBasket">בחר סל זה לעריכה</string>
+    <string name="addToCurrentBasket">הוסף סל זה לסל הנוכחי</string>
     <string name="set">ערוך</string>
     <string name="saveBasket">שמור סל</string>
     <string name="saveAllBaskets">שמור כל הסלים</string>

@@ -45,6 +45,7 @@ public class MyAccountBasketAdapter extends BaseAdapter {
         TextView basketitem_basketNameBtn = (TextView) view.findViewById(R.id.basketitem_basketNameBtn);
         TextView basketitem_authorNameBtn = (TextView) view.findViewById(R.id.basketitem_authorNameBtn);
         Button basketitem_setBasketBtn = (Button) view.findViewById(R.id.basketitem_setBasketBtn);
+        Button basketitem_addToCurrentBasketBtn = (Button) view.findViewById(R.id.basketitem_addToCurrentBasketBtn);
         Button basketitem_SaveBasketBtn = (Button) view.findViewById(R.id.basketitem_SaveBasketBtn);
         ImageButton basketitem_deleteImageButton = (ImageButton) view.findViewById(R.id.basketitem_deleteImageButton);
 
@@ -90,6 +91,14 @@ public class MyAccountBasketAdapter extends BaseAdapter {
                 notifyDataSetChanged();
             }
         });
+        basketitem_addToCurrentBasketBtn.setText(R.string.addToCurrentBasket);
+        basketitem_addToCurrentBasketBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currBasket.addToBasket();
+            }
+        });
+
         basketitem_SaveBasketBtn.setText(R.string.saveBasket);
         basketitem_SaveBasketBtn.setOnClickListener(new View.OnClickListener() {
             @Override

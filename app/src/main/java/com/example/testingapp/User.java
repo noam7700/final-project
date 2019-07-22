@@ -26,7 +26,7 @@ public class User {
 
     public User(String username, String password) {
 
-        serverExecutor = new ClientDataAccessObject(username, password, "10.0.2.2", 8080);
+        serverExecutor = new ClientDataAccessObject(username, password, "10.100.102.4", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
