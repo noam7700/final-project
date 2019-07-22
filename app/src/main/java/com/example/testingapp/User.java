@@ -156,8 +156,29 @@ public class User {
         return -1;
     }
 
-    public ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem) {
-        return null;
+    public static ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem) {
+        User tmp = new User("default", "default");
+        List<ProductInfo> searchResults;
+        try {
+            searchResults = tmp.serverExecutor.searchProducts(wanteditem.first);
+        } catch(ConnectException ex){
+            //TODO: tell the user about this error --AlertDialog
+            searchResults = new ArrayList<ProductInfo>(); //empty result
+        } catch(UnexpectedResponseFromServer ex){
+            //TODO: tell the user about this error --AlertDialog
+            searchResults = new ArrayList<ProductInfo>(); //empty result
+        }
+
+        ArrayList<Product> searchResults_parsed = new ArrayList<>();
+        Product parsedCurr;
+        for(int i=0; i<searchResults.size(); i++){
+            parsedCurr = Product.parseProductInfo(searchResults.get(i));
+            searchResults_parsed.add(parsedCurr);
+        }
+
+        //parse ArrayList<ProductInfo> to ArrayList<Product>
+
+        return searchResults_parsed;
     }
 
     public String getUsername() {

@@ -68,7 +68,6 @@ public class AutoBuyWantedAdapter extends BaseAdapter {
 
                 Pair<String, Double> newPair = new Pair<String, Double>(newName, newQty);
                 mWantedItems.set(position, newPair);
-                notifyDataSetChanged();
             }
         });
 
@@ -96,7 +95,6 @@ public class AutoBuyWantedAdapter extends BaseAdapter {
 
                 Pair<String, Double> newPair = new Pair<String, Double>(newName, newQty);
                 mWantedItems.set(position, newPair);
-                notifyDataSetChanged();
             }
         });
 

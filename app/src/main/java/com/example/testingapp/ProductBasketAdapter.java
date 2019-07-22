@@ -76,7 +76,7 @@ public class ProductBasketAdapter extends BaseAdapter {
                 //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
                 activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
-                double newSumDiscount = mBasket.getDiscount();
+                double newSumDiscount = mBasket.getDiscount(1); //currBasket's "qty" is 1
                 activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newSumDiscount) + "-"); //discounts shows as minus
             }
         });
@@ -84,7 +84,8 @@ public class ProductBasketAdapter extends BaseAdapter {
         pdDescTextView.setText(buyable.getDesc());
 
         pdSumPriceTextView.setText(new DecimalFormat("##.##").format(buyable.getPrice()));
-        pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(buyable.getDiscount()) + "-"); //discounts shows as minus
+        //currBasket's "qty" is 1
+        pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(buyable.getDiscount(1)) + "-"); //discounts shows as minus
 
         quantityTextView.setText("כמות:");
         quantityEditText.setText(String.valueOf(buyable.getQuantity()));
@@ -122,13 +123,13 @@ public class ProductBasketAdapter extends BaseAdapter {
 
                 double newPrice = buyable.getPrice();
                 pdSumPriceTextView.setText(new DecimalFormat("##.##").format(newPrice));
-                double newDiscount = buyable.getDiscount();
+                double newDiscount = buyable.getDiscount(1); //currBasket's "qty" is 1
                 pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(newDiscount) + "-"); //discounts shows as minus
 
                 //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
                 activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
-                double newSumDiscount = mBasket.getDiscount();
+                double newSumDiscount = mBasket.getDiscount(1); //currBasket's "qty" is 1
                 activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newSumDiscount) + "-"); //discounts shows as minus
 
             }

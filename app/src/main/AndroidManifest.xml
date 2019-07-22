@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AutoBuyLoopActivity"></activity>
+        <activity android:name=".AutoBuyLoopActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".AutoBuyActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -26,7 +27,8 @@
             android:name=".MyAccountBasketsActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MyAccountActivity" />
-        <activity android:name=".BasketActivity" />
+        <activity android:name=".BasketActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ProductActivity" />
         <activity android:name=".CategoryActivity" />
         <activity android:name=".MenuActivity" />

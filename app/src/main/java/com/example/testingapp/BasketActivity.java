@@ -86,7 +86,7 @@ public class BasketActivity extends AppCompatActivity {
         activity_basket_titleTextView.setText("הסל שלי");
         double newSumPrice = BasketActivity.currentBasket.getPrice();
         activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
-        double newDiscount = BasketActivity.currentBasket.getDiscount();
+        double newDiscount = BasketActivity.currentBasket.getDiscount(1); //currBasket's parent "qty" is 1
         activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newDiscount) + "-"); //discounts shows as minus
 
         activity_basket_buyBtn.setText("בצע קנייה");

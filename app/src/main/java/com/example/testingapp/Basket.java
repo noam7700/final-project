@@ -29,10 +29,10 @@ public class Basket implements Buyable, Serializable {
     }
 
     @Override
-    public double getDiscount() {
+    public double getDiscount(int times_ordered) {
         double sum_discounts = 0.0;
         for(int i = 0; i < basketBuyables.size(); i++) {
-            sum_discounts += this.basketBuyables.get(i).getDiscount();
+            sum_discounts += this.basketBuyables.get(i).getDiscount((int)this.quantity * times_ordered);
         }
         return sum_discounts;
     }
@@ -54,7 +54,7 @@ public class Basket implements Buyable, Serializable {
         for(int i = 0; i < this.basketBuyables.size(); i++){
             sum_allpds += this.basketBuyables.get(i).getPrice();
         }
-        return sum_allpds;
+        return sum_allpds * this.quantity;
     }
 
 

@@ -9,6 +9,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
+import communicationObjects.ProductInfo;
+
 public class Product implements Parcelable{
     private String id_str; //for example: "divProduct_112552446"
     private String price_str; //presented in the app (with NIS symbol)
@@ -73,6 +75,20 @@ public class Product implements Parcelable{
         price_perunit_str = in.readString();
         img_src = in.readString();
 
+    }
+
+    public static Product parseProductInfo(ProductInfo pdinfo){
+        String id_str, price_str, desc, supplier_desc, price_perunit_str, img_src;
+        id_str = pdinfo.getId_str();
+        price_str = pdinfo.getPrice_str();
+        desc = pdinfo.getDesc();
+        supplier_desc = pdinfo.getSupplier_desc();
+        price_perunit_str = pdinfo.getPrice_perunit_str();
+        img_src = pdinfo.getImg_src();
+
+        Product retPd = new Product(id_str, price_str, desc, supplier_desc, price_perunit_str, img_src);
+
+        return retPd;
     }
 
     @Override

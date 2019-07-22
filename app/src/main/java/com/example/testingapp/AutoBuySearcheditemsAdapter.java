@@ -81,7 +81,8 @@ public class AutoBuySearcheditemsAdapter extends BaseAdapter {
         pdDescTextView.setText(searcheditem.getDesc());
 
         pdSumPriceTextView.setText(new DecimalFormat("##.##").format(searcheditem.getPrice()));
-        pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(searcheditem.getDiscount()) + "-"); //discounts shows as minus
+        //currBasket's "qty" is 1
+        pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(searcheditem.getDiscount(1)) + "-"); //discounts shows as minus
 
         //not used to change quantity, only through the activity ("AutoBuyLoopActivity")
         quantityTextView.setVisibility(View.INVISIBLE);

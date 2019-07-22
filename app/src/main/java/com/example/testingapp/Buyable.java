@@ -5,7 +5,7 @@ import android.os.Parcelable;
 //current basket will hold list of Buyable's
 public interface Buyable extends Parcelable {
 
-    public double getDiscount(); //calculate overall discount
+    public double getDiscount(int times_ordered); //calculate overall discount - depends on qty of parent too
     public void addToBasket(); //add to current basket that's
     public String getDesc();
     public double getPrice();

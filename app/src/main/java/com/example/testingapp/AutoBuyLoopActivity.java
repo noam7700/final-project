@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class AutoBuyLoopActivity extends AppCompatActivity {
 
+    Pair<String, Double> loop_object;
     ArrayList<Buyable> searcheditems;
     ListView myListView;
     public static ArrayList<Buyable> chosenitems = null;
@@ -91,6 +92,7 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
         EditText nameEditText = (EditText) findViewById(R.id.activity_auto_buy_loop_nameEditText);
         EditText qtyEditText = (EditText) findViewById(R.id.activity_auto_buy_loop_qtyEditText);
         TextView listtitleTextView = (TextView) findViewById(R.id.activity_auto_buy_loop_listtitleTextView);
+        Button searchAgainBtn = (Button) findViewById(R.id.activity_auto_buy_loop_searchAgainBtn);
         Button continueBtn = (Button) findViewById(R.id._activity_auto_buy_loop_continueBtn);
 
 
@@ -103,40 +105,20 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
         }
 
         //loop_index starts as 1, and array starts as 0...
-        Pair<String, Double> loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
+        loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
 
-        if(MainActivity.isLoggedIn) {
-            ArrayList<Product> searchedResult = MainActivity.loggedUser.searchWanteditem(loop_object);
-            if(searchedResult == null){
-                this.searcheditems = null;
-            } else {
-                this.searcheditems = new ArrayList<Buyable>();
-
-                double wanted_qty = loop_object.second;
-                for (int i = 0; i < searchedResult.size(); i++) {
-                    this.searcheditems.add(new BasketProduct(searchedResult.get(i), wanted_qty));
-                }
-            }
-        }
-        else {
+        ArrayList<Product> searchedResult = User.searchWanteditem(loop_object);
+        if(searchedResult == null){
             this.searcheditems = null;
-
-            //for debugging:
-            //custom search result :P
-            Product pd1 = MenuActivity.myAppShop.getCategories().get(0).getProducts().get(0);
-            Product pd2 = MenuActivity.myAppShop.getCategories().get(0).getProducts().get(1);
-            Product pd3 = MenuActivity.myAppShop.getCategories().get(0).getProducts().get(2);
-            ArrayList<Product> searchedResult = new ArrayList<>();
-            searchedResult.add(pd1); searchedResult.add(pd2); searchedResult.add(pd3);
-
+        } else {
             this.searcheditems = new ArrayList<Buyable>();
 
             double wanted_qty = loop_object.second;
             for (int i = 0; i < searchedResult.size(); i++) {
                 this.searcheditems.add(new BasketProduct(searchedResult.get(i), wanted_qty));
             }
-
         }
+
         nameEditText.setText(loop_object.first);
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -151,7 +133,17 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //TODO: reset searcheditems
+                String newstring = nameEditText.getText().toString();
+                Double newdouble;
+                try {
+                    newdouble = Double.parseDouble(qtyEditText.getText().toString());
+                } catch(Exception ex) { //couldn't parse, probably empty...
+                    newdouble = 0.0;
+                }
+                Pair<String, Double> newpair = new Pair<>(newstring, newdouble);
+                AutoBuyActivity.mWantedItems.set(loop_index - 1, newpair);
+
+                loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
             }
         });
 
@@ -169,7 +161,24 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                //TODO: reset searcheditems
+                String newstring = nameEditText.getText().toString();
+                Double newdouble;
+                try {
+                    newdouble = Double.parseDouble(qtyEditText.getText().toString());
+                } catch(Exception ex) { //couldn't parse, probably empty...
+                    newdouble = 0.0;
+                }
+                Pair<String, Double> newpair = new Pair<>(newstring, newdouble);
+                AutoBuyActivity.mWantedItems.set(loop_index - 1, newpair);
+
+                loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
+
+                //also, update the BasketProducts' quantity
+                for(int i=0; i<searcheditems.size(); i++)
+                    searcheditems.get(i).setQuantity(newdouble);
+
+                AutoBuySearcheditemsAdapter myadapter = (AutoBuySearcheditemsAdapter) myListView.getAdapter();
+                myadapter.notifyDataSetChanged(); //update views
             }
         });
 
@@ -188,6 +197,27 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
                 myadapter.setWanteditem_index(position); //set to clicked item
                 myadapter.notifyDataSetChanged(); //update views
 
+            }
+        });
+
+        searchAgainBtn.setText(R.string.searchAgain);
+        searchAgainBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<Product> searchedResult = User.searchWanteditem(loop_object);
+                if(searchedResult == null){
+                    searcheditems = null;
+                } else {
+                    searcheditems = new ArrayList<Buyable>();
+
+                    double wanted_qty = loop_object.second;
+                    for (int i = 0; i < searchedResult.size(); i++) {
+                        searcheditems.add(new BasketProduct(searchedResult.get(i), wanted_qty));
+                    }
+                }
+
+                AutoBuySearcheditemsAdapter myadapter = (AutoBuySearcheditemsAdapter) myListView.getAdapter();
+                myadapter.notifyDataSetChanged(); //update views
             }
         });
 

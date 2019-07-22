@@ -32,12 +32,12 @@ public class BasketProduct implements Buyable{
     }
 
     @Override
-    public double getDiscount(){
+    public double getDiscount(int times_ordered){
         //TODO: check with amit the server - LATER
         //amit's "parameters"
         String prodID = myProduct.getId_str(); //for example: "divProduct_112552446"
         prodID = prodID.substring(prodID.lastIndexOf("_") + 1); //get the number itself
-        String qty = new DecimalFormat("##.##").format(quantity); //take only two digits after the dot
+        String qty = new DecimalFormat("##.##").format(quantity * (double)times_ordered); //take only two digits after the dot
 
         /*String paramUM = "";
         String discount = "";

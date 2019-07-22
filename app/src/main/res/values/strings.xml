@@ -23,6 +23,7 @@
     <string name="addProduct">הוסף מוצר</string>
     <string name="startAutoBuy">התחל קנייה אוטומטית</string>
     <string name="continueToNextProduct">המשך למוצר הבא</string>
+    <string name="searchAgain">חפש שוב</string>
     <string name="finishAndCreateBasket">סיים וצור סל</string>
     <string name="chooseBestOption">בחר באפשרות המתאימה ביותר</string>
     <string name="alert">התראה</string>
