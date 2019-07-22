@@ -24,6 +24,7 @@ android {
 }
 dependencies {
     implementation 'com.google.guava:guava:27.0.1-android'
+    implementation files('libs/communication_objects.jar')
 }
 //compileOptions {
 //    sourceCompatibility JavaVersion.VERSION_1_8
@@ -59,12 +60,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.android.support:design:28.0.0'
-    implementation files('libs/transport_objects.jar')
-//    implementation files('libs/mysql-connector-java-8.0.15.jar')
-//    implementation files('libs/google-http-client-1.20.0.jar')
     implementation files('libs/sha1.jar')
     implementation project(path: ':mysql-connector-java-8.0.15')
-//    implementation files('libs/Client.jar')
     implementation 'com.android.support:multidex:1.0.3'
 
 

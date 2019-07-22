@@ -10,14 +10,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MyAccountBasketAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
-    private ArrayList<Basket> mBaskets;
+    private List<Basket> mBaskets;
 
 
-    public MyAccountBasketAdapter(Context c, ArrayList<Basket> baskets){
+    public MyAccountBasketAdapter(Context c, List<Basket> baskets){
         mBaskets = baskets;
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

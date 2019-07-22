@@ -8,19 +8,19 @@ package communication.databaseClasses;
  *
  */
 public class ShoppingListProduct {
-	 private DbProduct product;
+	 private ProductInfo product;
 	 private int     amount;
 	 private double  totalPrice;
 	 private double  totalDiscount;
 
-	 public ShoppingListProduct(DbProduct product, int amount, double totalPrice, double totalDiscount) {
+	 public ShoppingListProduct(ProductInfo product, int amount, double totalPrice, double totalDiscount) {
 		  this.product = product;
 		  this.amount = amount;
 		  this.totalPrice = totalPrice;
 		  this.totalDiscount = totalDiscount;
 	 }
 
-	 public DbProduct getProduct() {
+	 public ProductInfo getProduct() {
 		  return product;
 	 }
 

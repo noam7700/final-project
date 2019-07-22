@@ -17,11 +17,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyAccountBasketsActivity extends AppCompatActivity {
 
     ListView myListView;
-    public static ArrayList<Basket> mBaskets;
+    public static List<Basket> mBaskets;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 

@@ -1,7 +1,7 @@
 package communication.communicationObjects;
 import java.io.Serializable;
 
-public class Request implements Serializable{
+public class Request implements Serializable {
 	static final long serialVersionUID = 0;
 	ClientQuery query;
 	Object objectToSend;
@@ -21,9 +21,11 @@ public class Request implements Serializable{
 		username = un;
 		password = ps;
 	}
+
 	public ClientQuery getQuery() {
 		return query;
 	}
+
 	public String getPass() {
 		return password;
 	}

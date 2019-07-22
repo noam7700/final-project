@@ -3,17 +3,19 @@ package com.example.testingapp;
 import android.util.Pair;
 
 import java.io.File;
+import java.net.ConnectException;
 import java.util.ArrayList;
+import java.util.List;
 
-import request_response.ResponseObject;
-
-//import Client_side.Client;
+import communication.clientDataAccess.ClientDataAccessObject;
+import communication.clientDataAccess.UnexpectedResponseFromServer;
+import communicationObjects.ProductInfo;
 
 public class User {
     private String username; // this details can be maintained is Client class as well (it will anyway contain so)
     private String password;
 
-    private Client serverExecutor;
+    private ClientDataAccessObject serverExecutor;
 
 
     public static void main(String[] args) {
@@ -23,7 +25,8 @@ public class User {
 
 
     public User(String username, String password) {
-        serverExecutor = new Client(username, password, "10.100.102.4", 8080);
+
+        serverExecutor = new ClientDataAccessObject(username, password, "10.0.2.2", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
@@ -31,13 +34,21 @@ public class User {
     }
 
     public String register() {
-        ResponseObject server_response = serverExecutor.register();
-        if (server_response.Error()) {
-            System.out.println(server_response.getError());
-            String error_message = server_response.getError();
-            return error_message;
+
+        try {
+            boolean success = serverExecutor.register();
+            if (!success) {
+                // TODO failure
+                System.out.println("registeration failed");
+                return "registeration failed";
+            } else
+                return "";
+        } catch (ConnectException e1) {
+            return e1.getMessage();
+        } catch (UnexpectedResponseFromServer e2) {
+            return e2.getMessage();
         }
-        return "";
+
 //        else { // user details added to the system
 //            ResponseObject updatedFileObject = serverExecutor.getData();
 //            File productsData = (File) updatedFileObject.getResponse();
@@ -47,11 +58,18 @@ public class User {
     }
 
     public String login() {
-        ResponseObject server_response = serverExecutor.verifyUser();
-        if (server_response.Error()) {
-            String error_message = server_response.getError();
+        communicationObjects.User userLogged;
+        try {
+            userLogged = serverExecutor.login();
+        } catch (ConnectException e1) {
+            return e1.getMessage();
+        } catch (communication.clientDataAccess.UnexpectedResponseFromServer e2) {
+            return e2.getMessage();
+        }
+        if (userLogged == null) {
+            String error_message = "wrong details";
             //TODO: error case - username/password are wrong
-            this.username = server_response.getError();
+            this.username = error_message;
             return this.username; //maybe I'll show it to user on the screen
         }
         return ""; //No error
@@ -63,11 +81,17 @@ public class User {
 //        }
     }
 
-    public void enterAsGuest() {
-        ResponseObject updatedFileObject = serverExecutor.getData();
-        File productsData = (File) updatedFileObject.getResponse();
-        File currentFile = new File("TestingApp\\app\\src\\main\\assets\\ProductsTextData");
-        //TODO: update current file
+    public List<ProductInfo> getProductsData() {
+        try {
+            List<ProductInfo> productsData = serverExecutor.getProductsData();
+            return productsData;
+        } catch (ConnectException e1) {
+            e1.printStackTrace();
+            return new ArrayList<>();
+        } catch (communication.clientDataAccess.UnexpectedResponseFromServer e2) {
+            e2.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     // set dest = source (update dest to have source's content)
@@ -82,51 +106,46 @@ public class User {
     }
 
     public void addBasket(Basket basket) {
-        ResponseObject server_response = serverExecutor.saveBasket(basket);
-        if (server_response.Error()) {
-            String error_message = server_response.getError();
-            //TODO: error case (unexpected problem)
+        try {
+            serverExecutor.saveBasket(basket);
+        } catch (ConnectException e) {
+            // TODO
         }
     }
 
-    public ArrayList<Basket> getSavedBaskets() {
-        ResponseObject server_response = serverExecutor.getSavedBaskets();
-        Object[] basketObjects = (Object[]) server_response.getResponse();
-        ArrayList<Basket> savedBaskets = new ArrayList<>();
-        if (server_response.Error()) {
-            String error_message = server_response.getError();
-            //TODO: error case (unexpected problem)
+    public List<Basket> getSavedBaskets() {
+        try {
+            List<Basket> savedBaskets = serverExecutor.getSavedBaskets();
             return savedBaskets;
-        } else {
-            for (Object basketObject : basketObjects) {
-                savedBaskets.add((Basket) basketObject);
-            }
+        } catch (ConnectException e1) {
+            return new ArrayList<>();
+        } catch (UnexpectedResponseFromServer e2) {
+            return new ArrayList<>();
         }
-        return savedBaskets;
     }
 
     public void deleteBasket_byIndex(int position) { //this is a bit expensive in complexity compared to deleting by value
-        ArrayList<Basket> userBaskets = getSavedBaskets();
+        List<Basket> userBaskets = getSavedBaskets();
 
         Basket basket = null;
-        try{
+        try {
             basket = userBaskets.get(position);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             //TODO handle exception
         }
-        ResponseObject server_response = serverExecutor.removeBasket(basket);
-        if (server_response.Error()) {
-            String error_message = server_response.getError();
-            //TODO: error case (unexpected problem) --call AlertDialog
+        try {
+            serverExecutor.removeBasket(basket);
+        } catch (ConnectException e) {
+            //TODO
         }
+
     }
 
     public void removeAllBaskets() {
-        ResponseObject server_response = serverExecutor.removeAllBaskets();
-        if (server_response.Error()) {
-            String error_message = server_response.getError();
-            //TODO: error case (unexpected problem)
+        try {
+            serverExecutor.removeAllBaskets();
+        } catch (ConnectException e) {
         }
     }
 
@@ -137,7 +156,7 @@ public class User {
         return -1;
     }
 
-    public ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem){
+    public ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem) {
         return null;
     }
 
