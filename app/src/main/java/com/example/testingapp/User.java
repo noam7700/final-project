@@ -67,8 +67,8 @@ public class User {
             return e2.getMessage();
         }
         if (userLogged == null) {
+            //TODO: error case - username/password are wrong  --call AlertDialog
             String error_message = "wrong details";
-            //TODO: error case - username/password are wrong
             this.username = error_message;
             return this.username; //maybe I'll show it to user on the screen
         }
