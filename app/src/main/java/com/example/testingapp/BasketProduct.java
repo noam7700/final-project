@@ -80,7 +80,6 @@ public class BasketProduct implements Buyable{
 
     @Override
     public void addToBasket() {
-        //TODO: add to current basket (BasketActivity.basketBuyables)
         BasketActivity.currentBasket.getBasketBuyables().add(this);
         return;
     }

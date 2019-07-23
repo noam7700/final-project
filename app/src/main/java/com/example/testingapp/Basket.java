@@ -6,11 +6,10 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Basket implements Buyable, Serializable {
+public class Basket implements Serializable,Parcelable {
     private String name;
     private String author;
     private ArrayList<Buyable> basketBuyables;
-    private double quantity;
 
     public Basket(){
         this("Default", "Default", null);
@@ -26,35 +25,6 @@ public class Basket implements Buyable, Serializable {
             this.basketBuyables = new ArrayList<Buyable>(basketBuyables); //deep copy
         else
             this.basketBuyables = new ArrayList<>();
-    }
-
-    @Override
-    public double getDiscount(int times_ordered) {
-        double sum_discounts = 0.0;
-        for(int i = 0; i < basketBuyables.size(); i++) {
-            sum_discounts += this.basketBuyables.get(i).getDiscount((int)this.quantity * times_ordered);
-        }
-        return sum_discounts;
-    }
-
-    @Override
-    public void addToBasket() {
-        BasketActivity.currentBasket.getBasketBuyables().add(this);
-        return;
-    }
-
-    @Override
-    public String getDesc() {
-        return this.name;
-    }
-
-    @Override
-    public double getPrice() {
-        double sum_allpds = 0;
-        for(int i = 0; i < this.basketBuyables.size(); i++){
-            sum_allpds += this.basketBuyables.get(i).getPrice();
-        }
-        return sum_allpds * this.quantity;
     }
 
 
@@ -81,26 +51,28 @@ public class Basket implements Buyable, Serializable {
         this.basketBuyables = basketBuyables;
     }
 
-    @Override
-    public double getQuantity(){
-        return quantity;
+    //quantity = 1...
+    public double getDiscount(int times_ordered) {
+        double sum_discounts = 0.0;
+        for(int i = 0; i < basketBuyables.size(); i++) {
+            sum_discounts += this.basketBuyables.get(i).getDiscount(1 * times_ordered);
+        }
+        return sum_discounts;
     }
 
-    @Override
-    public void setQuantity(double quantity){
-        this.quantity = quantity;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+    //quantity = 1...
+    public double getPrice() {
+        double sum_allpds = 0;
+        for(int i = 0; i < this.basketBuyables.size(); i++){
+            sum_allpds += this.basketBuyables.get(i).getPrice();
+        }
+        return sum_allpds * 1;
     }
 
     //implement Parcelable
     protected Basket(Parcel in) {
         this.name = in.readString();
         this.author = in.readString();
-        this.quantity = in.readDouble();
         if (in.readByte() == 0x01) {
             this.basketBuyables = new ArrayList<Buyable>();
             in.readList(this.basketBuyables, Basket.class.getClassLoader());
@@ -110,10 +82,14 @@ public class Basket implements Buyable, Serializable {
     }
 
     @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
         dest.writeString(this.author);
-        dest.writeDouble(this.quantity);
         if(this.basketBuyables == null){
             dest.writeByte((byte) (0x00));
         } else {

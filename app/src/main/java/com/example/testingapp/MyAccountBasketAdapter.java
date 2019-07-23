@@ -95,7 +95,9 @@ public class MyAccountBasketAdapter extends BaseAdapter {
         basketitem_addToCurrentBasketBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currBasket.addToBasket();
+                //TODO: check if already exists (alertDialog + if agrees, add again...)
+                BasketBuyable basketBuyable = new BasketBuyable(currBasket, 1.0);
+                basketBuyable.addToBasket();
             }
         });
 
