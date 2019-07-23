@@ -106,8 +106,7 @@ public class MyAccountBasketAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //TODO: check with amit the server - DONE
-                MainActivity.loggedUser.deleteBasket_byIndex(position); //remove old version
-                MainActivity.loggedUser.addBasket(mBaskets.get(position));
+                MainActivity.loggedUser.saveBasket(mBaskets.get(position), position); //remove old version
             }
         });
 

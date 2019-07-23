@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -83,7 +84,7 @@ public class CategoryActivity extends AppCompatActivity {
                 Intent startIntent = new Intent(getApplicationContext(), ProductActivity.class);
                 Product currPd = myCategory.getProducts().get(position);
                 startIntent.putExtra("com.example.testingapp.CATEGORY", myCategory);
-                startIntent.putExtra("com.example.testingapp.PRODUCT", currPd);
+                startIntent.putExtra("com.example.testingapp.PRODUCT", (Parcelable) currPd);
                 startActivity(startIntent);
             }
         });

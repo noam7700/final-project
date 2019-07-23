@@ -113,6 +113,11 @@ public class User {
         }
     }
 
+    public void saveBasket(Basket basket, int position) {
+            deleteBasket_byIndex(position); //remove old version - if exists
+            addBasket(basket);
+    }
+
     public List<Basket> getSavedBaskets() {
         try {
             List<Basket> savedBaskets = serverExecutor.getSavedBaskets();

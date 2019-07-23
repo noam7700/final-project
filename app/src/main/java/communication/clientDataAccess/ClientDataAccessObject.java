@@ -1,21 +1,19 @@
 package communication.clientDataAccess;
 
+import com.example.testingapp.Basket;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
-
-import com.example.testingapp.Basket;
-
 import java.net.ConnectException;
+import java.net.Socket;
 import java.util.List;
-import java.lang.*;
 
 import communication.communicationObjects.Baskets;
 import communicationObjects.ClientQuery;
+import communicationObjects.ProductInfo;
 import communicationObjects.Products;
 import communicationObjects.Request;
-import communicationObjects.ProductInfo;
 import communicationObjects.User;
 
 public class ClientDataAccessObject {

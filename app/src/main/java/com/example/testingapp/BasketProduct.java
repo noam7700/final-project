@@ -1,13 +1,15 @@
 package com.example.testingapp;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 
 //amit's imports
 
 
-public class BasketProduct implements Buyable{
+public class BasketProduct implements Buyable, Serializable {
     private Product myProduct;
     private double quantity;
 
@@ -110,4 +112,18 @@ public class BasketProduct implements Buyable{
         dest.writeDouble(quantity);
         dest.writeValue(myProduct);
     }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<BasketProduct> CREATOR = new Parcelable.Creator<BasketProduct>() {
+        @Override
+        public BasketProduct createFromParcel(Parcel in) {
+            return new BasketProduct(in);
+        }
+
+        @Override
+        public BasketProduct[] newArray(int size) {
+            return new BasketProduct[size];
+        }
+    };
+
 }
