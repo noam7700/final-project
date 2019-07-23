@@ -16,10 +16,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.List;
+
+import communicationObjects.ProductInfo;
 
 
 //Show Menu of categories of products
@@ -81,15 +80,9 @@ public class MenuActivity extends AppCompatActivity {
 
 
         if(MenuActivity.myAppShop == null) { //if it wasn't loaded before, load it
-            BufferedReader bufferReader = null;
-            try {
-                InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
-                bufferReader = new BufferedReader(new InputStreamReader(productsTextData_is, "UTF-8"));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            Shop appShop = new Shop(bufferReader);
-            MenuActivity.myAppShop = appShop;
+            //I'm using user because he has the correct default local IP - 10.100.102.4
+            List<ProductInfo> serverResult = new User("default", "default").getProductsData();
+            MenuActivity.myAppShop = new Shop(serverResult);
         }
 
         TextView loadingTextView = (TextView) findViewById(R.id.loadingTextView);

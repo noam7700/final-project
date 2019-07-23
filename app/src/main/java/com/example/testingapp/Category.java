@@ -51,6 +51,11 @@ public class Category implements Parcelable {
         }
     }
 
+    public Category(String catName, ArrayList<Product> products){
+        this.catName = catName;
+        this.products = products; //low copy
+    }
+
     //getters:
     public String getCatName() {
         return catName;
