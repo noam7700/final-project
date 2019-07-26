@@ -11,7 +11,9 @@ import java.net.ConnectException;
 import java.util.List;
 import java.lang.*;
 
-import communication.communicationObjects.Baskets;
+import communication.communicationObjects.BasketContent;
+import communication.communicationObjects.BasketsContent;
+import communication.parse.ObjectParser;
 import communicationObjects.ClientQuery;
 import communicationObjects.Products;
 import communicationObjects.Request;
@@ -23,35 +25,36 @@ public class ClientDataAccessObject {
     static public int port = 8080;
     static public String password = null;
     static public String username = null;
+    private ObjectParser objectParser = new ObjectParser();
 
     public ClientDataAccessObject(String username, String password, String host, int port) {
-        this.serverHostname = host;
-        this.port = port;
-        this.username = username;
-        this.password = password;
+        ClientDataAccessObject.serverHostname = host;
+        ClientDataAccessObject.port = port;
+        ClientDataAccessObject.username = username;
+        ClientDataAccessObject.password = password;
     }
 
     public ClientDataAccessObject(String username, String password, String host) {
-        this.serverHostname = host;
-        this.username = username;
-        this.password = password;
+        ClientDataAccessObject.serverHostname = host;
+        ClientDataAccessObject.username = username;
+        ClientDataAccessObject.password = password;
     }
 
     public ClientDataAccessObject(String username, String password) {
-        this.username = username;
-        this.password = password;
-//		this.serverHostname = "127.0.0.1";
-        this.port = 8080;
+        ClientDataAccessObject.username = username;
+        ClientDataAccessObject.password = password;
+//		ClientDataAccessObject.serverHostname = "127.0.0.1";
+        ClientDataAccessObject.port = 8080;
     }
 
     public ClientDataAccessObject() {
-        this.username = "";
-        this.password = "";
-        this.serverHostname = "127.0.0.1";
-        this.port = 8080;
+        ClientDataAccessObject.username = "";
+        ClientDataAccessObject.password = "";
+        ClientDataAccessObject.serverHostname = "127.0.0.1";
+        ClientDataAccessObject.port = 8080;
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         ClientDataAccessObject client = new ClientDataAccessObject("noam1a23345", "noam12", "127.0.0.1");
 
@@ -131,27 +134,25 @@ public class ClientDataAccessObject {
             throw new ConnectException();
         }
         try {
-            Baskets basketsRetrieval = (Baskets) baskets;
-            return basketsRetrieval.getBaskets();
+            BasketsContent basketsContent = (BasketsContent) baskets;
+            return objectParser.parseToBaskets(basketsContent);
         } catch (Exception e) {
             throw new UnexpectedResponseFromServer();
         }
     }
 
-    public void saveBasket(Object basket) throws ConnectException {
-
-        Request req = new Request(ClientQuery.SAVE_BASKET, basket, username, password);
-        try {
-            sendToServer(req);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void saveBasket(Basket basket) throws IOException {
+        byte[] rawContent = ObjectParser.getBytes(basket);
+        BasketContent basketContent = new BasketContent(rawContent);
+        Request req = new Request(ClientQuery.SAVE_BASKET, basketContent, username, password);
+        sendToServer(req);
     }
 
-    public void removeBasket(Object basket) throws ConnectException {
-
-        Request req = new Request(ClientQuery.REMOVE_BASKET, basket, username, password);
+    public void removeBasket(Basket basket) throws ConnectException {
         try {
+            byte[] rawContent = ObjectParser.getBytes(basket);
+            BasketContent basketContent = new BasketContent(rawContent);
+            Request req = new Request(ClientQuery.REMOVE_BASKET, basketContent, username, password);
             sendToServer(req);
         } catch (Exception e) {
             e.printStackTrace();
@@ -243,11 +244,9 @@ class ClientThread implements Runnable {
         try {
             objectReceived = sendToServer(request);
         } catch (IOException e1) {
-
-        } catch (IllegalArgumentException e2) {
-
-        } catch (ClassNotFoundException e3) {
-
+            e1.printStackTrace();
+        } catch (ClassNotFoundException e2) {
+            e2.printStackTrace();
         }
     }
 
@@ -257,9 +256,9 @@ class ClientThread implements Runnable {
 
     private Object sendToServer(Request req) throws IOException, IllegalArgumentException, ClassNotFoundException {
         System.out.println("Connecting to host " + serverHostname + " on port " + port + ".");
-        Socket serverSocket = null;
-        ObjectInputStream in = null;
-        ObjectOutputStream out = null;
+        Socket serverSocket;
+        ObjectInputStream in;
+        ObjectOutputStream out;
 
         System.out.println("connecting to server: ");
         serverSocket = new Socket(serverHostname, port);
@@ -274,7 +273,7 @@ class ClientThread implements Runnable {
         Object res = null;
         res = in.readObject();
 
-        /** Closing all the resources */
+        /* Closing all the resources */
         out.close();
         in.close();
         serverSocket.close();

@@ -3,10 +3,9 @@ package com.example.testingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Basket implements Buyable, Serializable {
+public class Basket implements Buyable {
     private String name;
     private String author;
     private ArrayList<Buyable> basketBuyables;
@@ -40,7 +39,6 @@ public class Basket implements Buyable, Serializable {
     @Override
     public void addToBasket() {
         BasketActivity.currentBasket.getBasketBuyables().add(this);
-        return;
     }
 
     @Override
@@ -102,7 +100,7 @@ public class Basket implements Buyable, Serializable {
         this.author = in.readString();
         this.quantity = in.readDouble();
         if (in.readByte() == 0x01) {
-            this.basketBuyables = new ArrayList<Buyable>();
+            this.basketBuyables = new ArrayList<>();
             in.readList(this.basketBuyables, Basket.class.getClassLoader());
         } else {
             this.basketBuyables = null;

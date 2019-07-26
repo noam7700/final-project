@@ -3,6 +3,7 @@ package com.example.testingapp;
 import android.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class User {
 
     public User(String username, String password) {
 
-        serverExecutor = new ClientDataAccessObject(username, password, "10.100.102.4", 8080);
+        serverExecutor = new ClientDataAccessObject(username, password, "10.0.2.2", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
@@ -109,7 +110,9 @@ public class User {
         try {
             serverExecutor.saveBasket(basket);
         } catch (ConnectException e) {
-            // TODO
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -146,12 +149,13 @@ public class User {
         try {
             serverExecutor.removeAllBaskets();
         } catch (ConnectException e) {
+            e.printStackTrace();
         }
     }
 
     public int findBasketIndex_byName(ArrayList<Basket> baskets, String name) {
         for (int i = 0; i < baskets.size(); i++)
-            if (baskets.get(i).getName() == name)
+            if (baskets.get(i).getName().equals(name))
                 return i;
         return -1;
     }

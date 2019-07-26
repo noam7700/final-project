@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 //amit's imports
 
 
-public class BasketProduct implements Buyable{
+public class BasketProduct implements Buyable {
     private Product myProduct;
     private double quantity;
 

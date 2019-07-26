@@ -9,7 +9,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-public class Product implements Parcelable{
+public class Product implements Parcelable {
     private String id_str; //for example: "divProduct_112552446"
     private String price_str; //presented in the app (with NIS symbol)
     private double price; //the price itself
@@ -35,7 +35,7 @@ public class Product implements Parcelable{
         catch (ParseException e) {
             e.printStackTrace();
         }
-        this.price = number.doubleValue();
+        this.price = number != null ? number.doubleValue() : 0;
         this.desc = desc;
         this.supplier_desc = supplier_desc;
         this.price_perunit_str = price_perunit_str;
