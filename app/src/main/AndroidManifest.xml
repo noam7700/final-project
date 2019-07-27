@@ -19,15 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ChooseAutoBuyMethodActivity"></activity>
-        <activity android:name=".AutoBuyLoopActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".AutoBuyLoopActivity"></activity>
         <activity
-            android:name=".ManualAutoBuyActivity"
+            android:name=".AutoBuyActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".EditBasketNamePopActivity"

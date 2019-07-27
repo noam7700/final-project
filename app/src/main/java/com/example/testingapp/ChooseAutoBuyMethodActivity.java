@@ -15,10 +15,7 @@ public class ChooseAutoBuyMethodActivity extends AppCompatActivity {
     }
 
     public void manualAutoBuyButtonSetup(View view) {
-        EditText editText = (EditText) findViewById(R.id.editText);
-        String productsText = editText.getText().toString();
-        Intent intent = new Intent(getApplicationContext(), ManualAutoBuyActivity.class);
-        intent.putExtra("productsText", productsText);
+        Intent intent = new Intent(getApplicationContext(), AutoBuyActivity.class);
         startActivity(intent);
     }
 

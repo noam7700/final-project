@@ -98,11 +98,11 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
         indexTextView.setText(String.valueOf(loop_index));
 
         if(AutoBuyLoopActivity.chosenitems == null) {
-            AutoBuyLoopActivity.chosenitems = new ArrayList<>(ManualAutoBuyActivity.mWantedItems.size());
+            AutoBuyLoopActivity.chosenitems = new ArrayList<>(AutoBuyActivity.mWantedItems.size());
         }
 
         //loop_index starts as 1, and array starts as 0...
-        Pair<String, Double> loop_object = ManualAutoBuyActivity.mWantedItems.get(loop_index - 1);
+        Pair<String, Double> loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
 
         if(MainActivity.isLoggedIn) {
             ArrayList<Product> searchedResult = MainActivity.loggedUser.searchWanteditem(loop_object);
@@ -190,7 +190,7 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             }
         });
 
-        if(loop_index < ManualAutoBuyActivity.mWantedItems.size())
+        if(loop_index < AutoBuyActivity.mWantedItems.size())
             continueBtn.setText(R.string.continueToNextProduct);
         else
             continueBtn.setText(R.string.finishAndCreateBasket);
@@ -225,7 +225,7 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
 
 
 
-                if(loop_index < ManualAutoBuyActivity.mWantedItems.size()) {
+                if(loop_index < AutoBuyActivity.mWantedItems.size()) {
                     Intent startIntent = new Intent(getApplicationContext(), AutoBuyLoopActivity.class);
                     startIntent.putExtra("com.example.testingapp.LOOPINDEX", loop_index + 1); //next wanteditem
                     startActivity(startIntent);
