@@ -12,8 +12,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import communication.communicationObjects.BasketContent;
-import communication.communicationObjects.BasketsContent;
+import communicationObjects.BasketContent;
+import communicationObjects.BasketsContent;
 
 
 public class ObjectParser {

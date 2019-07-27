@@ -41,4 +41,9 @@
 
     <!-- bar titles -->
     <string name="about">אודות</string>
+    <string name="manualAutoBuyButton">Button</string>
+    <string name="manualAutoBuyTextView">TextView</string>
+    <string name="manualAutoBuyEditText">Type Wanted Products</string>
+    <string name="autoBuyByCameraSnipText">TextView</string>
+    <string name="autoBuyBySnipButtonDescription">Automatic Purchase by snip</string>
 </resources>

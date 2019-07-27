@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 
 public class ChooseAutoBuyMethodActivity extends AppCompatActivity {
 
@@ -14,11 +15,14 @@ public class ChooseAutoBuyMethodActivity extends AppCompatActivity {
     }
 
     public void manualAutoBuyButtonSetup(View view) {
-        Intent startIntent = new Intent(getApplicationContext(), ManualAutoBuyActivity.class);
-        startActivity(startIntent);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        String productsText = editText.getText().toString();
+        Intent intent = new Intent(getApplicationContext(), ManualAutoBuyActivity.class);
+        intent.putExtra("productsText", productsText);
+        startActivity(intent);
     }
-    public void manualAutoBuyButtonSetup(View view) {
-        Intent startIntent = new Intent(getApplicationContext(), ManualAutoBuyActivity.class);
-        startActivity(startIntent);
+
+    public void takeSnipButtonSetup(View view) {
+
     }
 }

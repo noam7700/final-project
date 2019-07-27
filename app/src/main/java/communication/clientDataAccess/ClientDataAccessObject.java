@@ -11,8 +11,8 @@ import java.net.ConnectException;
 import java.util.List;
 import java.lang.*;
 
-import communication.communicationObjects.BasketContent;
-import communication.communicationObjects.BasketsContent;
+import communicationObjects.BasketContent;
+import communicationObjects.BasketsContent;
 import communication.parse.ObjectParser;
 import communicationObjects.ClientQuery;
 import communicationObjects.Products;

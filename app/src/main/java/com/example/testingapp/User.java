@@ -68,8 +68,8 @@ public class User {
             return e2.getMessage();
         }
         if (userLogged == null) {
-            //TODO: error case - username/password are wrong  --call AlertDialog
             String error_message = "wrong details";
+            //TODO: error case - username/password are wrong  --call AlertDialog
             this.username = error_message;
             return this.username; //maybe I'll show it to user on the screen
         }
@@ -149,13 +149,12 @@ public class User {
         try {
             serverExecutor.removeAllBaskets();
         } catch (ConnectException e) {
-            e.printStackTrace();
         }
     }
 
     public int findBasketIndex_byName(ArrayList<Basket> baskets, String name) {
         for (int i = 0; i < baskets.size(); i++)
-            if (baskets.get(i).getName().equals(name))
+            if (baskets.get(i).getName() == name)
                 return i;
         return -1;
     }
