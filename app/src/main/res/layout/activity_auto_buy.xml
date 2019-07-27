@@ -5,7 +5,7 @@
     android:id="@+id/activity_auto_buy"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AutoBuyActivity">
+    tools:context=".ManualAutoBuyActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

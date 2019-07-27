@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class AutoBuyActivity extends AppCompatActivity {
+public class ManualAutoBuyActivity extends AppCompatActivity {
 
     ListView myListView;
     public static ArrayList<Pair<String, Double>> mWantedItems;
@@ -88,7 +88,7 @@ public class AutoBuyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Pair<String, Double> def = new Pair<String, Double>("", new Double(0));
-                AutoBuyActivity.mWantedItems.add(def); //default
+                ManualAutoBuyActivity.mWantedItems.add(def); //default
 
                 AutoBuyWantedAdapter autoBuyWantedAdapter = (AutoBuyWantedAdapter) myListView.getAdapter();
                 autoBuyWantedAdapter.notifyDataSetChanged();
@@ -108,13 +108,13 @@ public class AutoBuyActivity extends AppCompatActivity {
 
         myListView = findViewById(R.id.activity_auto_buy_wanteditemsListView);
 
-        if(AutoBuyActivity.mWantedItems == null) {
-            AutoBuyActivity.mWantedItems = new ArrayList<Pair<String, Double>>();
+        if(ManualAutoBuyActivity.mWantedItems == null) {
+            ManualAutoBuyActivity.mWantedItems = new ArrayList<Pair<String, Double>>();
             Pair<String, Double> def = new Pair<String, Double>("", new Double(0));
-            AutoBuyActivity.mWantedItems.add(def); //default
+            ManualAutoBuyActivity.mWantedItems.add(def); //default
         }
 
-        AutoBuyWantedAdapter autoBuyWantedAdapter = new AutoBuyWantedAdapter(this, AutoBuyActivity.mWantedItems);
+        AutoBuyWantedAdapter autoBuyWantedAdapter = new AutoBuyWantedAdapter(this, ManualAutoBuyActivity.mWantedItems);
         myListView.setAdapter(autoBuyWantedAdapter);
 
     }
