@@ -8,12 +8,12 @@ import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import communicationObjects.BasketsContent;
 import communicationObjects.ClientQuery;
 import communicationObjects.Products;
 import communicationObjects.Request;
 import communicationObjects.ResponseObject;
 import communicationObjects.User;
-import databaseClasses.Baskets;
 import execution.DBExecutor;
 import updateContentFromWeb.FileAccessSynchronization;
 
@@ -161,10 +161,10 @@ public class ClientRequestManager {
 		  DBExecutor.removeAllBaskets(username);
 	 }
 
-	 private static Baskets getBaskets(Request req) {
+	 private static BasketsContent getBaskets(Request req) {
 		  String username = req.getUname();
 
-		  Baskets baskets = DBExecutor.getBaskets(username);
+		  BasketsContent baskets = DBExecutor.getBaskets(username);
 		  return baskets;
 	 }
 

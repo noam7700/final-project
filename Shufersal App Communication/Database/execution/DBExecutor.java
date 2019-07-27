@@ -12,12 +12,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
+import communicationObjects.BasketContent;
+import communicationObjects.BasketsContent;
 import communicationObjects.ProductInfo;
 import communicationObjects.Products;
 import communicationObjects.User;
 import connection.DBConnector;
-import databaseClasses.Basket;
-import databaseClasses.Baskets;
 import execution.genericSqlQueriesExecution.GenericSqlQueriesExecutor;
 
 public class DBExecutor {
@@ -146,16 +146,16 @@ public class DBExecutor {
 		  }
 	 }
 
-	 static public Baskets getBaskets(String username) {
+	 static public BasketsContent getBaskets(String username) {
 		  String sqlquery = "SELECT basket FROM " + usersbasketsTable + " WHERE username = ?;";
-		  List<Basket> userBaskets;
+		  List<BasketContent> userBaskets;
 		  try {
 			   PreparedStatement pstmt = DBConnector.getConnection().prepareStatement(sqlquery);
 			   pstmt.setString(1, username);
 			   synchronized (DBLock) {
-					userBaskets = rsToBasketList(pstmt.executeQuery());
+					userBaskets = rsToBasketContentList(pstmt.executeQuery());
 			   }
-			   return new Baskets(userBaskets);
+			   return new BasketsContent(userBaskets);
 
 		  } catch (SQLException e) {
 			   System.err.println("Error in user baskets retrieval");
@@ -164,14 +164,14 @@ public class DBExecutor {
 		  }
 	 }
 
-	 private static List<Basket> rsToBasketList(ResultSet basketsRset) {
-		  List<Basket> baskets = new ArrayList<Basket>();
+	 private static List<BasketContent> rsToBasketContentList(ResultSet basketsRset) {
+		  List<BasketContent> baskets = new ArrayList<>();
 		  try {
 			   while (basketsRset.next()) {
 					try {
 						 byte[] basketBytes = basketsRset.getBytes("basket");
-						 Basket bskt = (Basket) getObject(basketBytes);
-						 baskets.add(bskt);
+						 BasketContent basketContent = new BasketContent(basketBytes);
+						 baskets.add(basketContent);
 					} catch (Exception e) {
 					}
 			   }
@@ -185,37 +185,37 @@ public class DBExecutor {
 		  return baskets;
 	 }
 
-	 public static byte[] getBytes(Object object) {
-		  byte[] objectBytes = null;
-		  try {
-			   ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			   ObjectOutputStream oos = new ObjectOutputStream(bos);
-			   oos.writeObject(object);
-			   oos.close();
-			   bos.close();
-			   objectBytes = bos.toByteArray();
-		  } catch (Exception e) {
-			   e.printStackTrace();
-			   return objectBytes;
-		  }
-		  return objectBytes;
-	 }
-
-	 public static Object getObject(byte[] bytes) {
-
-		  Object object = bytes;
-		  ByteArrayInputStream bais;
-		  ObjectInputStream ins;
-		  try {
-			   bais = new ByteArrayInputStream(bytes);
-			   ins = new ObjectInputStream(bais);
-			   object = (Object) ins.readObject();
-			   ins.close();
-		  } catch (Exception e) {
-			   e.printStackTrace();
-		  }
-		  return object;
-	 }
+//	 public static byte[] getBytes(Object object) {
+//		  byte[] objectBytes = null;
+//		  try {
+//			   ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//			   ObjectOutputStream oos = new ObjectOutputStream(bos);
+//			   oos.writeObject(object);
+//			   oos.close();
+//			   bos.close();
+//			   objectBytes = bos.toByteArray();
+//		  } catch (Exception e) {
+//			   e.printStackTrace();
+//			   return objectBytes;
+//		  }
+//		  return objectBytes;
+//	 }
+//
+//	 public static Object getObject(byte[] bytes) {
+//
+//		  Object object = bytes;
+//		  ByteArrayInputStream bais;
+//		  ObjectInputStream ins;
+//		  try {
+//			   bais = new ByteArrayInputStream(bytes);
+//			   ins = new ObjectInputStream(bais);
+//			   object = (Object) ins.readObject();
+//			   ins.close();
+//		  } catch (Exception e) {
+//			   e.printStackTrace();
+//		  }
+//		  return object;
+//	 }
 
 	 public static void removeAllBaskets(String username) {
 		  // TODO Auto-generated method stub

@@ -1,0 +1,13 @@
+/clientDataAccess/
+/communicationObjects/
+/connection/
+/contentHashApplience/
+/databaseClasses/
+/databaseDetails/
+/databaseProductsUpdate/
+/databaseSynchronization/
+/execution/
+/handleMessageFromClient/
+/shufersalServerMain/
+/tests/
+/updateContentFromWeb/
