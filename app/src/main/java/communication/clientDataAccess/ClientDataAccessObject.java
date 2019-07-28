@@ -19,35 +19,35 @@ import communicationObjects.Request;
 import communicationObjects.User;
 
 public class ClientDataAccessObject {
-    static public String serverHostname = " 10.0.2.2";
+    static public String serverHostname = " 10.100.102.6";
     static public int port = 8080;
-    static public String password = null;
-    static public String username = null;
+    private String password = null;
+    private String username = null;
     private ObjectParser objectParser = new ObjectParser();
 
     public ClientDataAccessObject(String username, String password, String host, int port) {
         ClientDataAccessObject.serverHostname = host;
         ClientDataAccessObject.port = port;
-        ClientDataAccessObject.username = username;
-        ClientDataAccessObject.password = password;
+        this.username = username;
+        this.password = password;
     }
 
     public ClientDataAccessObject(String username, String password, String host) {
         ClientDataAccessObject.serverHostname = host;
-        ClientDataAccessObject.username = username;
-        ClientDataAccessObject.password = password;
+        this.username = username;
+        this.password = password;
     }
 
     public ClientDataAccessObject(String username, String password) {
-        ClientDataAccessObject.username = username;
-        ClientDataAccessObject.password = password;
+        this.username = username;
+        this.password = password;
 //		ClientDataAccessObject.serverHostname = "127.0.0.1";
         ClientDataAccessObject.port = 8080;
     }
 
     public ClientDataAccessObject() {
-        ClientDataAccessObject.username = "";
-        ClientDataAccessObject.password = "";
+        this.username = "";
+        this.password = "";
         ClientDataAccessObject.serverHostname = "127.0.0.1";
         ClientDataAccessObject.port = 8080;
     }
@@ -99,6 +99,7 @@ public class ClientDataAccessObject {
             return (boolean) registerStatus;
 
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnexpectedResponseFromServer();
         }
 
@@ -117,6 +118,7 @@ public class ClientDataAccessObject {
         try {
             return (User) user;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnexpectedResponseFromServer();
         }
 
@@ -135,6 +137,7 @@ public class ClientDataAccessObject {
             BasketsContent basketsContent = (BasketsContent) baskets;
             return objectParser.parseToBaskets(basketsContent);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnexpectedResponseFromServer();
         }
     }
@@ -180,6 +183,7 @@ public class ClientDataAccessObject {
             Products products = (Products) object;
             return products.getProducts();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnexpectedResponseFromServer();
         }
     }
@@ -197,6 +201,7 @@ public class ClientDataAccessObject {
             Products productsRetrieved = (Products) object;
             return productsRetrieved.getProducts();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnexpectedResponseFromServer();
         }
     }

@@ -18,6 +18,7 @@ public class sha1 {
 		  try {
 			   mDigest = MessageDigest.getInstance("SHA1");
 		  } catch (NoSuchAlgorithmException e) {
+			   e.printStackTrace();
 			   System.err.println("Error retreiving SHA1 hash");
 			   System.err.println(e.getMessage());
 			   System.exit(1);

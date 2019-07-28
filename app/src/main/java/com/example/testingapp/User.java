@@ -45,8 +45,10 @@ public class User {
             } else
                 return "";
         } catch (ConnectException e1) {
+            e1.printStackTrace();
             return e1.getMessage();
         } catch (UnexpectedResponseFromServer e2) {
+            e2.printStackTrace();
             return e2.getMessage();
         }
 
@@ -63,8 +65,10 @@ public class User {
         try {
             userLogged = serverExecutor.login();
         } catch (ConnectException e1) {
+            e1.printStackTrace();
             return e1.getMessage();
         } catch (communication.clientDataAccess.UnexpectedResponseFromServer e2) {
+            e2.printStackTrace();
             return e2.getMessage();
         }
         if (userLogged == null) {
@@ -126,8 +130,10 @@ public class User {
             List<Basket> savedBaskets = serverExecutor.getSavedBaskets();
             return savedBaskets;
         } catch (ConnectException e1) {
+            e1.printStackTrace();
             return new ArrayList<>();
         } catch (UnexpectedResponseFromServer e2) {
+            e2.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -145,6 +151,7 @@ public class User {
         try {
             serverExecutor.removeBasket(basket);
         } catch (ConnectException e) {
+            e.printStackTrace();
             //TODO
         }
 
@@ -154,6 +161,7 @@ public class User {
         try {
             serverExecutor.removeAllBaskets();
         } catch (ConnectException e) {
+            e.printStackTrace();
         }
     }
 
@@ -166,14 +174,17 @@ public class User {
 
     public static ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem) {
         User tmp = new User("default", "default");
+
         List<ProductInfo> searchResults;
         try {
             searchResults = tmp.serverExecutor.searchProducts(wanteditem.first);
         } catch(ConnectException ex){
             //TODO: tell the user about this error --AlertDialog
+            ex.printStackTrace();
             searchResults = new ArrayList<ProductInfo>(); //empty result
         } catch(UnexpectedResponseFromServer ex){
             //TODO: tell the user about this error --AlertDialog
+            ex.printStackTrace();
             searchResults = new ArrayList<ProductInfo>(); //empty result
         }
 
