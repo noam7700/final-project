@@ -1,4 +1,4 @@
-package communication.contentHashApplience;
+package communication.hash;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -8,8 +8,8 @@ public class sha1 {
 	 /**
 	  * Sha1 is a classic hash function. with this function the plain content will be
 	  * unreachable to a malicious observer.
-	  * 
-	  * @param input 
+	  *
+	  * @param input
 	  * 			plain to apply the hash to
 	  * @return <code>input</code> after sha1 hash has been applied
 	  */

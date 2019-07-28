@@ -9,7 +9,8 @@ import java.text.DecimalFormat;
 //amit's imports
 
 
-public class BasketProduct implements Buyable, Serializable {
+public class BasketProduct implements Buyable { //TODO: merge with amit: ", Serializable"
+
     private Product myProduct;
     private double quantity;
 

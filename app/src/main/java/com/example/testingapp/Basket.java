@@ -3,10 +3,10 @@ package com.example.testingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Basket implements Serializable,Parcelable {
+public class Basket implements Parcelable { //TODO: merge with amit: "Serializable,"
+
     private String name;
     private String author;
     private ArrayList<Buyable> basketBuyables;
@@ -26,7 +26,6 @@ public class Basket implements Serializable,Parcelable {
         else
             this.basketBuyables = new ArrayList<>();
     }
-
 
     //getters & setters
     public String getName() {
@@ -74,7 +73,7 @@ public class Basket implements Serializable,Parcelable {
         this.name = in.readString();
         this.author = in.readString();
         if (in.readByte() == 0x01) {
-            this.basketBuyables = new ArrayList<Buyable>();
+            this.basketBuyables = new ArrayList<>();
             in.readList(this.basketBuyables, Basket.class.getClassLoader());
         } else {
             this.basketBuyables = null;

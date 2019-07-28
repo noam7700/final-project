@@ -5,14 +5,14 @@ package com.example.testingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
 import communicationObjects.ProductInfo;
 
-public class Product implements Parcelable, Serializable {
+public class Product implements Parcelable { //TODO: merge with amit: ", Serializable"
+
     private String id_str; //for example: "divProduct_112552446"
     private String price_str; //presented in the app (with NIS symbol)
     private double price; //the price itself
@@ -38,7 +38,7 @@ public class Product implements Parcelable, Serializable {
         catch (ParseException e) {
             e.printStackTrace();
         }
-        this.price = number.doubleValue();
+        this.price = number != null ? number.doubleValue() : 0;
         this.desc = desc;
         this.supplier_desc = supplier_desc;
         this.price_perunit_str = price_perunit_str;

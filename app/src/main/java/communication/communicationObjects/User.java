@@ -1,4 +1,4 @@
-package communication.databaseClasses;
+package communication.communicationObjects;
 
 import java.io.Serializable;
 
@@ -13,7 +13,7 @@ public class User implements Serializable {
 
 	 private static final long serialVersionUID = 1L;
 
-	 String username;
+	 private String username;
 
 	 public User(String username) throws IllegalArgumentException {
 		  if (username == null) {

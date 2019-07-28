@@ -3,6 +3,7 @@ package com.example.testingapp;
 import android.util.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class User {
 
     public User(String username, String password) {
 
-        serverExecutor = new ClientDataAccessObject(username, password, "10.100.102.4", 8080);
+        serverExecutor = new ClientDataAccessObject(username, password, "10.100.102.6", 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;
@@ -67,8 +68,8 @@ public class User {
             return e2.getMessage();
         }
         if (userLogged == null) {
-            //TODO: error case - username/password are wrong  --call AlertDialog
             String error_message = "wrong details";
+            //TODO: error case - username/password are wrong  --call AlertDialog
             this.username = error_message;
             return this.username; //maybe I'll show it to user on the screen
         }
@@ -109,7 +110,9 @@ public class User {
         try {
             serverExecutor.saveBasket(basket);
         } catch (ConnectException e) {
-            // TODO
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

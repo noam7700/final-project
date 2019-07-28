@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Intent startIntent;
-                switch(menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.nav_main:
                         startIntent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(startIntent);
@@ -47,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(startIntent);
                         return true;
                     case R.id.nav_myaccount:
-                        if(MainActivity.isLoggedIn == false) {
+                        if (MainActivity.isLoggedIn == false) {
                             startIntent = new Intent(getApplicationContext(), LoginActivity.class);
                             startActivity(startIntent);
-                        }
-                        else{
+                        } else {
                             startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
                             startActivity(startIntent);
                         }
@@ -66,17 +65,17 @@ public class MainActivity extends AppCompatActivity {
         setTitle(R.string.title_shufersal);
 
 
-        if(BasketActivity.currentBasket == null){
+        if (BasketActivity.currentBasket == null) {
             BasketActivity.currentBasket = new Basket();
         }
 
         Button loginBtn = (Button) findViewById(R.id.main_activity_loginBtn);
         loginBtn.setText(R.string.login);
-        if(MainActivity.isLoggedIn == true)
+        if (MainActivity.isLoggedIn == true)
             loginBtn.setVisibility(View.INVISIBLE);
-        loginBtn.setOnClickListener(new View.OnClickListener(){
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 //go to Login
                 Intent startIntent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(startIntent);
@@ -95,14 +94,15 @@ public class MainActivity extends AppCompatActivity {
         automaticShoppingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(getApplicationContext(), AutoBuyActivity.class);
+
+                Intent startIntent = new Intent(getApplicationContext(), ChooseAutoBuyMethodActivity.class);
                 startActivity(startIntent);
             }
         });
 
         Button registerBtn = (Button) findViewById(R.id.main_activity_registerBtn);
         registerBtn.setText(R.string.register);
-        if(MainActivity.isLoggedIn == true)
+        if (MainActivity.isLoggedIn == true)
             registerBtn.setVisibility(View.INVISIBLE);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,24 +116,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_mainactivity, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){ //if it's
+        if (mToggle.onOptionsItemSelected(item)) { //if it's
             return true;
-        }
-        else
-            switch (item.getItemId()){
+        } else
+            switch (item.getItemId()) {
                 case R.id.menu_mainactivity_myaccount:
-                    if(MainActivity.isLoggedIn == false) {
+                    if (MainActivity.isLoggedIn == false) {
                         Intent startIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(startIntent);
-                    }
-                    else{
+                    } else {
                         Intent startIntent = new Intent(getApplicationContext(), MyAccountActivity.class);
                         startActivity(startIntent);
                     }
@@ -147,9 +145,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void forceRTLIfSupported()
-    {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+    private void forceRTLIfSupported() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
     }
