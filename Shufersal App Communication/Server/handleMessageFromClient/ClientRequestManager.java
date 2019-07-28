@@ -89,12 +89,15 @@ public class ClientRequestManager {
 
 			   case SAVE_BASKET:
 					saveBasket(req);
+					break;
 
 			   case REMOVE_BASKET:
 					removeBasket(req);
+					break;
 
 			   case REMOVE_ALL_BASKETS:
 					removeAllBaskets(req);
+					break;
 
 			   default:
 					break;
