@@ -5,13 +5,14 @@ package com.example.testingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
 import communicationObjects.ProductInfo;
 
-public class Product implements Parcelable { //TODO: merge with amit: ", Serializable"
+public class Product implements Parcelable, Serializable {
 
     private String id_str; //for example: "divProduct_112552446"
     private String price_str; //presented in the app (with NIS symbol)

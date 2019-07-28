@@ -98,9 +98,10 @@ public class MyAccountActivity extends AppCompatActivity {
         activity_myaccount_logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //update MainActivity attributes of the logged user
+                //update MainActivity attributes of the logged user + MyAccountBaskets
                 MainActivity.loggedUser = null;
                 MainActivity.isLoggedIn = false;
+                MyAccountBasketsActivity.mBaskets = null;
                 //goto MainActivity
                 Intent startIntent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(startIntent);

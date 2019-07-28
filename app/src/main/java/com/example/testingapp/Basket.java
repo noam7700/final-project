@@ -3,9 +3,10 @@ package com.example.testingapp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Basket implements Parcelable { //TODO: merge with amit: "Serializable,"
+public class Basket implements Parcelable, Serializable {
 
     private String name;
     private String author;
