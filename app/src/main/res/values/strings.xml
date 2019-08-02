@@ -43,8 +43,8 @@
     <!-- bar titles -->
     <string name="about">אודות</string>
     <string name="manualAutoBuyButton">התחל להקליד</string>
-    <string name="manualAutoBuyTextView">קנייה אוטומטית באמצעות הקלדה</string>
+    <string name="manualAutoBuyTextView">קנה אוטומטית באמצעות הקלדה</string>
     <string name="load_image_button">העלה תמונה קיימת</string>
-    <string name="autoBuyByCameraSnipText">קניה אוטומטית באמצעות תמונה</string>
+    <string name="autoBuyByCameraSnipText">קנה אוטומטית באמצעות תמונה</string>
     <string name="autoBuyBySnipButtonDescription">Automatic Purchase by snip</string>
 </resources>

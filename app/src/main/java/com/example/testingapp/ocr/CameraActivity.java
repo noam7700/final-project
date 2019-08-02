@@ -1,5 +1,6 @@
 package com.example.testingapp.ocr;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,6 +29,7 @@ import java.util.Date;
 
 public class CameraActivity extends Activity {
     private static final String TAG = "camera";
+    private static final int CAMERA_PERMISSION = 2;
 
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -62,28 +66,48 @@ public class CameraActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        ;
 
-        // Create an instance of Camera
-        mCamera = getCameraInstance();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION);
+        }
 
-        // Create our Preview view and set it as the content of our activity.
-        mPreview = new CameraPreview(this, mCamera);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
 
-        // Add a listener to the Capture button
-        Button captureButton = (Button) findViewById(R.id.button_capture);
-        captureButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // get an image from the camera
-                        mCamera.takePicture(null, null, mPicture);
-                    }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_PERMISSION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Create an instance of Camera
+                    mCamera = getCameraInstance();
+
+                    // Create our Preview view and set it as the content of our activity.
+                    mPreview = new CameraPreview(this, mCamera);
+                    FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+                    preview.addView(mPreview);
+
+                    // Add a listener to the Capture button
+                    Button captureButton = (Button) findViewById(R.id.button_capture);
+                    captureButton.setOnClickListener(
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // get an image from the camera
+                                    mCamera.takePicture(null, null, mPicture);
+                                }
+                            }
+                    );
                 }
-        );
-
+                return;
+            }
+        }
     }
 
     /**
