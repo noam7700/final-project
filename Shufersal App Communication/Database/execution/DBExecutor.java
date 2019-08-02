@@ -185,38 +185,6 @@ public class DBExecutor {
 		  return baskets;
 	 }
 
-//	 public static byte[] getBytes(Object object) {
-//		  byte[] objectBytes = null;
-//		  try {
-//			   ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//			   ObjectOutputStream oos = new ObjectOutputStream(bos);
-//			   oos.writeObject(object);
-//			   oos.close();
-//			   bos.close();
-//			   objectBytes = bos.toByteArray();
-//		  } catch (Exception e) {
-//			   e.printStackTrace();
-//			   return objectBytes;
-//		  }
-//		  return objectBytes;
-//	 }
-//
-//	 public static Object getObject(byte[] bytes) {
-//
-//		  Object object = bytes;
-//		  ByteArrayInputStream bais;
-//		  ObjectInputStream ins;
-//		  try {
-//			   bais = new ByteArrayInputStream(bytes);
-//			   ins = new ObjectInputStream(bais);
-//			   object = (Object) ins.readObject();
-//			   ins.close();
-//		  } catch (Exception e) {
-//			   e.printStackTrace();
-//		  }
-//		  return object;
-//	 }
-
 	 public static void removeAllBaskets(String username) {
 		  // TODO Auto-generated method stub
 

@@ -1,13 +1,13 @@
 
 package handleMessageFromClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import communicationObjects.BasketContent;
 import communicationObjects.BasketsContent;
 import communicationObjects.ClientQuery;
 import communicationObjects.Products;
@@ -73,7 +73,8 @@ public class ClientRequestManager {
 	 }
 
 	 private static boolean isGuestPrivilege(ClientQuery query) {
-		  if (query == ClientQuery.REGISTER || query == ClientQuery.LOGIN || query == ClientQuery.GET_PRODUCTS_DATA|| query == ClientQuery.SEARCH_PRODUCTS) {
+		  if (query == ClientQuery.REGISTER || query == ClientQuery.LOGIN || query == ClientQuery.GET_PRODUCTS_DATA
+		            || query == ClientQuery.SEARCH_PRODUCTS) {
 			   return true;
 		  } else {
 			   return false;
@@ -148,15 +149,23 @@ public class ClientRequestManager {
 	 }
 
 	 private static void saveBasket(Request req) {
-		  String username = req.getUname();
-		  Object basket = req.getObject();
-		  DBExecutor.addBasket(username, getBytes(basket));
+		  try {
+			   String username = req.getUname();
+			   BasketContent basket = (BasketContent)req.getObject();
+			   DBExecutor.addBasket(username, basket.getRawContent());
+		  } catch (Exception e) {
+			   e.printStackTrace();
+		  }
 	 }
 
 	 private static void removeBasket(Request req) {
-		  String username = req.getUname();
-		  byte[] basket = getBytes(req.getObject());
-		  DBExecutor.removeBasket(username, basket);
+		  try {
+			   String username = req.getUname();
+			   BasketContent basket = (BasketContent) req.getObject();
+			   DBExecutor.removeBasket(username, basket.getRawContent());
+		  } catch (Exception e) {
+			   e.printStackTrace();
+		  }
 	 }
 
 	 private static void removeAllBaskets(Request req) {
@@ -170,42 +179,6 @@ public class ClientRequestManager {
 		  BasketsContent baskets = DBExecutor.getBaskets(username);
 		  return baskets;
 	 }
-
-	 public static byte[] getBytes(Object object) {
-		  byte[] objectBytes = null;
-		  try {
-			   ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			   ObjectOutputStream oos = new ObjectOutputStream(bos);
-			   oos.writeObject(object);
-			   oos.close();
-			   bos.close();
-			   objectBytes = bos.toByteArray();
-		  } catch (Exception e) {
-			   e.printStackTrace();
-			   return objectBytes;
-		  }
-		  return objectBytes;
-	 }
-
-	 // private static Object bsktArray(ResultSet basketsRset) {
-//			   		ArrayList<Object> baskets = new ArrayList<Object>();
-//			   		try {
-//			   			while (basketsRset.next()) {
-////			   				Blob basketBlob = basketsRset.getBlob("basket");
-//			   				byte[] basketBytes = basketsRset.getBytes("basket");
-////			   				byte[] basketBytes = basketBlob.getBytes(1, (int) basketBlob.length());
-//			   				Object bskt = getObject(basketBytes);
-//			   				baskets.add(bskt);
-////			   				basketBlob.free();
-//			   			}
-//			   			basketsRset.close();
-//			   		} catch (SQLException e) {
-//			   			System.err.println("Error in converting baskets to string");
-//			   			System.err.println(e.getMessage());
-//			   		}
-//			   		Object[] basketsArr = baskets.toArray();
-//			   		return basketsArr;
-	 // }
 
 	 private static boolean register(Request req) {
 		  User user;
