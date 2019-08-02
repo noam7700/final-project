@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,8 +46,8 @@ public class CameraActivity extends Activity {
                 fos.close();
 
                 Intent intent = new Intent(getApplicationContext(), ImageRecognitionActivity.class);
-                Bitmap image = BitmapFactory.decodeFile(pictureFile.getAbsolutePath());
-                intent.putExtra("image", image);
+                intent.putExtra("imageUri", Uri.fromFile(pictureFile));
+
                 startActivity(intent);
 
             } catch (FileNotFoundException e) {
