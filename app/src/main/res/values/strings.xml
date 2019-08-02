@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TestingApp</string>
+    <string name="app_name">שופרסל</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="login">התחבר</string>
@@ -42,9 +42,9 @@
 
     <!-- bar titles -->
     <string name="about">אודות</string>
-    <string name="manualAutoBuyButton">Button</string>
-    <string name="manualAutoBuyTextView">TextView</string>
-    <string name="manualAutoBuyEditText">Type Wanted Products</string>
-    <string name="autoBuyByCameraSnipText">TextView</string>
+    <string name="manualAutoBuyButton">התחל להקליד</string>
+    <string name="manualAutoBuyTextView">קנייה אוטומטית באמצעות הקלדה</string>
+    <string name="load_image_button">העלה תמונה קיימת</string>
+    <string name="autoBuyByCameraSnipText">קניה אוטומטית באמצעות תמונה</string>
     <string name="autoBuyBySnipButtonDescription">Automatic Purchase by snip</string>
 </resources>

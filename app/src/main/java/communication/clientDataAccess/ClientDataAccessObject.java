@@ -1,5 +1,7 @@
 package communication.clientDataAccess;
 
+import android.util.Log;
+
 import com.example.testingapp.Basket;
 
 import java.io.IOException;
@@ -19,7 +21,7 @@ import communicationObjects.Request;
 import communicationObjects.User;
 
 public class ClientDataAccessObject {
-    static public String serverHostname = " 10.100.102.6";
+    static public String serverHostname = "192.168.1.212";
     static public int port = 8080;
     private String password = null;
     private String username = null;
@@ -247,6 +249,7 @@ class ClientThread implements Runnable {
         try {
             objectReceived = sendToServer(request);
         } catch (IOException e1) {
+            Log.d("EXCEPTION", e1.getMessage());
             e1.printStackTrace();
         } catch (ClassNotFoundException e2) {
             e2.printStackTrace();
