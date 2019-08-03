@@ -64,6 +64,23 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(R.string.title_shufersal);
 
+        //try tess-two
+        /*AssetManager assetManager = getApplicationContext().getAssets();
+
+        InputStream istr;
+        Bitmap bitmap = null;
+        try {
+            istr = assetManager.open("tryout_whatsapp.png");
+            bitmap = BitmapFactory.decodeStream(istr);
+        } catch (IOException e) {
+            // handle exception
+            e.printStackTrace();
+        }
+
+        OcrManager ocrManager = new OcrManager(this);
+        ocrManager.getText(bitmap, this);
+        ocrManager.getText(bitmap, this);*/
+
 
         if (BasketActivity.currentBasket == null) {
             BasketActivity.currentBasket = new Basket();
