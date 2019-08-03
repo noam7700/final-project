@@ -47,4 +47,5 @@
     <string name="load_image_button">העלה תמונה קיימת</string>
     <string name="autoBuyByCameraSnipText">קנה אוטומטית באמצעות תמונה</string>
     <string name="autoBuyBySnipButtonDescription">Automatic Purchase by snip</string>
+    <string name="photo" />
 </resources>
