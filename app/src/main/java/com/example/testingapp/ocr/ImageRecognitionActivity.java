@@ -3,18 +3,15 @@ package com.example.testingapp.ocr;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.testingapp.OcrManager;
 import com.example.testingapp.R;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.BreakIterator;
 
 public class ImageRecognitionActivity extends AppCompatActivity {
 
@@ -23,7 +20,7 @@ public class ImageRecognitionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);     
         setContentView(R.layout.activity_image_recognition);
         
-        OcrManager ocrManager = new OcrManager();
+        OcrManager ocrManager = new OcrManager(this);
 
         Uri imageUri = (Uri) (getIntent().getExtras().get("imageUri"));
         try {
