@@ -204,10 +204,10 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ArrayList<Product> searchedResult = User.searchWanteditem(loop_object);
-                if(searchedResult == null){
+                if(searchedResult == null){ //didnt find anything/error?
                     searcheditems = null;
                 } else {
-                    searcheditems = new ArrayList<Buyable>();
+                    searcheditems.clear();
 
                     double wanted_qty = loop_object.second;
                     for (int i = 0; i < searchedResult.size(); i++) {
