@@ -5,12 +5,13 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Basket implements Parcelable, Serializable {
 
     private String name;
     private String author;
-    private ArrayList<Buyable> basketBuyables;
+    private List<Buyable> basketBuyables;
 
     public Basket(){
         this("Default", "Default", null);
@@ -44,10 +45,10 @@ public class Basket implements Parcelable, Serializable {
         this.author = author;
     }
 
-    public ArrayList<Buyable> getBasketBuyables() {
+    public List<Buyable> getBasketBuyables() {
         return basketBuyables;
     }
-    public void setBasketBuyables(ArrayList<Buyable> basketBuyables) {
+    public void setBasketBuyables(List<Buyable> basketBuyables) {
         this.basketBuyables = basketBuyables;
     }
 
