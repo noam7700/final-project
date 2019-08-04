@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class AutoBuyActivity extends AppCompatActivity {
 
-    ListView myListView;
+    public static ListView myListView;
     public static ArrayList<Pair<String, Double>> mWantedItems;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;

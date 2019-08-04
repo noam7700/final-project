@@ -11,8 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -118,68 +116,9 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             }
         }
 
+        // w/o text listeners. to update loop_object you need to press the "search again" button
         nameEditText.setText(loop_object.first);
-        nameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                return;
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                return;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String newstring = nameEditText.getText().toString();
-                Double newdouble;
-                try {
-                    newdouble = Double.parseDouble(qtyEditText.getText().toString());
-                } catch(Exception ex) { //couldn't parse, probably empty...
-                    newdouble = 0.0;
-                }
-                Pair<String, Double> newpair = new Pair<>(newstring, newdouble);
-                AutoBuyActivity.mWantedItems.set(loop_index - 1, newpair);
-
-                loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
-            }
-        });
-
         qtyEditText.setText(String.valueOf(loop_object.second));
-        qtyEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                return;
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                return;
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String newstring = nameEditText.getText().toString();
-                Double newdouble;
-                try {
-                    newdouble = Double.parseDouble(qtyEditText.getText().toString());
-                } catch(Exception ex) { //couldn't parse, probably empty...
-                    newdouble = 0.0;
-                }
-                Pair<String, Double> newpair = new Pair<>(newstring, newdouble);
-                AutoBuyActivity.mWantedItems.set(loop_index - 1, newpair);
-
-                loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
-
-                //also, update the BasketProducts' quantity
-                for(int i=0; i<searcheditems.size(); i++)
-                    searcheditems.get(i).setQuantity(newdouble);
-
-                AutoBuySearcheditemsAdapter myadapter = (AutoBuySearcheditemsAdapter) myListView.getAdapter();
-                myadapter.notifyDataSetChanged(); //update views
-            }
-        });
 
         listtitleTextView.setText(R.string.chooseBestOption);
 
@@ -199,10 +138,28 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             }
         });
 
-        searchAgainBtn.setText(R.string.searchAgain);
+        searchAgainBtn.setText(R.string.UpdateAndsearchAgain);
         searchAgainBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //1. update loop_object (from editTexts)
+                String newstring = nameEditText.getText().toString();
+                Double newdouble;
+                try {
+                    newdouble = Double.parseDouble(qtyEditText.getText().toString());
+                } catch(Exception ex) { //couldn't parse, probably empty...
+                    newdouble = 0.0;
+                }
+                Pair<String, Double> newpair = new Pair<>(newstring, newdouble);
+                AutoBuyActivity.mWantedItems.set(loop_index - 1, newpair);
+
+                loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
+
+                //update wanteditems's list in AutoBuyActivity (if he goes with 'previous')
+                AutoBuyWantedAdapter wantedAdapter = (AutoBuyWantedAdapter) AutoBuyActivity.myListView.getAdapter();
+                wantedAdapter.notifyDataSetChanged();
+
+                //2. search again
                 ArrayList<Product> searchedResult = User.searchWanteditem(loop_object);
                 if(searchedResult == null){ //didnt find anything/error?
                     searcheditems = null;
@@ -216,7 +173,8 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
                 }
 
                 AutoBuySearcheditemsAdapter myadapter = (AutoBuySearcheditemsAdapter) myListView.getAdapter();
-                myadapter.notifyDataSetChanged(); //update views
+                myadapter.notifyDataSetChanged(); //update search result's listview
+
             }
         });
 
