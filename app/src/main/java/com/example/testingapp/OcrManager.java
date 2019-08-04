@@ -3,6 +3,7 @@ package com.example.testingapp;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.util.Pair;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class OcrManager {
 
@@ -47,6 +49,41 @@ public class OcrManager {
         }
         tessBaseAPI.end();
         return retStr;
+    }
+
+    public static ArrayList<Pair<String, Double>> parseTextToPairs(String text){
+
+        /*ArrayList<Pair<String, Double>> retPairs = new ArrayList<>();
+
+        String[] lines = text.split("\\r?\\n"), words;
+        String lastword, searchname; int lastword_parsed;
+        for(String line : lines){
+            words = line.split(" ");
+            lastword = words[words.length-1];
+            try {
+                lastword_parsed = Integer.parseInt(lastword);
+            } catch(Exception e){
+                lastword_parsed = 0;
+            }
+            searchname = OcrManager.joinRange(words, words.length-1); //dont include last word
+
+            retPairs.add(new Pair<>(searchname, Double.valueOf(lastword_parsed)));
+        }
+
+        return retPairs;*/
+
+        ArrayList<Pair<String, Double>> retPairs = new ArrayList<>();
+        retPairs.add(new Pair<>("גבינה", Double.valueOf(5.0)));
+        retPairs.add(new Pair<>("פיתות", Double.valueOf(1.0)));
+
+        return retPairs;
+    }
+
+    public static String joinRange(String[] arr, int size){
+        String ret = "";
+        for(int i=0; i<size; i++)
+            ret += arr[i];
+        return ret;
     }
 
     //copy Assets to external storage

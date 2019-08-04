@@ -30,6 +30,7 @@
     <string name="chooseOptionToContinue">יש לבחור מוצר מהרשימה המתאים לך כדי להמשיך</string>
     <string name="understood">הבנתי</string>
     <string name="automaticBasket">סל אוטומטי</string>
+    <string name="chooseAutomaticMethod">בחר שיטה אוטומטית</string>
 
     <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
     <string name="title_shufersal">שופרסל</string>
