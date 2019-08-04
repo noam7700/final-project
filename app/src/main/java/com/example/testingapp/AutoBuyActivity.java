@@ -72,6 +72,13 @@ public class AutoBuyActivity extends AppCompatActivity {
 
         setTitle(R.string.title_shufersal);
 
+        String image_text;
+        try {
+            image_text = (String) getIntent().getExtras().get("com.example.testingapp.FAKE");
+        } catch(Exception e){
+            e.printStackTrace(); //when opening the activity w/o a picture (manual autobuy)
+            image_text = "";
+        }
 
         TextView headlineTextView = (TextView) findViewById(R.id.activity_auto_buy_headlineTextView);
         TextView nameTextView = (TextView) findViewById(R.id.activity_auto_buy_nameTextView);
@@ -108,10 +115,12 @@ public class AutoBuyActivity extends AppCompatActivity {
 
         myListView = findViewById(R.id.activity_auto_buy_wanteditemsListView);
 
-        if(AutoBuyActivity.mWantedItems == null) {
+        if(image_text.equals("")) {
             AutoBuyActivity.mWantedItems = new ArrayList<Pair<String, Double>>();
             Pair<String, Double> def = new Pair<String, Double>("", new Double(0));
             AutoBuyActivity.mWantedItems.add(def); //default
+        } else{
+            AutoBuyActivity.mWantedItems = OcrManager.parseTextToPairs(image_text);
         }
 
         AutoBuyWantedAdapter autoBuyWantedAdapter = new AutoBuyWantedAdapter(this, AutoBuyActivity.mWantedItems);
