@@ -97,7 +97,7 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
         loop_index = getIntent().getIntExtra("com.example.testingapp.LOOPINDEX", -1);
         indexTextView.setText(String.valueOf(loop_index));
 
-        if(AutoBuyLoopActivity.chosenitems == null) {
+        if(loop_index == 1) {
             AutoBuyLoopActivity.chosenitems = new ArrayList<>(AutoBuyActivity.mWantedItems.size());
         }
 
