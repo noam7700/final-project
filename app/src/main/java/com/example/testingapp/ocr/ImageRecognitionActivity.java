@@ -46,7 +46,7 @@ public class ImageRecognitionActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     //ArrayList<Pair<String,Double>> fake = OcrManager.parseTextToPairs(textView.getText().toString());
                     Intent startIntent = new Intent(getApplicationContext(), AutoBuyActivity.class);
-                    startIntent.putExtra("com.example.testingapp.FAKE", "lololol");
+                    startIntent.putExtra("com.example.testingapp.FAKE", textView.getText().toString());
                     startActivity(startIntent);
                 }
             });

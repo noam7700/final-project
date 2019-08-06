@@ -53,7 +53,7 @@ public class OcrManager {
 
     public static ArrayList<Pair<String, Integer>> parseTextToPairs(String text){
 
-        /*ArrayList<Pair<String, Double>> retPairs = new ArrayList<>();
+        ArrayList<Pair<String, Integer>> retPairs = new ArrayList<>();
 
         String[] lines = text.split("\\r?\\n"), words;
         String lastword, searchname; int lastword_parsed;
@@ -67,14 +67,8 @@ public class OcrManager {
             }
             searchname = OcrManager.joinRange(words, words.length-1); //dont include last word
 
-            retPairs.add(new Pair<>(searchname, Double.valueOf(lastword_parsed)));
+            retPairs.add(new Pair<>(searchname, Integer.valueOf(lastword_parsed)));
         }
-
-        return retPairs;*/
-
-        ArrayList<Pair<String, Integer>> retPairs = new ArrayList<>();
-        retPairs.add(new Pair<>("גבינה", 5));
-        retPairs.add(new Pair<>("פיתות", 1));
 
         return retPairs;
     }
