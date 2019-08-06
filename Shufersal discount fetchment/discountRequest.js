@@ -1,7 +1,9 @@
 const puppeteer = require('puppeteer');
 
 
-
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function run() {
 	discountRequest(408354, 8)
@@ -63,7 +65,7 @@ async function discountRequest(prodID,qty){
 		console.log("Response Headers: " + response.headers);
 		console.log("Response: " + response);
 		res = await response.text();
-		price = CalcAndPrintDisc(res);
+		price = CalcAndPrintDisc(res); //TODO: print price to .txt (only if not null)
         //console.log(res + "\n Price after discount: " + price);
         console.log("==============");
     });
@@ -73,7 +75,10 @@ async function discountRequest(prodID,qty){
     //console.log(response.statusText());
     //console.log(response.responseText);
 
-    //console.log('done');
+	await sleep(5 * 1000); //5 seconds
+	
+    console.log('done!');
+	process.exit();
 	
 	
 }

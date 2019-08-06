@@ -32,7 +32,10 @@ const writeFile = util.promisify(fs.writeFile);
 
 (async function main() {
 	try {
-		const browser = await puppeteer.launch({headless: true});
+		
+		console.log('Record video1 :P\n');
+		
+		const browser = await puppeteer.launch({headless: false});
 		const page = await browser.newPage();
 		
 		//probably stupid way to delete previous data
@@ -46,9 +49,15 @@ const writeFile = util.promisify(fs.writeFile);
 		//emptying the folder 'images'
 	    /*empty('./images', false, (o)=>{
 		if(o.error) console.error(o.error);
-		});*/	
-		await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx');
+		});*/
+		console.log('Record video1.5 :P\n');
+		
+		await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx', {
+                timeout: 3000000 //bigger timeout
+            });
 		await page.waitForSelector('.ciw '); //catagories
+		
+		console.log('Record video2 :P\n');
 		
 		const img_buf = [];
 		const button_cats = await page.$$('.ciw ');
@@ -56,12 +65,19 @@ const writeFile = util.promisify(fs.writeFile);
 		let pd_num;
 		outStream.write(cats_num+'\n'); //line1
 		
+		console.log('Record video3 :P\n');
+		
 		let idbuf = [];
 		//i starts as 1, because [0] is 'recommended' and doesn't work as others
 		for (let i=1; i<cats_num; i++) {
 			console.log('current cat: '+ i);
+			
+			console.log('Record video4 :P\n');
+			
 			//reload main shopping page everytime
-			await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx');
+			await page.goto('https://www.shufersal.co.il/Pages/Catalog.aspx', {
+                timeout: 3000000 //bigger timeout
+            });
 			await page.waitForSelector('.ciw ');
 			const button_cats = await page.$$('.ciw ');
 			
@@ -72,21 +88,26 @@ const writeFile = util.promisify(fs.writeFile);
 			outStream.write(clickableImg_title+'\n'); //line2.1
 			await clickableImg.click(); //goto current catagory
 			let productsDetails;
+			
+			console.log('Record video5 :P\n');
+			
 			for(let i = 0; i<8; i++){
 				//await sleep(500); // delay for scrolling data to be loaded (a second)
-				await page.waitForSelector('div[id^="divProduct_"]');	
-				productsDetails = await page.$$('div[id^="divProduct_"]');
+				await page.waitForSelector('div[id^="divProduct_"]', {timeout: 3000000}); //bigger timeout	
+				productsDetails = await page.$$('div[id^="divProduct_"]', {timeout: 3000000}); //bigger timeout
 				pd_num = productsDetails.length;
 				const last_pd_id = await page.evaluate(el=>el.id, productsDetails[pd_num - 1]);
 				console.log(last_pd_id);
 				const last_selector = "#"+last_pd_id+' > #divProductBg > #divProductDetails > #divProductDetailsTexts > div.prodpricetbl > a'; // selector of the description of last pd
 				await page.waitForSelector(last_selector);
 				await page.hover(last_selector);
-				await sleep(2500); // delay for scrolling data to be loaded (1.5 seconds)
+				await sleep(3 * 2500); // delay for scrolling data to be loaded (3 * 1.5 seconds)
 
 			}				
 			console.log(pd_num);
 			outStream.write(pd_num+'\n'); //line2.2
+			
+			console.log('Record video6 :P\n');
 			
 			//loop over all the products			
 			for(let i=0; i<pd_num; i++) {
@@ -150,7 +171,9 @@ const writeFile = util.promisify(fs.writeFile);
 
 		
 	} catch(e) {
-		writeFile('errors_readProductsData.txt'+e+'\n\n');
+		console.log('catch... :P\n');
+		console.log('errors_readProductsData.txt'+e+'\n\n');
+		console.log('end catch... :P\n');
 	}
 })();
 
