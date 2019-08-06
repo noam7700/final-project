@@ -96,7 +96,7 @@ public class MyAccountBasketAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 //TODO: check if already exists (alertDialog + if agrees, add again...)
-                BasketBuyable basketBuyable = new BasketBuyable(currBasket, 1.0);
+                BasketBuyable basketBuyable = new BasketBuyable(currBasket, 1);
                 basketBuyable.addToBasket();
             }
         });

@@ -172,7 +172,7 @@ public class User {
         return -1;
     }
 
-    public static ArrayList<Product> searchWanteditem(Pair<String, Double> wanteditem) {
+    public static ArrayList<Product> searchWanteditem(Pair<String, Integer> wanteditem) {
         User tmp = new User("default", "default");
 
         List<ProductInfo> searchResults;

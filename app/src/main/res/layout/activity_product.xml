@@ -36,8 +36,8 @@
             android:layout_toEndOf="@+id/basketproduct_quantityTextView"
             android:layout_toRightOf="@+id/basketproduct_quantityTextView"
             android:ems="10"
-            android:hint="0.00"
-            android:inputType="numberDecimal"
+            android:hint="0"
+            android:inputType="number"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/activity_product_quantityBtn" />
 

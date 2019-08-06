@@ -51,7 +51,7 @@ public class OcrManager {
         return retStr;
     }
 
-    public static ArrayList<Pair<String, Double>> parseTextToPairs(String text){
+    public static ArrayList<Pair<String, Integer>> parseTextToPairs(String text){
 
         /*ArrayList<Pair<String, Double>> retPairs = new ArrayList<>();
 
@@ -72,9 +72,9 @@ public class OcrManager {
 
         return retPairs;*/
 
-        ArrayList<Pair<String, Double>> retPairs = new ArrayList<>();
-        retPairs.add(new Pair<>("גבינה", Double.valueOf(5.0)));
-        retPairs.add(new Pair<>("פיתות", Double.valueOf(1.0)));
+        ArrayList<Pair<String, Integer>> retPairs = new ArrayList<>();
+        retPairs.add(new Pair<>("גבינה", 5));
+        retPairs.add(new Pair<>("פיתות", 1));
 
         return retPairs;
     }

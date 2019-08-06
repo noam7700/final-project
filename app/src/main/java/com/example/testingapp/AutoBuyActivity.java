@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class AutoBuyActivity extends AppCompatActivity {
 
     public static ListView myListView;
-    public static ArrayList<Pair<String, Double>> mWantedItems;
+    public static ArrayList<Pair<String, Integer>> mWantedItems;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -94,7 +94,7 @@ public class AutoBuyActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Pair<String, Double> def = new Pair<String, Double>("", new Double(0));
+                Pair<String, Integer> def = new Pair<String, Integer>("", new Integer(0));
                 AutoBuyActivity.mWantedItems.add(def); //default
 
                 AutoBuyWantedAdapter autoBuyWantedAdapter = (AutoBuyWantedAdapter) myListView.getAdapter();
@@ -116,8 +116,8 @@ public class AutoBuyActivity extends AppCompatActivity {
         myListView = findViewById(R.id.activity_auto_buy_wanteditemsListView);
 
         if(image_text.equals("")) {
-            AutoBuyActivity.mWantedItems = new ArrayList<Pair<String, Double>>();
-            Pair<String, Double> def = new Pair<String, Double>("", new Double(0));
+            AutoBuyActivity.mWantedItems = new ArrayList<Pair<String, Integer>>();
+            Pair<String, Integer> def = new Pair<String, Integer>("", new Integer(0));
             AutoBuyActivity.mWantedItems.add(def); //default
         } else{
             AutoBuyActivity.mWantedItems = OcrManager.parseTextToPairs(image_text);

@@ -118,8 +118,7 @@ public class ProductActivity extends AppCompatActivity {
                 catch (ParseException e) {
                     e.printStackTrace();
                 }
-                double new_quantity = number_new_quantity.doubleValue();
-                new_quantity = (double)((int)(new_quantity)); //make it a whole number - sorry :/
+                int new_quantity = number_new_quantity.intValue();
 
                 //check if the product already exists in the basket (from last to first)
                 BasketProduct foundPd = null;

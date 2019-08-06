@@ -5,9 +5,9 @@ import android.os.Parcelable;
 
 public class BasketBuyable implements Buyable {
     private Basket myBasket;
-    private double quantity;
+    private int quantity;
 
-    public BasketBuyable(Basket myBasket, double quantity){
+    public BasketBuyable(Basket myBasket, int quantity){
         this.myBasket = myBasket;
         this.quantity = quantity;
     }
@@ -34,12 +34,12 @@ public class BasketBuyable implements Buyable {
     }
 
     @Override
-    public double getQuantity() {
+    public int getQuantity() {
         return this.quantity;
     }
 
     @Override
-    public void setQuantity(double quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
@@ -47,7 +47,7 @@ public class BasketBuyable implements Buyable {
 
     protected BasketBuyable(Parcel in) {
         myBasket = (Basket) in.readValue(Basket.class.getClassLoader());
-        quantity = in.readDouble();
+        quantity = in.readInt();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BasketBuyable implements Buyable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(myBasket);
-        dest.writeDouble(quantity);
+        dest.writeInt(quantity);
     }
 
     @SuppressWarnings("unused")

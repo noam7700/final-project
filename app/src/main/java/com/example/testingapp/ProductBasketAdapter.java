@@ -107,19 +107,18 @@ public class ProductBasketAdapter extends BaseAdapter {
                 //supports commas in the number. like "1,399.00"
                 NumberFormat format = NumberFormat.getInstance(Locale.US);
                 Number number = null;
-                double newQty_double;
+                int newQty_int;
                 try {
                     number = format.parse(newQty); //here it might fail
-                    newQty_double = number.doubleValue();
-                    newQty_double = (double)((int)(newQty_double)); //make it a whole number - sorry :/
+                    newQty_int = number.intValue();
                 }
                 catch (ParseException e) { //if couldn't parse, just say it's 0
-                    newQty_double = 0.0;
+                    newQty_int = 0;
                     //e.printStackTrace();
                 }
 
 
-                buyable.setQuantity(newQty_double);
+                buyable.setQuantity(newQty_int);
 
                 double newPrice = buyable.getPrice();
                 pdSumPriceTextView.setText(new DecimalFormat("##.##").format(newPrice));

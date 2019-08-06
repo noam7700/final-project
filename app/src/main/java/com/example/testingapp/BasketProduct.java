@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 
 //amit's imports
 
@@ -12,21 +11,21 @@ import java.text.DecimalFormat;
 public class BasketProduct implements Buyable, Serializable {
 
     private Product myProduct;
-    private double quantity;
+    private int quantity;
 
-    public BasketProduct(Product product, double quantity){
+    public BasketProduct(Product product, int quantity){
         myProduct = product;
         this.quantity = quantity;
     }
 
     //getters & setters
     @Override
-    public double getQuantity(){
+    public int getQuantity(){
         return quantity;
     }
 
     @Override
-    public void setQuantity(double quantity){
+    public void setQuantity(int quantity){
         this.quantity = quantity;
     }
 
@@ -40,7 +39,7 @@ public class BasketProduct implements Buyable, Serializable {
         //amit's "parameters"
         String prodID = myProduct.getId_str(); //for example: "divProduct_112552446"
         prodID = prodID.substring(prodID.lastIndexOf("_") + 1); //get the number itself
-        String qty = new DecimalFormat("##.##").format(quantity * (double)times_ordered); //take only two digits after the dot
+        String qty = String.valueOf(quantity * times_ordered); //take only two digits after the dot
 
         /*String paramUM = "";
         String discount = "";
@@ -99,7 +98,7 @@ public class BasketProduct implements Buyable, Serializable {
 
     //implement Parcelable
     protected BasketProduct(Parcel in) {
-        quantity = in.readDouble();
+        quantity = in.readInt();
         myProduct = (Product) in.readValue(Product.class.getClassLoader()); //i hope it works
     }
 
@@ -110,7 +109,7 @@ public class BasketProduct implements Buyable, Serializable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(quantity);
+        dest.writeInt(quantity);
         dest.writeValue(myProduct);
     }
 

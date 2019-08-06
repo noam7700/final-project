@@ -11,8 +11,8 @@ public interface Buyable extends Parcelable {
     double getPrice();
 
     //Buyable should be abstract class so it can hold quantity, but fuck it
-    double getQuantity();
-    void setQuantity(double quantity);
+    int getQuantity();
+    void setQuantity(int quantity);
 
 }
 

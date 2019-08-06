@@ -25,7 +25,7 @@ import java.util.ArrayList;
 
 public class AutoBuyLoopActivity extends AppCompatActivity {
 
-    Pair<String, Double> loop_object;
+    Pair<String, Integer> loop_object;
     ArrayList<Buyable> searcheditems;
     ListView myListView;
     public static ArrayList<Buyable> chosenitems = null;
@@ -110,7 +110,7 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
         } else {
             this.searcheditems = new ArrayList<Buyable>();
 
-            double wanted_qty = loop_object.second;
+            int wanted_qty = loop_object.second;
             for (int i = 0; i < searchedResult.size(); i++) {
                 this.searcheditems.add(new BasketProduct(searchedResult.get(i), wanted_qty));
             }
@@ -144,13 +144,13 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //1. update loop_object (from editTexts)
                 String newstring = nameEditText.getText().toString();
-                Double newdouble;
+                Integer newint;
                 try {
-                    newdouble = Double.parseDouble(qtyEditText.getText().toString());
+                    newint = Integer.parseInt(qtyEditText.getText().toString());
                 } catch(Exception ex) { //couldn't parse, probably empty...
-                    newdouble = 0.0;
+                    newint = 0;
                 }
-                Pair<String, Double> newpair = new Pair<>(newstring, newdouble);
+                Pair<String, Integer> newpair = new Pair<>(newstring, newint);
                 AutoBuyActivity.mWantedItems.set(loop_index - 1, newpair);
 
                 loop_object = AutoBuyActivity.mWantedItems.get(loop_index - 1);
@@ -166,7 +166,7 @@ public class AutoBuyLoopActivity extends AppCompatActivity {
                 } else {
                     searcheditems.clear();
 
-                    double wanted_qty = loop_object.second;
+                    int wanted_qty = loop_object.second;
                     for (int i = 0; i < searchedResult.size(); i++) {
                         searcheditems.add(new BasketProduct(searchedResult.get(i), wanted_qty));
                     }

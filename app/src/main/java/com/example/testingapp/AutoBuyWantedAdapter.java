@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class AutoBuyWantedAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
-    private ArrayList<Pair<String, Double>> mWantedItems;
+    private ArrayList<Pair<String, Integer>> mWantedItems;
 
-    public AutoBuyWantedAdapter(Context c, ArrayList<Pair<String, Double>> wantedItems){
+    public AutoBuyWantedAdapter(Context c, ArrayList<Pair<String, Integer>> wantedItems){
         mWantedItems = wantedItems;
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -36,7 +36,7 @@ public class AutoBuyWantedAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = mInflater.inflate(R.layout.autobuy_wanteditem_layout, null);
 
-        Pair<String, Double> wanteditem = mWantedItems.get(position);
+        Pair<String, Integer> wanteditem = mWantedItems.get(position);
 
         TextView numberTextView = (TextView) view.findViewById(R.id.autobuy_wanteditem_numberTextView);
         EditText nameEditText = (EditText) view.findViewById(R.id.autobuy_wanteditem_nameEditText);
@@ -60,13 +60,13 @@ public class AutoBuyWantedAdapter extends BaseAdapter {
             public void afterTextChanged(Editable s) {
                 String newName = nameEditText.getText().toString();
                 String newQty_str = qtyEditText.getText().toString();
-                Double newQty;
+                Integer newQty;
                 if(newQty_str.equals(""))
-                    newQty = new Double(0.0);
+                    newQty = Integer.valueOf(0);
                 else
-                    newQty = Double.parseDouble(newQty_str);
+                    newQty = Integer.parseInt(newQty_str);
 
-                Pair<String, Double> newPair = new Pair<String, Double>(newName, newQty);
+                Pair<String, Integer> newPair = new Pair<String, Integer>(newName, newQty);
                 mWantedItems.set(position, newPair);
             }
         });
@@ -87,13 +87,13 @@ public class AutoBuyWantedAdapter extends BaseAdapter {
             public void afterTextChanged(Editable s) {
                 String newName = nameEditText.getText().toString();
                 String newQty_str = qtyEditText.getText().toString();
-                Double newQty;
+                Integer newQty;
                 if(newQty_str.equals(""))
-                    newQty = new Double(0.0);
+                    newQty = Integer.valueOf(0);
                 else
-                    newQty = Double.parseDouble(newQty_str);
+                    newQty = Integer.parseInt(newQty_str);
 
-                Pair<String, Double> newPair = new Pair<String, Double>(newName, newQty);
+                Pair<String, Integer> newPair = new Pair<String, Integer>(newName, newQty);
                 mWantedItems.set(position, newPair);
             }
         });
