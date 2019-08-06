@@ -15,6 +15,8 @@ import communicationObjects.BasketContent;
 import communicationObjects.BasketsContent;
 import communication.parse.ObjectParser;
 import communicationObjects.ClientQuery;
+import communicationObjects.Discount;
+import communicationObjects.DiscountRequest;
 import communicationObjects.ProductInfo;
 import communicationObjects.Products;
 import communicationObjects.Request;
@@ -78,6 +80,24 @@ public class ClientDataAccessObject {
             e.printStackTrace();
         } catch (UnexpectedResponseFromServer e) {
             e.printStackTrace();
+        }
+    }
+
+    public static double getProductDiscount(String prodID, int qty) throws UnexpectedResponseFromServer, ConnectException {
+        Request req = new Request(ClientQuery.GET_DISCOUNT, new DiscountRequest(prodID, qty),null, null);
+        Object object;
+        try {
+            object = sendToServer(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ConnectException();
+        }
+        try {
+            Discount discount = (Discount) object;
+            return discount.getDiscount();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UnexpectedResponseFromServer();
         }
     }
 
@@ -172,8 +192,8 @@ public class ClientDataAccessObject {
         }
     }
 
-    public List<ProductInfo> getProductsData() throws ConnectException, UnexpectedResponseFromServer {
-        Request req = new Request(ClientQuery.GET_PRODUCTS_DATA, username, password);
+    static public List<ProductInfo> getProductsData() throws ConnectException, UnexpectedResponseFromServer {
+        Request req = new Request(ClientQuery.GET_PRODUCTS_DATA, null, null);
         Object object;
         try {
             object = sendToServer(req);
@@ -214,7 +234,7 @@ public class ClientDataAccessObject {
 //	}
 
 
-    private Object sendToServer(Request request) {
+    static private Object sendToServer(Request request) {
         ClientThread clientThread = new ClientThread(request);
         Thread thread = new Thread(clientThread);
         thread.start();

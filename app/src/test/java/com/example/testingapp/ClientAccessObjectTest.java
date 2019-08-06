@@ -5,13 +5,15 @@ import android.os.Parcel;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import communication.clientDataAccess.ClientDataAccessObject;
 import communication.clientDataAccess.UnexpectedResponseFromServer;
-import communication.communicationObjects.BasketsContent;
+
+import communicationObjects.ProductInfo;
 
 import static org.junit.Assert.*;
 
@@ -46,8 +48,18 @@ public class ClientAccessObjectTest {
             assertEquals(basket.getName(), basketReturned.getName());
             assertEquals(basket.getAuthor(), basketReturned.getAuthor());
             assertEquals(basket.getBasketBuyables().get(0).getDesc(), basketReturned.getBasketBuyables().get(0).getDesc());
-        } catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
+    }
+
+    @Test
+    public void getDiscountTest() throws UnexpectedResponseFromServer, ConnectException {
+        List<ProductInfo> products = ClientDataAccessObject.getProductsData();
+        ProductInfo productInfo = products.get(0);
+        int qty = 10;
+        double discount = ClientDataAccessObject.getProductDiscount(productInfo.getId_str(), qty);
+        System.out.println(discount);
+        assertTrue(discount >= 0);
     }
 }
