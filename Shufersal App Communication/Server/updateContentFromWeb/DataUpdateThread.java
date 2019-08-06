@@ -18,14 +18,14 @@ public class DataUpdateThread extends Thread {
 
 	 private void modifyWebContentToFile() throws IOException, InterruptedException, SQLException { // running web-scraping
 	                                                                                        // script by cmd
-		  String command = new String("node readProductsData.js&&exit"); // script has to be in project's directory
+		  String command = new String("node readProductsData.js"); // script has to be in project's directory
 		  System.out.println("Starting to update products details");
 		  System.out.println("Do you allow to update the details? [y/n]: ");
 		  InputStreamReader inputStream = new InputStreamReader(System.in);
 		  char updatePermission = (char) inputStream.read();
 		  if( updatePermission != 'y' ) return; 
 
-		  Process p = Runtime.getRuntime().exec("cmd /c start /wait cmd.exe /K \"" + command + "\"");
+		  Process p = Runtime.getRuntime().exec("cmd /c start /wait cmd.exe /K \"" + command + "&&exit\"");
 		  p.waitFor(); // waiting for script to be finished
 		  System.out.println("Products File update finished.");
 		  File productsFile = new File("productsTextData.txt");

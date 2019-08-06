@@ -1,7 +1,9 @@
 
 package handleMessageFromClient;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
@@ -10,6 +12,8 @@ import java.util.ArrayList;
 import communicationObjects.BasketContent;
 import communicationObjects.BasketsContent;
 import communicationObjects.ClientQuery;
+import communicationObjects.Discount;
+import communicationObjects.DiscountRequest;
 import communicationObjects.Products;
 import communicationObjects.Request;
 import communicationObjects.ResponseObject;
@@ -74,7 +78,7 @@ public class ClientRequestManager {
 
 	 private static boolean isGuestPrivilege(ClientQuery query) {
 		  if (query == ClientQuery.REGISTER || query == ClientQuery.LOGIN || query == ClientQuery.GET_PRODUCTS_DATA
-		            || query == ClientQuery.SEARCH_PRODUCTS) {
+		            || query == ClientQuery.SEARCH_PRODUCTS || query == ClientQuery.GET_DISCOUNT) {
 			   return true;
 		  } else {
 			   return false;
@@ -116,9 +120,36 @@ public class ClientRequestManager {
 					return getProductsData();
 			   case SEARCH_PRODUCTS:
 					return searchProductsByDescription(req);
+			   case GET_DISCOUNT:
+					return getDiscount(req);
 
 			   default:
 					return null;
+		  }
+
+	 }
+
+	 private static Discount getDiscount(Request req) {
+		  try {
+
+			   DiscountRequest discountRequest = (DiscountRequest) req.getObject();
+			   String command = "node \"../Shufersal discount fetchment/discountRequest.js\" " + discountRequest.getProdID()
+			             + " " + discountRequest.getQty();
+			   Process p = Runtime.getRuntime().exec("cmd /c start /wait cmd.exe /K \"" + command + "&&exit\"");
+			   p.waitFor();
+			   System.out.println("discount command executed");
+			   File discountFile = new File("../Shufersal discount fetchment/discountResult.txt");
+			   BufferedReader br = new BufferedReader(new FileReader(discountFile));
+			   String discountStr = br.readLine();
+			   br.close();
+			   double discount = Double.valueOf(discountStr);
+			   return new Discount(discount);
+		  } catch (IOException | InterruptedException e) {
+			   e.printStackTrace();
+//			   return new Discount(0);
+			   return null;
+		  } catch (Exception e) {
+			   return null;
 		  }
 
 	 }
@@ -151,7 +182,7 @@ public class ClientRequestManager {
 	 private static void saveBasket(Request req) {
 		  try {
 			   String username = req.getUname();
-			   BasketContent basket = (BasketContent)req.getObject();
+			   BasketContent basket = (BasketContent) req.getObject();
 			   DBExecutor.addBasket(username, basket.getRawContent());
 		  } catch (Exception e) {
 			   e.printStackTrace();
