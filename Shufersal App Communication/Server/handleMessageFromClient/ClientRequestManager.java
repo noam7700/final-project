@@ -138,7 +138,7 @@ public class ClientRequestManager {
 			   Process p = Runtime.getRuntime().exec("cmd /c start /wait cmd.exe /K \"" + command + "&&exit\"");
 			   p.waitFor();
 			   System.out.println("discount command executed");
-			   File discountFile = new File("../Shufersal discount fetchment/discountResult.txt");
+			   File discountFile = new File("./discountResult.txt");
 			   BufferedReader br = new BufferedReader(new FileReader(discountFile));
 			   String discountStr = br.readLine();
 			   br.close();
