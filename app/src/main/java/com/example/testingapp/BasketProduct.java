@@ -14,10 +14,14 @@ public class BasketProduct implements Buyable, Serializable {
 
     private Product myProduct;
     private int quantity;
+    private double discount;
+    private boolean isDiscountUpdated; //if we changed quantity somewhere
 
     public BasketProduct(Product product, int quantity) {
         myProduct = product;
         this.quantity = quantity;
+        this.discount = 0.0;
+        this.isDiscountUpdated = false;
     }
 
     //getters & setters
@@ -29,6 +33,7 @@ public class BasketProduct implements Buyable, Serializable {
     @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+        this.isDiscountUpdated = false; //discount isn't relevant to new quantity
     }
 
     public Product getMyProduct() {
@@ -43,7 +48,13 @@ public class BasketProduct implements Buyable, Serializable {
         prodID = prodID.substring(prodID.lastIndexOf("_") + 1); //get the number itself
         int qty = quantity * times_ordered; //take only two digits after the dot
         try {
-            return ClientDataAccessObject.getProductDiscount(prodID, qty);
+            if(!this.isDiscountUpdated) {
+                this.discount = ClientDataAccessObject.getProductDiscount(prodID, qty);
+                this.isDiscountUpdated = true; //we just did :P (updated the discount)
+                return this.discount;
+            } else {
+                return this.discount; //dont re-ask the server, we already know the discount
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0;
