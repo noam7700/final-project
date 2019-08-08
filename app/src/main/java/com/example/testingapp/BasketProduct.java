@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 
-import communication.clientDataAccess.ClientDataAccessObject;
-
 //amit's imports
 
 
@@ -47,7 +45,7 @@ public class BasketProduct implements Buyable, Serializable {
         String prodID = myProduct.getId_str(); //for example: "divProduct_112552446"
         prodID = prodID.substring(prodID.lastIndexOf("_") + 1); //get the number itself
         int qty = quantity * times_ordered; //take only two digits after the dot
-        try {
+        /*try {
             if(!this.isDiscountUpdated) {
                 this.discount = ClientDataAccessObject.getProductDiscount(prodID, qty);
                 this.isDiscountUpdated = true; //we just did :P (updated the discount)
@@ -58,7 +56,8 @@ public class BasketProduct implements Buyable, Serializable {
         } catch (Exception e) {
             e.printStackTrace();
             return 0.0;
-        }
+        }*/
+        return 0.0; //takes too much time :(
     }
 
     //help function for getDiscount
