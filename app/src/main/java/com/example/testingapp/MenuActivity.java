@@ -16,6 +16,10 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import communicationObjects.ProductInfo;
@@ -83,6 +87,21 @@ public class MenuActivity extends AppCompatActivity {
             //I'm using user because he has the correct default local IP - 10.100.102.4
             List<ProductInfo> serverResult = new User("default", "default").getProductsData();
             MenuActivity.myAppShop = new Shop(serverResult);
+
+            //if didn't succeed (server's not working)
+            //this piece of code actually never is executed, because when server's down, there's
+            //no timeout in request, and the app crashes.
+            if(MenuActivity.myAppShop.getCategories().size() == 0){
+                //load offline
+                BufferedReader bufferReader = null;
+                try {
+                    InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
+                    bufferReader = new BufferedReader(new InputStreamReader(productsTextData_is, "UTF-8"));
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+                MenuActivity.myAppShop = new Shop(bufferReader);
+            }
         }
 
         TextView loadingTextView = (TextView) findViewById(R.id.loadingTextView);
