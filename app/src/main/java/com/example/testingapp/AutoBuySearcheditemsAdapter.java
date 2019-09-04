@@ -93,7 +93,7 @@ public class AutoBuySearcheditemsAdapter extends BaseAdapter {
                     @Override
                     public void run() {
                         pdSumDiscountTextView.setText(new DecimalFormat("##.##")
-                                .format(discount + "-")); //discounts shows as minus
+                                .format(discount) + "-"); //discounts shows as minus
 
                     }
                 });
