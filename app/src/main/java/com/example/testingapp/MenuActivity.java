@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -82,37 +83,61 @@ public class MenuActivity extends AppCompatActivity {
 
         setTitle(R.string.title_shufersal);
 
+        Handler load_shop_handler = new Handler();
+
+        //setting the listView to depend on the (possibly new) loaded appShop
+        myListView = (ListView) findViewById(R.id.categoriesListView);
 
         if(MenuActivity.myAppShop == null) { //if it wasn't loaded before, load it
-            //I'm using user because he has the correct default local IP - 10.100.102.4
-            List<ProductInfo> serverResult = new User("default", "default").getProductsData();
-            MenuActivity.myAppShop = new Shop(serverResult);
+            //Shop loading should be done not in main thread!
 
-            //if didn't succeed (server's not working)
-            //this piece of code actually never is executed, because when server's down, there's
-            //no timeout in request, and the app crashes.
-            if(MenuActivity.myAppShop.getCategories().size() == 0){
-                //load offline
-                BufferedReader bufferReader = null;
-                try {
-                    InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
-                    bufferReader = new BufferedReader(new InputStreamReader(productsTextData_is, "UTF-8"));
-                } catch(IOException e) {
-                    e.printStackTrace();
+            myListView.setVisibility(View.INVISIBLE); //until the shop is loaded
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //I'm using user because he has the correct default local IP - 10.100.102.4
+                    List<ProductInfo> serverResult = new User("default", "default").getProductsData();
+                    MenuActivity.myAppShop = new Shop(serverResult);
+
+                    //if didn't succeed (server's not working)
+                    //this piece of code actually never is executed, because when server's down, there's
+                    //no timeout in request, and the app crashes.
+                    if(MenuActivity.myAppShop.getCategories().size() == 0){
+                        //load offline
+                        BufferedReader bufferReader = null;
+                        try {
+                            InputStream productsTextData_is = getAssets().open("ProductsTextData.txt");
+                            bufferReader = new BufferedReader(new InputStreamReader(productsTextData_is, "UTF-8"));
+                        } catch(IOException e) {
+                            e.printStackTrace();
+                        }
+                        MenuActivity.myAppShop = new Shop(bufferReader);
+                    }
+
+                    //Shop is loaded. now reset the listview
+                    load_shop_handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            CategoryAdapter categoryAdapter = new CategoryAdapter(MenuActivity.this, MenuActivity.myAppShop);
+                            myListView.setAdapter(categoryAdapter);
+
+                            findViewById(R.id.loading_animation).setVisibility(View.GONE);
+                            myListView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
                 }
-                MenuActivity.myAppShop = new Shop(bufferReader);
-            }
+            }).start();
+
+        } else { //Shop != null. it is already loaded
+            CategoryAdapter categoryAdapter = new CategoryAdapter(this, MenuActivity.myAppShop);
+            myListView.setAdapter(categoryAdapter);
         }
 
         TextView loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         loadingTextView.setText("קטגוריות");
         loadingTextView.setBackgroundColor(Color.GREEN);
-
-        //setting the listView to depend on the (possibly new) loaded appShop
-        myListView = (ListView) findViewById(R.id.categoriesListView);
-
-        CategoryAdapter categoryAdapter = new CategoryAdapter(this, MenuActivity.myAppShop);
-        myListView.setAdapter(categoryAdapter);
     }
 
     @Override

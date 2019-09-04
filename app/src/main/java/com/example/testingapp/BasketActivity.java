@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -80,14 +81,29 @@ public class BasketActivity extends AppCompatActivity {
         TextView activity_basket_sumTextView = (TextView) findViewById(R.id.activity_basket_sumTextView);
         TextView activity_basket_sumDiscountTextView = (TextView) findViewById(R.id.activity_basket_sumDiscountTextView);
         Button activity_basket_buyBtn = (Button) findViewById(R.id.activity_basket_buyBtn);
+        Handler discount_change_handler = new Handler();
 
         myBasketListView = (ListView) findViewById(R.id.activity_basket_basketListView);
 
         activity_basket_titleTextView.setText("הסל שלי");
         double newSumPrice = BasketActivity.currentBasket.getPrice();
         activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
-        double newDiscount = BasketActivity.currentBasket.getDiscount(1); //currBasket's parent "qty" is 1
-        activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newDiscount) + "-"); //discounts shows as minus
+
+        activity_basket_sumDiscountTextView.setText("loading...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                double newDiscount = BasketActivity.currentBasket.getDiscount(1); //currBasket's parent "qty" is 1
+                discount_change_handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##")
+                                .format(newDiscount) + "-"); //discounts shows as minus
+
+                    }
+                });
+            }
+        }).start();
 
         activity_basket_buyBtn.setText("בצע קנייה");
         activity_basket_buyBtn.setOnClickListener(new View.OnClickListener() {

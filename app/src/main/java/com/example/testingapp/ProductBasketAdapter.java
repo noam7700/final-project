@@ -1,6 +1,7 @@
 package com.example.testingapp;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -63,6 +64,8 @@ public class ProductBasketAdapter extends BaseAdapter {
         ImageView basketproduct_ImageView = (ImageView) view.findViewById(R.id.basketproduct_ImageView);
         ImageButton basketproduct_deleteProductBtn = (ImageButton) view.findViewById(R.id.basketproduct_deleteProductBtn);
 
+        Handler discount_change_handler = new Handler();
+
         if(buyable instanceof BasketProduct) {
             Picasso.with(view.getContext()).load(((BasketProduct)buyable).getMyProduct().getImg_src()).into(basketproduct_ImageView);
         }
@@ -76,16 +79,44 @@ public class ProductBasketAdapter extends BaseAdapter {
                 //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
                 activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
-                double newSumDiscount = mBasket.getDiscount(1); //currBasket's "qty" is 1
-                activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newSumDiscount) + "-"); //discounts shows as minus
+
+                activity_basket_sumDiscountTextView.setText("loading...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        double newSumDiscount = mBasket.getDiscount(1); //currBasket's "qty" is 1
+                        discount_change_handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##")
+                                        .format(newSumDiscount) + "-"); //discounts shows as minus
+                            }
+                        });
+                    }
+                }).start();
+
             }
         });
 
         pdDescTextView.setText(buyable.getDesc());
 
         pdSumPriceTextView.setText(new DecimalFormat("##.##").format(buyable.getPrice()));
-        //currBasket's "qty" is 1
-        pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(buyable.getDiscount(1)) + "-"); //discounts shows as minus
+
+        pdSumDiscountTextView.setText("loading...");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                double discount = buyable.getDiscount(1); //currBasket's "qty" is 1 (times_ordered)
+                discount_change_handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pdSumDiscountTextView.setText(new DecimalFormat("##.##")
+                                .format(discount) + "-"); //discounts shows as minus
+                    }
+                });
+
+            }
+        }).start();
 
         quantityTextView.setText("כמות:");
         quantityEditText.setText(String.valueOf(buyable.getQuantity()));
@@ -122,14 +153,40 @@ public class ProductBasketAdapter extends BaseAdapter {
 
                 double newPrice = buyable.getPrice();
                 pdSumPriceTextView.setText(new DecimalFormat("##.##").format(newPrice));
-                double newDiscount = buyable.getDiscount(1); //currBasket's "qty" is 1
-                pdSumDiscountTextView.setText(new DecimalFormat("##.##").format(newDiscount) + "-"); //discounts shows as minus
+
+                pdSumDiscountTextView.setText("loading...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        double newDiscount = buyable.getDiscount(1); //currBasket's "qty" is 1
+                        discount_change_handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                pdSumDiscountTextView.setText(new DecimalFormat("##.##")
+                                        .format(newDiscount) + "-"); //discounts shows as minus
+                            }
+                        });
+                    }
+                }).start();
 
                 //TODO: update SumPrice efficently (add the delta instead of re-calculating)
                 double newSumPrice = mBasket.getPrice();
                 activity_basket_sumTextView.setText(new DecimalFormat("##.##").format(newSumPrice));
-                double newSumDiscount = mBasket.getDiscount(1); //currBasket's "qty" is 1
-                activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##").format(newSumDiscount) + "-"); //discounts shows as minus
+
+                activity_basket_sumDiscountTextView.setText("loading...");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        double newSumDiscount = mBasket.getDiscount(1); //currBasket's "qty" is 1
+                        discount_change_handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity_basket_sumDiscountTextView.setText(new DecimalFormat("##.##")
+                                        .format(newSumDiscount) + "-"); //discounts shows as minus
+                            }
+                        });
+                    }
+                }).start();
 
             }
         });
