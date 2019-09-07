@@ -133,6 +133,9 @@ public class MenuActivity extends AppCompatActivity {
         } else { //Shop != null. it is already loaded
             CategoryAdapter categoryAdapter = new CategoryAdapter(this, MenuActivity.myAppShop);
             myListView.setAdapter(categoryAdapter);
+
+            //dont show loading animation - Shop is already loaded...
+            findViewById(R.id.loading_animation).setVisibility(View.GONE);
         }
 
         TextView loadingTextView = (TextView) findViewById(R.id.loadingTextView);
