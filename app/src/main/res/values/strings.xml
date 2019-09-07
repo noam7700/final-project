@@ -31,6 +31,10 @@
     <string name="understood">הבנתי</string>
     <string name="automaticBasket">סל אוטומטי</string>
     <string name="chooseAutomaticMethod">בחר שיטה אוטומטית</string>
+    <string name="debugSettings">הגדרות דיבוג</string>
+    <string name="serversIp">איי-פי של הסרבר</string>
+    <string name="onlineMode">מצב אונליין</string>
+    <string name="saveChanges">שמור שינויים</string>
 
     <!-- titles of actionbar in each activity -> everyone with "shufersal" -->
     <string name="title_shufersal">שופרסל</string>

@@ -18,6 +18,7 @@ public class User {
 
     private ClientDataAccessObject serverExecutor;
 
+    public static String server_default_ip = "10.100.102.6";
 
     public static void main(String[] args) {
         User user = new User("NOAM1234", "NOAM");
@@ -27,7 +28,7 @@ public class User {
 
     public User(String username, String password) {
 
-        serverExecutor = new ClientDataAccessObject(username, password, "132.74.210.33", 8080);
+        serverExecutor = new ClientDataAccessObject(username, password, User.server_default_ip, 8080);
 //        Client c = new Client(username, password);
 //        c.register();
         this.username = username;

@@ -96,14 +96,17 @@ public class MenuActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    //I'm using user because he has the correct default local IP - 10.100.102.4
-                    List<ProductInfo> serverResult = new User("default", "default").getProductsData();
-                    MenuActivity.myAppShop = new Shop(serverResult);
 
-                    //if didn't succeed (server's not working)
-                    //this piece of code actually never is executed, because when server's down, there's
+                    if(DebugOptionsActivity.isOnlineMode == true) {
+                        //I'm using user because he has the correct default local IP - 10.100.102.4
+                        List<ProductInfo> serverResult =
+                                new User("default", "default").getProductsData();
+                        MenuActivity.myAppShop = new Shop(serverResult);
+                    }
+                    //we're in offlineMode OR if didn't succeed (server's not working - Shop is empty)
+                    //this second case is never true, because when server's down, there's
                     //no timeout in request, and the app crashes.
-                    if(MenuActivity.myAppShop.getCategories().size() == 0){
+                    if(DebugOptionsActivity.isOnlineMode == false || MenuActivity.myAppShop.getCategories().size() == 0){
                         //load offline
                         BufferedReader bufferReader = null;
                         try {
