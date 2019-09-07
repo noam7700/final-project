@@ -129,6 +129,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button debugOptionsBtn = (Button) findViewById(R.id.debugOptionsBtn);
+        debugOptionsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), DebugOptionsActivity.class);
+                startActivity(startIntent);
+            }
+        });
 
     }
 

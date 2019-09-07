@@ -101,9 +101,12 @@
             app:layout_constraintTop_toBottomOf="@+id/main_activity_startShoppingBtn" />
 
         <Button
-            android:id="@+id/debugBtn"
+            android:id="@+id/debugOptionsBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="8dp"
             android:background="#00F30606"
             android:text="@string/debugSettings"
             android:textSize="18sp"
